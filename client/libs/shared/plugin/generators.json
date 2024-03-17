@@ -1,0 +1,14 @@
+{
+    "generators": {
+        "component": {
+            "factory": "./src/generators/component/generator",
+            "schema": "./src/generators/component/schema.json",
+            "description": "component generator"
+        },
+        "slice": {
+            "factory": "./src/generators/slice/generator",
+            "schema": "./src/generators/slice/schema.json",
+            "description": "slice generator"
+        }
+    }
+}

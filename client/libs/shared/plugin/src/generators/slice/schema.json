@@ -1,0 +1,37 @@
+{
+    "$schema": "http://json-schema.org/schema",
+    "cli": "nx",
+    "$id": "NxNextReactSlice",
+    "title": "Create a React Slice for Next",
+    "type": "object",
+    "properties": {
+        "name": {
+            "type": "string",
+            "description": "",
+            "$default": {
+                "$source": "argv",
+                "index": 0
+            },
+            "x-prompt": "What name would you like to use?"
+        },
+        "export": {
+            "type": "boolean",
+            "description": "",
+            "x-prompt": "In which layer the project should be located?"
+        },
+        "layer": {
+            "type": "string",
+            "description": "",
+            "$default": {
+                "$source": "argv",
+                "index": 1
+            },
+            "x-prompt": {
+                "message": "In which layer should the slice be placed?",
+                "type": "list",
+                "items": ["shared", "entities", "features", "widgets", "pages"]
+            }
+        }
+    },
+    "required": ["name", "layer"]
+}

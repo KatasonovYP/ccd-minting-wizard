@@ -1,0 +1,21 @@
+:root {
+    /* Default colors */
+    --black: #000000;
+    --white: #ffffff;
+    --dark: #101010;
+    --light: #f0f0f0;
+    --gray: #8191a2;
+    --blue: #029cfd;
+    --light-blue: #46a3f9;
+    color-scheme: dark;
+
+    /* Main colors */
+    --bg-color: var(--light);
+    --bg-inverted-color: var(--dark);
+    --bg-neutral-color: rgba(235, 236, 244, 1);
+    --bg-navbar-color: linear-gradient(270deg, #1d2633, #0c1016);
+    --text-base-color: var(--black);
+    --text-inverted-base-color: var(--white);
+    --text-inverted-primary-color: var(--light);
+    --text-neutral-color: var(--gray);
+}

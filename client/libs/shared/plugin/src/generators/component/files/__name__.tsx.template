@@ -1,0 +1,16 @@
+import cn from 'classnames';
+import cls from './<%= name %>.module.css';
+
+interface <%= pascalCase(name) %>Props {
+	className?: string;
+}
+
+export function <%= pascalCase(name) %>(props: <%= pascalCase(name) %>Props) {
+	const { className } = props;
+
+	return (
+		<div className={cn(className, cls.<%= camelCase(name) %>)}>
+			<h1><%= name %></h1>
+		</div>
+	);
+};

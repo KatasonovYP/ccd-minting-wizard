@@ -1,0 +1,18 @@
+{
+    "name": "assets",
+    "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+    "sourceRoot": "libs/shared/assets/src",
+    "projectType": "library",
+    "targets": {
+        "lint": {
+            "executor": "@nx/eslint:lint"
+        },
+        "prettier": {
+            "executor": "@my/plugin:prettier"
+        },
+        "ci": {
+            "executor": "@my/plugin:ci"
+        }
+    },
+    "tags": []
+}

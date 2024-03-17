@@ -1,0 +1,14 @@
+.spinnerWrapper {
+    display: flex;
+    flex: 1;
+    justify-content: center;
+    align-items: center;
+}
+
+.spinner {
+    --spinner-side: 64px;
+    height: var(--spinner-side);
+    width: var(--spinner-side);
+    fill: var(--primary-color);
+    color: var(--bg-neutral-color);
+}

@@ -1,0 +1,61 @@
+include:
+  - project: 'totalny/devops'
+    ref: main
+    file: '/CI/templates/.gitlab-ci-templates.yml'
+
+stages:
+  - build
+  - test
+  - publish-docker
+  - deploy
+
+build:
+  extends: .build-node
+  script:
+    - chmod +x ./scripts/CI/build/build.sh
+    - ./scripts/CI/build/build.sh
+  cache:
+    key: ${CI_COMMIT_REF_SLUG}
+    paths:
+      - node_modules/
+      - .nx/cache/
+  artifacts:
+    when: on_success
+    expire_in: 45 mins
+    paths:
+      - dist/
+      - Dockerfile
+      - nginx.conf
+    
+test-CI:
+  extends: .lint-node
+  needs: ["build"]
+  script:
+    - yarn install
+    - yarn nx run-many -t ci --fix --parallel=8
+  cache:
+    key: ${CI_COMMIT_REF_SLUG}
+    paths:
+      - node_modules/
+      - .nx/cache/
+  when: on_success
+  
+publish:
+  extends: .publish-docker
+  needs: 
+    - job: build
+      artifacts: true
+  only:
+    - main
+  script:
+    - chmod +x ./scripts/CI/publish/publish.sh
+    - ./scripts/CI/publish/publish.sh $DOCKER_REGISTRY_USERNAME $DOCKER_REGISTRY_PASSWORD $CONTAINER_IMAGE $DOCKER_REGISTRY
+
+deploy:
+  extends: .deploy
+  needs: 
+    - job: build
+      artifacts: true
+  script:
+    - chmod +x ./scripts/CI/deploy/deploy.sh
+    - ./scripts/CI/deploy/deploy.sh $HOST_USER $USER_PASSWORD $HOST_IP $DEPLOY_FOLDER $DOCKER_REGISTRY_USERNAME $DOCKER_REGISTRY_PASSWORD $DOCKER_REGISTRY $SAMBA_USER $SAMBA_PASSWORD $SAMBA_FOLDER

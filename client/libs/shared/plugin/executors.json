@@ -1,0 +1,14 @@
+{
+    "executors": {
+        "prettier": {
+            "implementation": "./src/executors/prettier/executor",
+            "schema": "./src/executors/prettier/schema.json",
+            "description": "prettier executor"
+        },
+        "ci": {
+            "implementation": "./src/executors/ci/executor",
+            "schema": "./src/executors/ci/schema.json",
+            "description": "ci executor"
+        }
+    }
+}

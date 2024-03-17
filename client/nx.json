@@ -1,0 +1,130 @@
+{
+    "$schema": "node_modules/nx/schemas/nx-schema.json",
+    "affected": {
+        "defaultBase": "main"
+    },
+    "targetDefaults": {
+        "build": {
+            "cache": true,
+            "dependsOn": ["^build"],
+            "inputs": ["production", "^production"]
+        },
+        "prettier": {
+            "executor": "@my/plugin:prettier",
+            "defaultConfiguration": "check",
+            "configurations": {
+                "check": {
+                    "fix": false
+                },
+                "fix": {
+                    "fix": true
+                }
+            },
+            "inputs": [
+                "default",
+                "{workspaceRoot}/.prettierrc",
+                "{workspaceRoot}/.prettierignore"
+            ]
+        },
+        "ci": {
+            "executor": "@my/plugin:ci",
+            "cache": true
+        },
+        "@nx/jest:jest": {
+            "cache": true,
+            "inputs": [
+                "default",
+                "^production",
+                "{workspaceRoot}/jest.preset.js"
+            ],
+            "options": {
+                "passWithNoTests": true
+            },
+            "configurations": {
+                "ci": {
+                    "ci": true,
+                    "codeCoverage": true
+                }
+            }
+        },
+        "@nx/eslint:lint": {
+            "cache": true,
+            "inputs": [
+                "default",
+                "{workspaceRoot}/.eslintrc.json",
+                "{workspaceRoot}/.eslintignore",
+                "{workspaceRoot}/eslint.config.js"
+            ]
+        },
+        "build-storybook": {
+            "cache": true,
+            "inputs": [
+                "default",
+                "^production",
+                "{projectRoot}/.storybook/**/*",
+                "{projectRoot}/tsconfig.storybook.json"
+            ]
+        },
+        "@nx/vite:test": {
+            "cache": true,
+            "inputs": ["default", "^production"]
+        },
+        "@nx/vite:build": {
+            "cache": true,
+            "dependsOn": ["^build"],
+            "inputs": ["production", "^production"]
+        }
+    },
+    "namedInputs": {
+        "default": ["{projectRoot}/**/*", "sharedGlobals"],
+        "production": [
+            "default",
+            "!{projectRoot}/cypress/**/*",
+            "!{projectRoot}/**/*.cy.[jt]s?(x)",
+            "!{projectRoot}/cypress.config.[jt]s",
+            "!{projectRoot}/**/?(*.)+(spec|test).[jt]s?(x)?(.snap)",
+            "!{projectRoot}/tsconfig.spec.json",
+            "!{projectRoot}/.eslintrc.json",
+            "!{projectRoot}/eslint.config.js",
+            "!{projectRoot}/jest.config.[jt]s",
+            "!{projectRoot}/src/test-setup.[jt]s",
+            "!{projectRoot}/test-setup.[jt]s",
+            "!{projectRoot}/**/*.stories.@(js|jsx|ts|tsx|mdx)",
+            "!{projectRoot}/.storybook/**/*",
+            "!{projectRoot}/tsconfig.storybook.json"
+        ],
+        "sharedGlobals": ["{workspaceRoot}/libs/shared/styles/global.css"]
+    },
+    "generators": {
+        "@my/plugin": {
+            "slice": {
+                "style": "css",
+                "export": false
+            }
+        },
+        "@nx/react": {
+            "application": {
+                "babel": true,
+                "style": "css",
+                "linter": "eslint",
+                "bundler": "vite"
+            },
+            "component": {
+                "style": "css"
+            },
+            "library": {
+                "style": "css",
+                "linter": "eslint",
+                "unitTestRunner": "vitest"
+            }
+        }
+    },
+    "neverConnectToCloud": true,
+    "tasksRunnerOptions": {
+        "default": {
+            "options": {
+                "cacheableOperations": ["build-storybook"]
+            }
+        }
+    }
+}

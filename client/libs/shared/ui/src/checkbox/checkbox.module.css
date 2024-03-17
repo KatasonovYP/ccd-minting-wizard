@@ -1,0 +1,41 @@
+.checkbox {
+    --checkmark-color: var(--checkbox-checkmark-color);
+    --border-color: var(--text-neutral-color);
+    --border-width: 1px;
+    --spinner-side: 28px;
+
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: var(--text-neutral-color);
+
+    .input {
+        min-width: var(--spinner-side);
+        min-height: var(--spinner-side);
+        border: var(--border-width) solid var(--border-color);
+        border-radius: var(--border-radius-xs);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    svg {
+        opacity: 0;
+        transform: scale(0.5);
+        /*fill: var(--checkmark-color);*/
+        transition: var(--bounce-transition);
+    }
+
+    &[data-focus-visible] .input {
+        outline: var(--border-width) solid var(--button-focus-color);
+        outline-offset: var(--border-width);
+    }
+
+    &[data-selected],
+    &[data-indeterminate] {
+        svg {
+            opacity: 1;
+            transform: scale(1);
+        }
+    }
+}

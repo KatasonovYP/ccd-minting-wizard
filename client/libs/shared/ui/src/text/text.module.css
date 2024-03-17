@@ -1,0 +1,51 @@
+.text {
+    margin: 0;
+}
+
+.xs {
+    font: var(--font-xs);
+}
+
+.sm {
+    font: var(--font-sm);
+}
+
+.md {
+    font: var(--font-md);
+}
+
+.lg {
+    font: var(--font-lg);
+}
+
+.xl {
+    font: var(--font-xl);
+}
+
+.xxl {
+    font: var(--font-2xl);
+}
+
+.text {
+    font-weight: inherit;
+}
+
+.display {
+    font-family: var(--font-sb-sans-display);
+}
+
+.regular {
+    font-weight: 400;
+}
+
+.medium {
+    font-weight: 500;
+}
+
+.semibold {
+    font-weight: 600;
+}
+
+.bold {
+    font-weight: 700;
+}

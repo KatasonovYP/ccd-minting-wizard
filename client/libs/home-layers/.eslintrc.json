@@ -1,0 +1,12 @@
+{
+    "extends": ["plugin:@nx/react", "../../.eslintrc.json"],
+    "ignorePatterns": ["!**/*"],
+    "overrides": [
+        {
+            "files": ["./src/pages/**/*.tsx", "./src/widgets/**/*.tsx"],
+            "rules": {
+                "import/no-default-export": 0
+            }
+        }
+    ]
+}

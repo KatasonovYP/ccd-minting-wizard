@@ -1,0 +1,58 @@
+{
+    "name": "plugin",
+    "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+    "sourceRoot": "libs/shared/plugin/src",
+    "projectType": "library",
+    "targets": {
+        "build": {
+            "executor": "@nx/js:tsc",
+            "outputs": ["{options.outputPath}"],
+            "options": {
+                "outputPath": "dist/libs/shared/plugin",
+                "main": "libs/shared/plugin/src/index.ts",
+                "tsConfig": "libs/shared/plugin/tsconfig.lib.json",
+                "assets": [
+                    "libs/shared/plugin/*.md",
+                    {
+                        "input": "./libs/shared/plugin/src",
+                        "glob": "**/!(*.ts)",
+                        "output": "./src"
+                    },
+                    {
+                        "input": "./libs/shared/plugin/src",
+                        "glob": "**/*.d.ts",
+                        "output": "./src"
+                    },
+                    {
+                        "input": "./libs/shared/plugin",
+                        "glob": "generators.json",
+                        "output": "."
+                    },
+                    {
+                        "input": "./libs/shared/plugin",
+                        "glob": "executors.json",
+                        "output": "."
+                    }
+                ]
+            }
+        },
+        "lint": {
+            "executor": "@nx/eslint:lint",
+            "outputs": ["{options.outputFile}"]
+        },
+        "test": {
+            "executor": "@nx/jest:jest",
+            "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+            "options": {
+                "jestConfig": "libs/shared/plugin/jest.config.ts"
+            }
+        },
+        "prettier": {
+            "executor": "@my/plugin:prettier"
+        },
+        "ci": {
+            "executor": "@my/plugin:ci"
+        }
+    },
+    "tags": []
+}

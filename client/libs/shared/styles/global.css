@@ -1,0 +1,42 @@
+@import "./variables/clear.css";
+@import "./variables/preflight.css";
+@import "./variables/tailwind.css";
+@import "./variables/fonts.css";
+@import "./variables/variables.css";
+@import "./themes/dark.css";
+
+html {
+    overflow-x: hidden;
+}
+
+body {
+    background-color: var(--bg-color);
+    margin-right: calc(100% - 100vw);
+    color: var(--text-base-color);
+    font: var(--font-sm);
+    font-weight: 400;
+    scroll-behavior: smooth;
+}
+
+p {
+    white-space: pre-wrap;
+}
+
+.form-page {
+    justify-content: center;
+    align-items: center;
+    flex: 1;
+    padding-bottom: 32px;
+}
+
+body::-webkit-scrollbar {
+    width: 10px;
+    background: #454545;
+}
+
+body::-webkit-scrollbar-thumb {
+    background: rgba(126, 126, 126, 0.8);
+    background-clip: content-box;
+    border: 3px solid transparent;
+    border-radius: var(--border-radius-xl);
+}

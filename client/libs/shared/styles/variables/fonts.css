@@ -1,0 +1,67 @@
+:root {
+    --font-family: sans-serif;
+
+    --font-2xs-min: 12;
+    --font-2xs-max: 12;
+
+    --font-xs-min: 14;
+    --font-xs-max: 14;
+
+    --font-sm-min: 14;
+    --font-sm-max: 18;
+
+    --font-md-min: 16;
+    --font-md-max: 24;
+
+    --font-lg-min: 24;
+    --font-lg-max: 36;
+
+    --font-xl-min: 56;
+    --font-xl-max: 64;
+
+    --font-2xl-min: 64;
+    --font-2xl-max: 100;
+
+    --font-min-screen: 360;
+    --font-max-screen: 1280;
+
+    --font-shift-factor: 10;
+
+    --font-factor: calc(
+        (100vw - var(--font-min-screen) * 1px)
+        / (var(--font-max-screen) - var(--font-min-screen))
+    );
+
+    --font-2xs-diff: calc(var(--font-2xs-max) - var(--font-2xs-min));
+    --font-xs-diff: calc(var(--font-xs-max) - var(--font-xs-min));
+    --font-sm-diff: calc(var(--font-sm-max) - var(--font-sm-min));
+    --font-md-diff: calc(var(--font-md-max) - var(--font-md-min));
+    --font-lg-diff: calc(var(--font-lg-max) - var(--font-lg-min));
+    --font-xl-diff: calc(var(--font-xl-max) - var(--font-xl-min));
+    --font-2xl-diff: calc(var(--font-2xl-max) - var(--font-2xl-min));
+
+    --font-2xs-resp: calc(var(--font-2xs-min) * 1px + var(--font-2xs-diff) * var(--font-factor));
+    --font-xs-resp: calc(var(--font-xs-min) * 1px + var(--font-xs-diff) * var(--font-factor));
+    --font-sm-resp: calc(var(--font-sm-min) * 1px + var(--font-sm-diff) * var(--font-factor));
+    --font-md-resp: calc(var(--font-md-min) * 1px + var(--font-md-diff) * var(--font-factor));
+    --font-lg-resp: calc(var(--font-lg-min) * 1px + var(--font-lg-diff) * var(--font-factor));
+    --font-xl-resp: calc(var(--font-xl-min) * 1px + var(--font-xl-diff) * var(--font-factor));
+    --font-2xl-resp: calc(var(--font-2xl-min) * 1px + var(--font-2xl-diff) * var(--font-factor));
+
+    --font-2xs-size: clamp(var(--font-2xs-min) * 1px, var(--font-2xs-resp), var(--font-2xs-max) * 1px);
+    --font-xs-size: clamp(var(--font-xs-min) * 1px, var(--font-xs-resp), var(--font-xs-max) * 1px);
+    --font-sm-size: clamp(var(--font-sm-min) * 1px, var(--font-sm-resp), var(--font-sm-max) * 1px);
+    --font-md-size: clamp(var(--font-md-min) * 1px, var(--font-md-resp), var(--font-md-max) * 1px);
+    --font-lg-size: clamp(var(--font-lg-min) * 1px, var(--font-lg-resp), var(--font-lg-max) * 1px);
+    --font-xl-size: clamp(var(--font-xl-min) * 1px, var(--font-xl-resp), var(--font-xl-max) * 1px);
+    --font-2xl-size: clamp(var(--font-2xl-min) * 1px, var(--font-2xl-resp), var(--font-2xl-max) * 1px);
+
+
+    --font-2xs: var(--font-2xs-size) / calc(var(--font-2xs-size) + 8px) var(--font-family);
+    --font-xs: var(--font-xs-size) / calc(var(--font-xs-size) + 8px) var(--font-family);
+    --font-sm: var(--font-sm-size) / calc(var(--font-sm-size) + 8px) var(--font-family);
+    --font-md: var(--font-md-size) / calc(var(--font-md-size) + 8px) var(--font-family);
+    --font-lg: var(--font-lg-size) / calc(var(--font-lg-size) + 8px) var(--font-family);
+    --font-xl: var(--font-xl-size) / calc(var(--font-xl-size) - 8px) var(--font-family);
+    --font-2xl: var(--font-2xl-size) / calc(var(--font-2xl-size) - 8px) var(--font-family);
+}

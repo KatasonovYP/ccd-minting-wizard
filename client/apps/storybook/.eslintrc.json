@@ -1,0 +1,13 @@
+{
+    "extends": ["plugin:@nx/react", "../../.eslintrc.json"],
+    "ignorePatterns": ["!**/*"],
+    "overrides": [
+        {
+            "files": ["./.storybook/**/*.{ts,tsx}"],
+            "rules": {
+                "import/no-default-export": 0,
+                "@typescript-eslint/ban-ts-comment": 0
+            }
+        }
+    ]
+}
