@@ -9,6 +9,7 @@ import { FormMintingSettings } from '../../features/form-minting-settings';
 import { CopyContract } from '../../features/copy-contract';
 import { FormFunctionalitySettings } from '../../features/form-functionality-settings';
 import cls from './wizard-page.module.css';
+import { ConcordiumLogoIcon } from '@/shared/assets/icons';
 
 interface WizardPageProps {
     className?: string;
@@ -19,14 +20,23 @@ export function WizardPage(props: WizardPageProps) {
 
     return (
         <div className={cn(className, cls.wizardPage)}>
-            <div className={cls.header}>
-                <ConnectButton />
-                <CopyContract />
-                <DownloadContract />
-                <DeployContract />
+            <div className='mb-4 flex items-center justify-between'>
+                <ConcordiumLogoIcon />
+                <div className='flex gap-4'>
+                    <ConnectButton />
+                    <CopyContract />
+                    <DownloadContract />
+                    {/*<DownloadMetadata />*/}
+                    <DeployContract />
+                </div>
             </div>
             <div className={cls.content}>
-                <div className='rounded-lg bg-white p-4 shadow-md'>
+                <div
+                    className={cn(
+                        cls.forms,
+                        'rounded-lg bg-white p-4 shadow-md',
+                    )}
+                >
                     <FormMetadata />
                     <FormIdentity />
                     <FormMintingSettings />

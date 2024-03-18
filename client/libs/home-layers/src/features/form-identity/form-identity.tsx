@@ -10,7 +10,7 @@ interface FormIdentityProps {
     className?: string;
 }
 
-type FormIdentityValues = Identity
+type FormIdentityValues = Identity;
 
 const schema = z.object({
     name: z

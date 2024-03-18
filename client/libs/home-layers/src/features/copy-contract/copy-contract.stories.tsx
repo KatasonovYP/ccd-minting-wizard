@@ -1,7 +1,6 @@
 import { CopyContract } from './copy-contract';
 import type { Meta, StoryObj } from '@storybook/react';
 
-
 const meta: Meta<typeof CopyContract> = {
     title: 'unknown/copy-contract',
     component: CopyContract,

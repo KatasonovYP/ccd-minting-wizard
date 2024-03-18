@@ -1,7 +1,7 @@
 import cn from 'classnames';
 import { useForm } from 'react-hook-form';
 import cls from './form-functionality-settings.module.css';
-import type { FunctionalitySettings} from '@/shared/store/mint-store';
+import type { FunctionalitySettings } from '@/shared/store/mint-store';
 import { useMintStore } from '@/shared/store/mint-store';
 import { CheckboxControlled } from '@/shared/ui/checkbox';
 
@@ -9,7 +9,7 @@ interface FormFunctionalitySettingsProps {
     className?: string;
 }
 
-type FormFunctionalitySettingsValues = FunctionalitySettings
+type FormFunctionalitySettingsValues = FunctionalitySettings;
 
 const names: Array<keyof FunctionalitySettings> = [
     'mintable',

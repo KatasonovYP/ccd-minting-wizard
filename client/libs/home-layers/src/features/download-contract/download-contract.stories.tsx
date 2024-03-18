@@ -1,7 +1,6 @@
 import { DownloadContract } from './download-contract';
 import type { Meta, StoryObj } from '@storybook/react';
 
-
 const meta: Meta<typeof DownloadContract> = {
     title: 'unknown/download-contract',
     component: DownloadContract,

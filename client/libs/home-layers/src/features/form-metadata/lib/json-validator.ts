@@ -1,9 +1,9 @@
-interface JsonUrl {
-    url: string;
-    hash: string;
-}
+// interface JsonUrl {
+//     url: string;
+//     hash: string;
+// }
 
-function hasExpectedKeys(obj: Object, expectedKeys: Array<string>) {
+function hasExpectedKeys(obj: Record<string, unknown>, expectedKeys: Array<string>) {
     const objKeys = Object.keys(obj);
     return (
         objKeys.length <= expectedKeys.length &&
@@ -11,9 +11,9 @@ function hasExpectedKeys(obj: Object, expectedKeys: Array<string>) {
     );
 }
 
-function hasRequiredKeys(obj: Object, requiredKeys: string[]) {
-    return requiredKeys.every((key) => obj.hasOwnProperty(key));
-}
+// function hasRequiredKeys(obj: Object, requiredKeys: string[]) {
+//     return requiredKeys.every((key) => obj.hasOwnProperty(key));
+// }
 
 export function jsonValidator(src: Record<string, unknown>) {
     return hasExpectedKeys(src, ['name', 'symbol', 'description', 'unique']);

@@ -1,7 +1,6 @@
 import { FormFunctionalitySettings } from './form-functionality-settings';
 import type { Meta, StoryObj } from '@storybook/react';
 
-
 const meta: Meta<typeof FormFunctionalitySettings> = {
     title: 'unknown/form-functionality-settings',
     component: FormFunctionalitySettings,

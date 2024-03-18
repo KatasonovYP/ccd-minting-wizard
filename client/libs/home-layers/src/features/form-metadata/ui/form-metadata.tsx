@@ -1,7 +1,7 @@
 import { useForm } from 'react-hook-form';
 import cn from 'classnames';
 import { fileRead } from '../lib/file-read';
-import type { SubmitHandler} from 'react-hook-form';
+import type { SubmitHandler } from 'react-hook-form';
 import type { FormMetadataValues } from '../model/form-metadata-values';
 import { InputFile } from '@/shared/ui/input';
 import { useMintStore } from '@/shared/store/mint-store';

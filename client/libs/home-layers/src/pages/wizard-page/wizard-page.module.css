@@ -3,6 +3,7 @@
     flex: 1;
     display: flex;
     flex-direction: column;
+    max-height: 100%;
 }
 
 .header {
@@ -13,9 +14,32 @@
 }
 
 .content {
+    position: relative;
     width: 100%;
     flex: 1;
     display: flex;
     justify-content: space-between;
     gap: 32px;
+    overflow-y: clip;
+    max-height: calc(100vh - 128px);
+
+    @media screen and (max-width: 800px) {
+            flex-direction: column;
+    }
+
+    .forms {
+        overflow-y: auto;
+
+        &::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        &::-webkit-scrollbar-thumb {
+            background: rgba(126, 126, 126, 0.4);
+            background-clip: content-box;
+            border: 2px solid transparent;
+            border-radius: var(--border-radius-xl);
+        }
+    }
 }
+

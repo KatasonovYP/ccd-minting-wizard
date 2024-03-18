@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import z from 'zod';
 import cls from './form-minting-settings.module.css';
-import type { MintingSettings} from '@/shared/store/mint-store';
+import type { MintingSettings } from '@/shared/store/mint-store';
 import { useMintStore } from '@/shared/store/mint-store';
 import { InputControlled } from '@/shared/ui/input';
 
@@ -11,14 +11,17 @@ interface FormMintingSettingsProps {
     className?: string;
 }
 
-type FormMintingSettingsValues = MintingSettings
+type FormMintingSettingsValues = MintingSettings;
+
+const numberConstraints = z
+    .string()
+    .regex(/^\d+$/, 'Must be a positive integer')
+    .max(20, 'The value is too high')
+    .optional();
 
 const schema = z.object({
-    premint: z.string().regex(/^\d+$/, 'Must be a positive integer').optional(),
-    'maximum tokens': z
-        .string()
-        .regex(/^\d+$/, 'Must be a positive integer')
-        .optional(),
+    premint: numberConstraints,
+    'maximum tokens': numberConstraints,
 });
 
 export function FormMintingSettings(props: FormMintingSettingsProps) {

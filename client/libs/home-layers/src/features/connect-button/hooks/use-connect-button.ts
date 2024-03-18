@@ -4,10 +4,10 @@ import { useConcordiumApi } from '@/shared/utils/hooks';
 import { BROWSER_WALLET } from '@/shared/config/concordium';
 
 export function useConnectButton() {
-    const { setActiveConnectorType, account } = useConcordiumApi();
-    const { connection, activeConnector } = useConcordiumApi();
+    const { setActiveConnectorType } = useConcordiumApi();
+    const { connection } = useConcordiumApi();
 
-    useEffect(() => setActiveConnectorType(BROWSER_WALLET), []);
+    useEffect(() => setActiveConnectorType(BROWSER_WALLET), [setActiveConnectorType]);
 
     return {
         toggleConnection: useToggleConnection(),

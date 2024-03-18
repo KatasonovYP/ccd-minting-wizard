@@ -1,7 +1,6 @@
 import { LoadingPage } from './loading-page';
 import type { Meta, StoryObj } from '@storybook/react';
 
-
 const meta: Meta<typeof LoadingPage> = {
     title: 'unknown/loading-page',
     component: LoadingPage,

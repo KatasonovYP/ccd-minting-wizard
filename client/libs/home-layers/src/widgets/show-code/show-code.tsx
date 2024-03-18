@@ -1,6 +1,7 @@
 import cn from 'classnames';
 import CodeMirror, { EditorState } from '@uiw/react-codemirror';
 import { rustLanguage } from '@codemirror/lang-rust';
+import { useEffect, useState } from 'react';
 import cls from './show-code.module.css';
 import { useCodeStore } from '@/shared/store/code-store';
 import { useMintStore } from '@/shared/store/mint-store';
@@ -12,7 +13,16 @@ interface ShowCodeProps {
 export default function ShowCode(props: ShowCodeProps) {
     const { className } = props;
     const identity = useMintStore((state) => state.identity);
-    const code = useCodeStore((state) => state.formatCode(identity));
+    const functionalitySettings = useMintStore(
+        (state) => state.functionalitySettings,
+    );
+    const [code, setCode] = useState<string>('');
+    const formatCode = useCodeStore((state) => state.formatCode);
+
+    useEffect(() => {
+        formatCode(identity, functionalitySettings).then(setCode);
+    }, [identity, functionalitySettings, formatCode]);
+
     const theme = 'dark';
 
     return (
