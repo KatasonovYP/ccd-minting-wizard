@@ -5,6 +5,7 @@ import type { SubmitHandler } from 'react-hook-form';
 import type { FormMetadataValues } from '../model/form-metadata-values';
 import { InputFile } from '@/shared/ui/input';
 import { useMintStore } from '@/shared/store/mint-store';
+// import { postIpfs } from '../lib/post-ipfs';
 
 interface FormMetadataProps {
     className?: string;

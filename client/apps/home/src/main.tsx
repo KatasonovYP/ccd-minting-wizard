@@ -10,11 +10,11 @@ const root = ReactDOM.createRoot(
     document.getElementById('root') as HTMLElement,
 );
 root.render(
-    <Suspense fallback={<LoadingPage />}>
-        <StrictMode>
+    <StrictMode>
+        <Suspense fallback={<LoadingPage />}>
             <ConcordiumProvider>
                 <App />
             </ConcordiumProvider>
-        </StrictMode>
-    </Suspense>,
+        </Suspense>
+    </StrictMode>,
 );

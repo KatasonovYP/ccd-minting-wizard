@@ -10,7 +10,7 @@ export function ConnectButton() {
             onClick={toggleConnection}
             variant={'outline'}
         >
-            {isConnected ? account : 'connect'}
+            {isConnected ? account : 'Connect'}
         </Button>
     );
 }

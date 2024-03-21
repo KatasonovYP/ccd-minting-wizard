@@ -12,6 +12,7 @@ export function DownloadMetadata(props: DownloadMetadataProps) {
     const metadata = useMintStore((state) => state.metadata);
     const identity = useMintStore((state) => state.identity);
     console.log(metadata);
+    // file = new Blob([code], options)
 
     return (
         <div className={cn(className, cls.downloadMetadata)}>
