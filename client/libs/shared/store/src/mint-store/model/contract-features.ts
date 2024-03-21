@@ -1,4 +1,4 @@
-export interface FunctionalitySettings {
+export interface ContractFeatures {
     mintable: boolean;
     burnable: boolean;
     pausable: boolean;

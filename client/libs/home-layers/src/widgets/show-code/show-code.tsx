@@ -1,10 +1,8 @@
 import cn from 'classnames';
-import CodeMirror, { EditorState } from '@uiw/react-codemirror';
+import CodeMirror, { EditorState, EditorView } from '@uiw/react-codemirror';
 import { rustLanguage } from '@codemirror/lang-rust';
-import { useEffect, useState } from 'react';
 import cls from './show-code.module.css';
-import { useCodeStore } from '@/shared/store/code-store';
-import { useMintStore } from '@/shared/store/mint-store';
+import { useCode } from '@/shared/utils/hooks';
 
 interface ShowCodeProps {
     className?: string;
@@ -12,16 +10,7 @@ interface ShowCodeProps {
 
 export default function ShowCode(props: ShowCodeProps) {
     const { className } = props;
-    const identity = useMintStore((state) => state.identity);
-    const functionalitySettings = useMintStore(
-        (state) => state.functionalitySettings,
-    );
-    const [code, setCode] = useState<string>('');
-    const formatCode = useCodeStore((state) => state.formatCode);
-
-    useEffect(() => {
-        formatCode(identity, functionalitySettings).then(setCode);
-    }, [identity, functionalitySettings, formatCode]);
+    const {code} = useCode();
 
     const theme = 'dark';
 
@@ -36,7 +25,7 @@ export default function ShowCode(props: ShowCodeProps) {
             theme={theme}
             minHeight={'100%'}
             editable={false}
-            extensions={[rustLanguage, EditorState.readOnly.of(true)]}
+            extensions={[rustLanguage, EditorState.readOnly.of(true), EditorView.lineWrapping]}
             basicSetup={{
                 lineNumbers: false,
                 foldGutter: false,

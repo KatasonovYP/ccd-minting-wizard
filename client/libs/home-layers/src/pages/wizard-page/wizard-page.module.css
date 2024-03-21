@@ -29,6 +29,8 @@
 
     .forms {
         overflow-y: auto;
+        max-width: 456px;
+        width: 100%;
 
         &::-webkit-scrollbar {
             width: 8px;

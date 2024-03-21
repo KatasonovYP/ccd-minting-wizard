@@ -15,7 +15,7 @@ type FormMintingSettingsValues = MintingSettings;
 
 const numberConstraints = z
     .string()
-    .regex(/^\d+$/, 'Must be a positive integer')
+    .regex(/^0$|^[1-9]+$/, 'Must be a positive integer')
     .max(20, 'The value is too high')
     .optional();
 
@@ -39,10 +39,11 @@ export function FormMintingSettings(props: FormMintingSettingsProps) {
 
     function onAction(data: FormMintingSettingsValues) {
         console.log(data);
-        setMintingSettings(data);
+        setMintingSettings({
+            premint: data.premint || undefined,
+            'maximum tokens': data['maximum tokens'] || undefined,
+        });
     }
-
-    // const formProps = { register, errors };
 
     return (
         <form
@@ -51,18 +52,10 @@ export function FormMintingSettings(props: FormMintingSettingsProps) {
         >
             <div className='flex justify-between gap-4'>
                 <InputControlled
-                    {...{
-                        control,
-                        name: 'premint',
-                        type: 'number',
-                    }}
+                    {...{ control, name: 'premint', type: 'number' }}
                 />
                 <InputControlled
-                    {...{
-                        control,
-                        name: 'maximum tokens',
-                        type: 'number',
-                    }}
+                    {...{ control, name: 'maximum tokens', type: 'number' }}
                 />
             </div>
         </form>

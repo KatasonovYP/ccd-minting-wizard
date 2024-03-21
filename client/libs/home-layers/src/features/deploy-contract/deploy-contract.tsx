@@ -14,7 +14,8 @@ export function DeployContract(props: DeployContractProps) {
     function handleClick() {
         console.log(mintStore.identity);
         console.log(mintStore.mintingSettings);
-        console.log(mintStore.functionalitySettings);
+        console.log(mintStore.contractFeatures);
+        console.log(mintStore.optionalFields);
     }
 
     return (

@@ -1,4 +1,4 @@
 export interface MintingSettings {
-    premint?: string;
-    'maximum tokens'?: string;
+    premint?: number;
+    'maximum tokens'?: number;
 }

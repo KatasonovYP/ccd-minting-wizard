@@ -7,9 +7,11 @@ import { ShowCode } from '../../widgets/show-code';
 import { DownloadContract } from '../../features/download-contract';
 import { FormMintingSettings } from '../../features/form-minting-settings';
 import { CopyContract } from '../../features/copy-contract';
-import { FormFunctionalitySettings } from '../../features/form-functionality-settings';
 import cls from './wizard-page.module.css';
 import { ConcordiumLogoIcon } from '@/shared/assets/icons';
+import { FormMetadataOptional } from '../../features/form-metadata-optional';
+import { DownloadMetadata } from '../../features/download-metadata';
+import { FormFunctionalitySettings } from '../../features/form-functionality-settings';
 
 interface WizardPageProps {
     className?: string;
@@ -26,7 +28,7 @@ export function WizardPage(props: WizardPageProps) {
                     <ConnectButton />
                     <CopyContract />
                     <DownloadContract />
-                    {/*<DownloadMetadata />*/}
+                    <DownloadMetadata />
                     <DeployContract />
                 </div>
             </div>
@@ -41,6 +43,7 @@ export function WizardPage(props: WizardPageProps) {
                     <FormIdentity />
                     <FormMintingSettings />
                     <FormFunctionalitySettings />
+                    <FormMetadataOptional />
                 </div>
                 <ShowCode className={'shadow-md'} />
             </div>

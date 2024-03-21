@@ -13,7 +13,7 @@ export function DownloadContract(props: DownloadContractProps) {
     const { className } = props;
     const identity = useMintStore((state) => state.identity);
     const functionalitySettings = useMintStore(
-        (state) => state.functionalitySettings,
+        (state) => state.contractFeatures,
     );
     const options = { type: 'text/plain' };
     const [file, setFile] = useState(new Blob([''], options));

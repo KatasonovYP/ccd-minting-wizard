@@ -1,9 +1,7 @@
 import cn from 'classnames';
-import { useEffect, useState } from 'react';
 import cls from './copy-contract.module.css';
-import { useMintStore } from '@/shared/store/mint-store';
-import { useCodeStore } from '@/shared/store/code-store';
 import { Button } from '@/shared/ui/button';
+import { useCode } from '@/shared/utils/hooks';
 
 interface CopyContractProps {
     className?: string;
@@ -11,16 +9,7 @@ interface CopyContractProps {
 
 export function CopyContract(props: CopyContractProps) {
     const { className } = props;
-    const identity = useMintStore((state) => state.identity);
-    const functionalitySettings = useMintStore(
-        (state) => state.functionalitySettings,
-    );
-    const [code, setCode] = useState<string>('');
-    const formatCode = useCodeStore((state) => state.formatCode);
-
-    useEffect(() => {
-        formatCode(identity, functionalitySettings).then(setCode);
-    }, [identity, functionalitySettings, formatCode]);
+    const { code } = useCode();
 
     function clickHandler() {
         navigator.clipboard.writeText(code).then(null);

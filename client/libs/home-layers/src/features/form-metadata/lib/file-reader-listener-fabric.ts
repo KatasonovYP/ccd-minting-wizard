@@ -1,4 +1,4 @@
-import { jsonValidator } from './json-validator';
+import { cis2Validator } from './cis2-validator';
 import type { UseFormSetError } from 'react-hook-form';
 import type { FormMetadataValues } from '../model/form-metadata-values';
 
@@ -13,7 +13,7 @@ export function fileReaderListenerFabric<T>(
         if (typeof buffer === 'string') {
             try {
                 const parsed = JSON.parse(buffer);
-                if (!jsonValidator(parsed)) {
+                if (!cis2Validator(parsed)) {
                     setError('metadata', {
                         type: 'cis-2',
                         message: 'invalid CIS-2',

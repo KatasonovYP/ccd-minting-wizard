@@ -2,7 +2,7 @@ import { create } from 'zustand';
 // import rustPlugin from 'prettier-plugin-rust';
 // import prettier from 'prettier/standalone';
 import { plainText as initialCode } from '../assets/code.rs';
-import type { FunctionalitySettings, Identity } from '../../mint-store';
+import type { ContractFeatures, Identity } from '../../mint-store';
 
 interface State {
     code: string;
@@ -11,7 +11,7 @@ interface State {
 interface Actions {
     formatCode: (
         identity: Identity,
-        functionalitySettings: FunctionalitySettings,
+        functionalitySettings: ContractFeatures,
     ) => Promise<string>;
 }
 
@@ -28,7 +28,6 @@ export const useCodeStore = create<Store>((set, get): Store => {
             return initialCode
                 .replace('{name}', identity.name)
                 .replace('{description}', identity.description)
-                .replace('{symbol}', identity.symbol)
                 .replace(
                     '{mintable}',
                     functionalitySettings.mintable

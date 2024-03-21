@@ -1,2 +1,10 @@
 .input {
+    &:-webkit-autofill,
+    &:-webkit-autofill:hover,
+    &:-webkit-autofill:focus,
+    &:-webkit-autofill:active {
+        -webkit-text-fill-color: black;
+        box-shadow: inset 0 0 0 2rem theme(colors.yellow.100);
+        caret-color: black;
+    }
 }

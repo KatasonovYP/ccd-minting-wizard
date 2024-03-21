@@ -1,7 +1,7 @@
 import cn from 'classnames';
 import { useForm } from 'react-hook-form';
 import cls from './form-functionality-settings.module.css';
-import type { FunctionalitySettings } from '@/shared/store/mint-store';
+import type { ContractFeatures } from '@/shared/store/mint-store';
 import { useMintStore } from '@/shared/store/mint-store';
 import { CheckboxControlled } from '@/shared/ui/checkbox';
 
@@ -9,9 +9,9 @@ interface FormFunctionalitySettingsProps {
     className?: string;
 }
 
-type FormFunctionalitySettingsValues = FunctionalitySettings;
+type FormFunctionalitySettingsValues = ContractFeatures;
 
-const names: Array<keyof FunctionalitySettings> = [
+const names: Array<keyof ContractFeatures> = [
     'mintable',
     'burnable',
     'pausable',
@@ -26,20 +26,20 @@ export function FormFunctionalitySettings(
 ) {
     const { className } = props;
 
-    const setFunctionalitySettings = useMintStore(
-        (state) => state.setFunctionalitySettings,
+    const setContractFeatures = useMintStore(
+        (state) => state.setContractFeatures,
     );
-    const functionalitySettings = useMintStore(
-        (state) => state.functionalitySettings,
+    const contractFeatures = useMintStore(
+        (state) => state.contractFeatures,
     );
 
     const { handleSubmit, control } = useForm<FormFunctionalitySettingsValues>({
-        values: functionalitySettings,
+        values: contractFeatures,
     });
 
     function onAction(data: FormFunctionalitySettingsValues) {
         console.log(data);
-        setFunctionalitySettings(data);
+        setContractFeatures(data);
     }
 
     return (

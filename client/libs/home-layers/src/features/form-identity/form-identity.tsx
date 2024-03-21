@@ -17,12 +17,8 @@ const schema = z.object({
         .string()
         .min(2, 'at least 2 characters')
         .max(32, 'at most 32 characters'),
-    symbol: z
-        .string()
-        .min(2, 'at least 2 characters')
-        .max(8, 'at most 8 characters'),
     description: z.string().max(512).optional(),
-});
+} satisfies Record<keyof FormIdentityValues, unknown>);
 
 export function FormIdentity(props: FormIdentityProps) {
     const { className } = props;
@@ -45,18 +41,11 @@ export function FormIdentity(props: FormIdentityProps) {
             onChange={handleSubmit(onAction)}
             className={cn(className, cls.formIdentity)}
         >
-            <div className='flex justify-between gap-4'>
-                <InputControlled
-                    control={control}
-                    name={'name'}
-                    required
-                />
-                <InputControlled
-                    control={control}
-                    name={'symbol'}
-                    required
-                />
-            </div>
+            <InputControlled
+                control={control}
+                name={'name'}
+                required
+            />
             <InputControlled
                 control={control}
                 name={'description'}
