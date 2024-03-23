@@ -22,6 +22,7 @@ export function FormMetadataFile(props: FormMetadataProps) {
     const setIdentity = useMintStore((store) => store.setIdentity);
     const setOptionalFields = useMintStore((store) => store.setOptionalFields);
     const setAttributes = useMintStore((store) => store.setAttributes);
+    const setAssets = useMintStore((store) => store.setAssets);
 
     const onAction: SubmitHandler<FormMetadataFileValues> = async (
         data,
@@ -29,7 +30,7 @@ export function FormMetadataFile(props: FormMetadataProps) {
         try {
             fileRead(
                 data.metadata[0],
-                [setIdentity, setOptionalFields, setAttributes],
+                [setIdentity, setOptionalFields, setAttributes, setAssets],
                 setError,
             );
             // console.log(await postIpfs(data.metadata[0]));

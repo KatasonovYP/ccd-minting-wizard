@@ -5,7 +5,7 @@ import type { MintingSettings } from '../model/minting-settings';
 import type { ContractFeatures } from '../model/contract-features';
 import type { Setters } from '@/shared/types/utils';
 
-interface State {
+export interface MintStoreState {
     identity: Identity;
     mintingSettings: MintingSettings;
     contractFeatures: ContractFeatures;
@@ -14,9 +14,9 @@ interface State {
     assets: { assets: Cis2Url[] };
 }
 
-type Actions = Setters<State>;
+export type MintStoreActions = Setters<MintStoreState>;
 
-type Store = State & Actions;
+type Store = MintStoreState & MintStoreActions;
 
 export const useMintStore = create<Store>(
     (set): Store => ({
@@ -39,13 +39,11 @@ export const useMintStore = create<Store>(
         },
         optionalFields: {
             symbol: undefined,
-            artifact: undefined,
-            assets: undefined,
-            decimals: undefined,
-            display: undefined,
-            localization: undefined,
             unique: undefined,
+            decimals: undefined,
             thumbnail: undefined,
+            display: undefined,
+            artifact: undefined,
         },
         attributes: {
             attributes: [],

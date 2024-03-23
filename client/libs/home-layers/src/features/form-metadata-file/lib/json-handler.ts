@@ -1,5 +1,5 @@
 import { cis2Validator } from './cis2-validator';
-import type { Setter } from '../model/setters';
+import type { Setter } from '../model/setter';
 import type { UseFormSetError } from 'react-hook-form';
 import type { FormMetadataFileValues } from '../model/form-metadata-file-values';
 

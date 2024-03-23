@@ -14,15 +14,19 @@ export function DownloadMetadata(props: DownloadMetadataProps) {
     const optionalFields = useMintStore((state) => state.optionalFields);
     const identity = useMintStore((state) => state.identity);
     const attributes = useMintStore((state) => state.attributes);
+    const assets = useMintStore((state) => state.assets);
     const [file, setFile] = useState<Blob>(new Blob([''], options));
     useEffect(() => {
         const metadata = { ...identity, ...optionalFields };
         metadata.attributes = optionalFields.unique
             ? attributes.attributes
             : undefined;
+        metadata.assets = optionalFields.unique
+            ? assets.assets
+            : undefined;
         console.log(metadata);
         setFile(new Blob([JSON.stringify(metadata)], options));
-    }, [optionalFields, identity, attributes]);
+    }, [optionalFields, identity, attributes, assets]);
 
     return (
         <div className={cn(className, cls.downloadMetadata)}>

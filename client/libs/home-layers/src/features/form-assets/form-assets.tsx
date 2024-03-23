@@ -1,36 +1,36 @@
 import cn from 'classnames';
-import { useFieldArray, useForm } from 'react-hook-form';
-import cls from './form-attributes.module.css';
-import { FormAttributesInput } from './ui/form-attributes-input';
-import type { FormAttributesValues } from './model/form-attributes-values';
-import { Button } from '@/shared/ui/button';
+import cls from './form-assets.module.css';
 import { useMintStore } from '@/shared/store/mint-store';
+import { useFieldArray, useForm } from 'react-hook-form';
+import { FormAssetsValues } from './model/form-assets-values';
+import { Button } from '@/shared/ui/button';
+import { FormAssetsInput } from './ui/form-assets-input';
 
-interface FormAttributesProps {
+interface FormAssetsProps {
     className?: string;
 }
 
-export function FormAttributes(props: FormAttributesProps) {
+export function FormAssets(props: FormAssetsProps) {
     const { className } = props;
 
     const unique = useMintStore((state) => state.optionalFields.unique);
-    const attributes = useMintStore((state) => state.attributes);
-    const setAttributes = useMintStore((state) => state.setAttributes);
+    const assets = useMintStore((state) => state.assets);
+    const setAssets = useMintStore((state) => state.setAssets);
 
-    const { control, handleSubmit } = useForm<FormAttributesValues>({
-        values: attributes,
+    const { control, handleSubmit } = useForm<FormAssetsValues>({
+        values: assets,
         // resolver: zodResolver(schema),
         // shouldFocusError: false,
     });
 
     const { fields, append, remove } = useFieldArray({
         control,
-        name: 'attributes',
+        name: 'assets',
     });
 
-    function onAction(data: FormAttributesValues) {
-        console.log(...data.attributes);
-        setAttributes(data);
+    function onAction(data: FormAssetsValues) {
+        console.log(...data.assets);
+        setAssets(data);
     }
 
     if (!unique) {
@@ -40,10 +40,10 @@ export function FormAttributes(props: FormAttributesProps) {
     return (
         <form
             onChange={handleSubmit(onAction)}
-            className={cn(className, cls.formAttributes)}
+            className={cn(className, cls.formAssets)}
         >
             {fields.map((field, index) => (
-                <FormAttributesInput
+                <FormAssetsInput
                     remove={() => {
                         remove(index);
                         handleSubmit(onAction)();
@@ -51,18 +51,18 @@ export function FormAttributes(props: FormAttributesProps) {
                     key={index}
                     control={control}
                     index={index}
-                    name={'attributes'}
+                    name={'assets'}
                     field={field}
                 />
             ))}
             <Button
                 type='button'
                 onClick={() => {
-                    append({ type: '', name: '', value: '' });
+                    append({ url: '', hash: '' });
                     handleSubmit(onAction)();
                 }}
             >
-                Add Attribute
+                Add Asset
             </Button>
         </form>
     );

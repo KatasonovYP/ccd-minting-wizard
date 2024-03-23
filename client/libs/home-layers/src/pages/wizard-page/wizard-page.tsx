@@ -13,6 +13,7 @@ import { FormAttributes } from '../../features/form-attributes';
 import cls from './wizard-page.module.css';
 import { ConcordiumLogoIcon } from '@/shared/assets/icons';
 import { FormMetadataFile } from '@/home/features/form-metadata-file';
+import { FormAssets } from '@/home/features/form-assets';
 
 interface WizardPageProps {
     className?: string;
@@ -45,7 +46,8 @@ export function WizardPage(props: WizardPageProps) {
                     <FormMintingSettings />
                     <FormFunctionalitySettings />
                     <FormMetadataOptional />
-                    <FormAttributes />
+                    <FormAttributes className='mb-4' />
+                    <FormAssets />
                 </div>
                 <ShowCode className={'shadow-md'} />
             </div>
