@@ -1,5 +1,4 @@
 import { render } from '@testing-library/react';
-
 import { FormAssets } from './form-assets';
 
 describe('form-assets', () => {

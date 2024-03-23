@@ -1,10 +1,10 @@
 import cn from 'classnames';
-import cls from './form-assets.module.css';
-import { useMintStore } from '@/shared/store/mint-store';
 import { useFieldArray, useForm } from 'react-hook-form';
-import { FormAssetsValues } from './model/form-assets-values';
-import { Button } from '@/shared/ui/button';
+import cls from './form-assets.module.css';
 import { FormAssetsInput } from './ui/form-assets-input';
+import type { FormAssetsValues } from './model/form-assets-values';
+import { useMintStore } from '@/shared/store/mint-store';
+import { Button } from '@/shared/ui/button';
 
 interface FormAssetsProps {
     className?: string;

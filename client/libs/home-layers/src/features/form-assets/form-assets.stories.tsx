@@ -1,6 +1,6 @@
+import { FormAssets } from './form-assets';
 import type { Meta, StoryObj } from '@storybook/react';
 
-import { FormAssets } from './form-assets';
 
 const meta: Meta<typeof FormAssets> = {
     title: 'unknown/form-assets',

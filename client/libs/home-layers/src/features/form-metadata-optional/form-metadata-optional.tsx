@@ -7,8 +7,8 @@ import { InputCis2Url } from './ui/input-cis2-url';
 import { toFormAdapter } from './utils/to-form-adapter';
 import { toStoreAdapter } from './utils/to-store-adapter';
 import type { Cis2Optional, Cis2Url } from '@/shared/store/mint-store';
-import { useMintStore } from '@/shared/store/mint-store';
 import type { FormMetadataOptionalValues } from './model/form-metadata-optional-values';
+import { useMintStore } from '@/shared/store/mint-store';
 import { CheckboxControlled } from '@/shared/ui/checkbox';
 import { InputControlled } from '@/shared/ui/input';
 

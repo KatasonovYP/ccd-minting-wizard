@@ -1,9 +1,10 @@
-import { InputControlled, InputControlledProps } from '@/shared/ui/input';
+import { Trash } from 'lucide-react';
+import type { InputControlledProps } from '@/shared/ui/input';
+import type { Cis2Url } from '@/shared/store/mint-store';
+import type { FormAssetsValues } from '../model/form-assets-values';
+import { InputControlled } from '@/shared/ui/input';
 import { Text } from '@/shared/ui/text';
 import { Button } from '@/shared/ui/button';
-import { Trash } from 'lucide-react';
-import { Cis2Url } from '@/shared/store/mint-store';
-import { FormAssetsValues } from '../model/form-assets-values';
 
 interface FormAssetsInputProps extends InputControlledProps<FormAssetsValues> {
     field: Cis2Url;

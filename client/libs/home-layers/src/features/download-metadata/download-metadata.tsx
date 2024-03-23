@@ -21,9 +21,7 @@ export function DownloadMetadata(props: DownloadMetadataProps) {
         metadata.attributes = optionalFields.unique
             ? attributes.attributes
             : undefined;
-        metadata.assets = optionalFields.unique
-            ? assets.assets
-            : undefined;
+        metadata.assets = optionalFields.unique ? assets.assets : undefined;
         console.log(metadata);
         setFile(new Blob([JSON.stringify(metadata)], options));
     }, [optionalFields, identity, attributes, assets]);
