@@ -1,6 +1,5 @@
 import cn from 'classnames';
 import { ConnectButton } from '../../features/connect-button';
-import { FormMetadata } from '../../features/form-metadata/ui/form-metadata';
 import { FormIdentity } from '../../features/form-identity';
 import { DeployContract } from '../../features/deploy-contract';
 import { ShowCode } from '../../widgets/show-code';
@@ -13,6 +12,7 @@ import { FormFunctionalitySettings } from '../../features/form-functionality-set
 import { FormAttributes } from '../../features/form-attributes';
 import cls from './wizard-page.module.css';
 import { ConcordiumLogoIcon } from '@/shared/assets/icons';
+import { FormMetadataFile } from '@/home/features/form-metadata-file';
 
 interface WizardPageProps {
     className?: string;
@@ -40,7 +40,7 @@ export function WizardPage(props: WizardPageProps) {
                         'rounded-lg bg-white p-4 shadow-md',
                     )}
                 >
-                    <FormMetadata />
+                    <FormMetadataFile />
                     <FormIdentity />
                     <FormMintingSettings />
                     <FormFunctionalitySettings />

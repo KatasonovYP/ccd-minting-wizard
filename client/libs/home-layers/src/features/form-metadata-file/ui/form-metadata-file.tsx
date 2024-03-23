@@ -1,8 +1,8 @@
+import type { SubmitHandler } from 'react-hook-form';
 import { useForm } from 'react-hook-form';
 import cn from 'classnames';
 import { fileRead } from '../lib/file-read';
-import type { SubmitHandler } from 'react-hook-form';
-import type { FormMetadataValues } from '../model/form-metadata-values';
+import type { FormMetadataFileValues } from '../model/form-metadata-file-values';
 import { InputFile } from '@/shared/ui/input';
 import { useMintStore } from '@/shared/store/mint-store';
 
@@ -10,20 +10,20 @@ interface FormMetadataProps {
     className?: string;
 }
 
-export function FormMetadata(props: FormMetadataProps) {
+export function FormMetadataFile(props: FormMetadataProps) {
     const { className } = props;
     const {
         register,
         handleSubmit,
         formState: { errors },
         setError,
-    } = useForm<FormMetadataValues>();
+    } = useForm<FormMetadataFileValues>();
 
     const setIdentity = useMintStore((store) => store.setIdentity);
     const setOptionalFields = useMintStore((store) => store.setOptionalFields);
     const setAttributes = useMintStore((store) => store.setAttributes);
 
-    const onAction: SubmitHandler<FormMetadataValues> = async (
+    const onAction: SubmitHandler<FormMetadataFileValues> = async (
         data,
     ): Promise<void> => {
         try {

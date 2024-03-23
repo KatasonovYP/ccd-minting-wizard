@@ -1,7 +1,7 @@
 import { cis2Validator } from './cis2-validator';
 import type { Setter } from '../model/setters';
 import type { UseFormSetError } from 'react-hook-form';
-import type { FormMetadataValues } from '../model/form-metadata-values';
+import type { FormMetadataFileValues } from '../model/form-metadata-file-values';
 
 const errors = {
     json: {
@@ -17,7 +17,7 @@ const errors = {
 export function jsonHandler(
     buffer: string,
     setters: Setter[],
-    setError: UseFormSetError<FormMetadataValues>,
+    setError: UseFormSetError<FormMetadataFileValues>,
 ) {
     try {
         const parsed = JSON.parse(buffer);
