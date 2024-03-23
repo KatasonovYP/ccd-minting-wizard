@@ -1,4 +1,4 @@
-import { ShowCode } from './show-code';
+import ShowCode from './show-code';
 import type { Meta, StoryObj } from '@storybook/react';
 
 const meta: Meta<typeof ShowCode> = {

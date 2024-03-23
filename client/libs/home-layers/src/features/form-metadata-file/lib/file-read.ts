@@ -2,10 +2,6 @@ import { jsonHandler } from './json-handler';
 import type { Setter } from '../model/setter';
 import type { UseFormSetError } from 'react-hook-form';
 import type { FormMetadataFileValues } from '../model/form-metadata-file-values';
-import type { MintStoreState } from '@/shared/store/mint-store';
-import type { Setters } from '@/shared/types/utils';
-
-type A = Setters<MintStoreState>;
 
 export function fileRead(
     blob: Blob,

@@ -2,7 +2,7 @@ import cn from 'classnames';
 import { useEffect, useState } from 'react';
 import cls from './download-metadata.module.css';
 import { Button } from '@/shared/ui/button';
-import { useMintStore } from '@/shared/store/mint-store';
+import { Cis2, useMintStore } from '@/shared/store/mint-store';
 
 interface DownloadMetadataProps {
     className?: string;
@@ -17,7 +17,7 @@ export function DownloadMetadata(props: DownloadMetadataProps) {
     const assets = useMintStore((state) => state.assets);
     const [file, setFile] = useState<Blob>(new Blob([''], options));
     useEffect(() => {
-        const metadata = { ...identity, ...optionalFields };
+        const metadata: Cis2 = { ...identity, ...optionalFields };
         metadata.attributes = optionalFields.unique
             ? attributes.attributes
             : undefined;
