@@ -3,21 +3,16 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import z from 'zod';
 import cls from './form-minting-settings.module.css';
-import type { MintingSettings } from '@/shared/store/mint-store';
 import { useMintStore } from '@/shared/store/mint-store';
 import { InputControlled } from '@/shared/ui/input';
+import { FormMintingSettingsValues } from './model/form-minting-settings-values';
+import { formMintingSettingsAdapter } from './utils/form-minting-settings-adapter';
 
 interface FormMintingSettingsProps {
     className?: string;
 }
 
-type FormMintingSettingsValues = MintingSettings;
-
-const numberConstraints = z
-    .string()
-    .regex(/^0$|^[1-9]+$/, 'Must be a positive integer')
-    .max(20, 'The value is too high')
-    .optional();
+const numberConstraints = z.coerce.number().gt(-1).lt(100).optional();
 
 const schema = z.object({
     premint: numberConstraints,
@@ -32,17 +27,13 @@ export function FormMintingSettings(props: FormMintingSettingsProps) {
     const mintingSettings = useMintStore((state) => state.mintingSettings);
 
     const { handleSubmit, control } = useForm<FormMintingSettingsValues>({
-        values: mintingSettings,
+        values: formMintingSettingsAdapter.toForm(mintingSettings),
         shouldFocusError: false,
         resolver: zodResolver(schema),
     });
 
     function onAction(data: FormMintingSettingsValues) {
-        console.log(data);
-        setMintingSettings({
-            premint: data.premint || undefined,
-            'maximum tokens': data['maximum tokens'] || undefined,
-        });
+        setMintingSettings(formMintingSettingsAdapter.toStore(data));
     }
 
     return (
@@ -51,12 +42,8 @@ export function FormMintingSettings(props: FormMintingSettingsProps) {
             className={cn(className, cls.formIdentity)}
         >
             <div className='flex justify-between gap-4'>
-                <InputControlled
-                    {...{ control, name: 'premint', type: 'number' }}
-                />
-                <InputControlled
-                    {...{ control, name: 'maximum tokens', type: 'number' }}
-                />
+                <InputControlled {...{ control, name: 'premint' }} />
+                <InputControlled {...{ control, name: 'maximum tokens' }} />
             </div>
         </form>
     );

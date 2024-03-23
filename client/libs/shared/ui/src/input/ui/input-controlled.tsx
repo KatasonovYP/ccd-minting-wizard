@@ -33,27 +33,29 @@ export function InputControlled<T extends FieldValues>(
             control={control}
             name={name}
             rules={rules}
-            render={({ field, fieldState: { error } }) => (
-                <div className={className}>
-                    {labeled && (
-                        <Text
-                            className='capitalize'
-                            text={label}
-                            size={'xs'}
+            render={({ field, fieldState: { error } }) => {
+                return (
+                    <div className={className}>
+                        {labeled && (
+                            <Text
+                                className='capitalize'
+                                text={label}
+                                size={'xs'}
+                            />
+                        )}
+                        <Input
+                            {...field}
+                            {...otherProps}
+                            onChange={(e) => {
+                                field.onChange(e);
+                                onChange && onChange(e);
+                            }}
+                            placeholder={`add ${label}...`}
                         />
-                    )}
-                    <Input
-                        {...field}
-                        {...otherProps}
-                        onChange={(e) => {
-                            field.onChange(e);
-                            onChange && onChange(e);
-                        }}
-                        placeholder={`add ${label}...`}
-                    />
-                    <ErrorMessage message={error?.message} />
-                </div>
-            )}
+                        <ErrorMessage message={error?.message} />
+                    </div>
+                );
+            }}
         />
     );
 }

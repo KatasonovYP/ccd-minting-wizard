@@ -36,7 +36,6 @@ export function FormFunctionalitySettings(
     });
 
     function onAction(data: FormFunctionalitySettingsValues) {
-        console.log(data);
         setContractFeatures(data);
     }
 

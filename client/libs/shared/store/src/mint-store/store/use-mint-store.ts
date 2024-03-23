@@ -25,8 +25,8 @@ export const useMintStore = create<Store>(
             description: 'Token description',
         },
         mintingSettings: {
-            premint: 0,
-            'maximum tokens': 0,
+            premint: undefined,
+            'maximum tokens': undefined,
         },
         contractFeatures: {
             burnable: false,
