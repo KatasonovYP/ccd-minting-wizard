@@ -1,9 +1,9 @@
 import { render } from '@testing-library/react';
-import { Select } from './select';
+import { FormAttributes } from './form-attributes';
 
-describe('select', () => {
+describe('form-attributes', () => {
     it('should render successfully', () => {
-        const { baseElement } = render(<Select />);
+        const { baseElement } = render(<FormAttributes />);
         expect(baseElement).toBeTruthy();
     });
 });

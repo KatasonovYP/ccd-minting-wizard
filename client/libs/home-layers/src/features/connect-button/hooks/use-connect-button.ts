@@ -7,7 +7,10 @@ export function useConnectButton() {
     const { setActiveConnectorType } = useConcordiumApi();
     const { connection } = useConcordiumApi();
 
-    useEffect(() => setActiveConnectorType(BROWSER_WALLET), [setActiveConnectorType]);
+    useEffect(
+        () => setActiveConnectorType(BROWSER_WALLET),
+        [setActiveConnectorType],
+    );
 
     return {
         toggleConnection: useToggleConnection(),

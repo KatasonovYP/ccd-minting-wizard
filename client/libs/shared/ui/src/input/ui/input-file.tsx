@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { Input } from '../../input';
 import { Text } from '../../text';
+import { ErrorMessage } from '../../error-message';
 import type { FieldError } from 'react-hook-form';
 import type { InputHTMLAttributes } from 'react';
 
@@ -25,19 +26,7 @@ export function InputFile(props: InputFileProps) {
                 {...formReg}
                 hidden
             />
-            {error?.message ? (
-                <Text
-                    className='text-red-500'
-                    size={'xs'}
-                    text={error.message}
-                />
-            ) : (
-                <Text
-                    size={'xs'}
-                    className='invisible'
-                    text='mock'
-                />
-            )}
+            <ErrorMessage message={error?.message} />
         </div>
     );
 }

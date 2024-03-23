@@ -1,15 +1,17 @@
-import type { Control, FieldValues, Path } from 'react-hook-form';
 import { Controller } from 'react-hook-form';
 import * as React from 'react';
 import { Text } from '../../text';
+import { ErrorMessage } from '../../error-message';
 import { Input } from './input.shadcn';
+import type { Control, FieldValues, Path } from 'react-hook-form';
 
 export interface InputControlledProps<T extends FieldValues>
     extends React.InputHTMLAttributes<HTMLInputElement> {
     control: Control<T>;
     name: Path<T>;
     rules?: Parameters<typeof Controller<T>>[0]['rules'];
-    label?: boolean;
+    labeled?: boolean;
+    label?: string;
 }
 
 export function InputControlled<T extends FieldValues>(
@@ -19,8 +21,10 @@ export function InputControlled<T extends FieldValues>(
         control,
         name,
         rules,
-        label = true,
+        labeled = true,
         className,
+        label = name,
+        onChange,
         ...otherProps
     } = props;
 
@@ -31,31 +35,23 @@ export function InputControlled<T extends FieldValues>(
             rules={rules}
             render={({ field, fieldState: { error } }) => (
                 <div className={className}>
-                    {label && (
+                    {labeled && (
                         <Text
                             className='capitalize'
-                            text={name}
+                            text={label}
                             size={'xs'}
                         />
                     )}
                     <Input
                         {...field}
                         {...otherProps}
-                        placeholder={`add ${name}...`}
+                        onChange={(e) => {
+                            field.onChange(e);
+                            onChange && onChange(e);
+                        }}
+                        placeholder={`add ${label}...`}
                     />
-                    {error?.message ? (
-                        <Text
-                            className='text-red-500'
-                            size={'xs'}
-                            text={error.message}
-                        />
-                    ) : (
-                        <Text
-                            className='invisible'
-                            size={'xs'}
-                            text='mock'
-                        />
-                    )}
+                    <ErrorMessage message={error?.message} />
                 </div>
             )}
         />

@@ -1,4 +1,4 @@
-import { Cis2 } from '@/shared/store/mint-store';
+import type { Cis2 } from '@/shared/store/mint-store';
 
 function hasExpectedKeys(
     json: Record<string, unknown>,

@@ -1,9 +1,9 @@
 import { render } from '@testing-library/react';
-import { Select } from './select';
+import { ErrorMessage } from './error-message';
 
-describe('select', () => {
+describe('error-message', () => {
     it('should render successfully', () => {
-        const { baseElement } = render(<Select />);
+        const { baseElement } = render(<ErrorMessage />);
         expect(baseElement).toBeTruthy();
     });
 });

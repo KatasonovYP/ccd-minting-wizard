@@ -1,7 +1,6 @@
 import { DownloadMetadata } from './download-metadata';
 import type { Meta, StoryObj } from '@storybook/react';
 
-
 const meta: Meta<typeof DownloadMetadata> = {
     title: 'unknown/download-metadata',
     component: DownloadMetadata,

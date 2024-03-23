@@ -1,13 +1,20 @@
-import { fileReaderListenerFabric } from './file-reader-listener-fabric';
+import { jsonHandler } from './json-handler';
+import type { Setter } from '../model/setters';
 import type { UseFormSetError } from 'react-hook-form';
 import type { FormMetadataValues } from '../model/form-metadata-values';
 
-export function fileRead<T>(
+export function fileRead(
     blob: Blob,
-    setValue: (value: T) => unknown,
+    setters: Setter[],
     setError: UseFormSetError<FormMetadataValues>,
 ) {
     const metadataReader = new FileReader();
-    metadataReader.onloadend = fileReaderListenerFabric(setValue, setError);
+
+    metadataReader.onloadend = (event) => {
+        const buffer = event.target?.result;
+        if (typeof buffer !== 'string') return;
+        jsonHandler(buffer, setters, setError);
+    };
+
     metadataReader.readAsText(blob);
 }

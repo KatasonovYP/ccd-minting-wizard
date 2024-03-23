@@ -16,6 +16,7 @@ export function DeployContract(props: DeployContractProps) {
         console.log(mintStore.mintingSettings);
         console.log(mintStore.contractFeatures);
         console.log(mintStore.optionalFields);
+        console.log(mintStore.attributes);
     }
 
     return (

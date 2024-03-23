@@ -1,0 +1,12 @@
+{
+    "name": "types",
+    "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+    "sourceRoot": "libs/shared/types/src",
+    "projectType": "library",
+    "targets": {
+        "lint": {
+            "executor": "@nx/eslint:lint"
+        }
+    },
+    "tags": []
+}

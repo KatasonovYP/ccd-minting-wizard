@@ -1,5 +1,5 @@
-import { Cis2Optional, Cis2Url } from '@/shared/store/mint-store';
-import { FormMetadataOptionalValues } from '../model/form-metadata-optional-values';
+import type { FormMetadataOptionalValues } from '../model/form-metadata-optional-values';
+import type { Cis2Optional, Cis2Url } from '@/shared/store/mint-store';
 
 export function getCleanUrl(
     data: FormMetadataOptionalValues,

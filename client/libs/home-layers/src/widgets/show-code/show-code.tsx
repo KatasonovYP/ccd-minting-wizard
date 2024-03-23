@@ -10,7 +10,7 @@ interface ShowCodeProps {
 
 export default function ShowCode(props: ShowCodeProps) {
     const { className } = props;
-    const {code} = useCode();
+    const { code } = useCode();
 
     const theme = 'dark';
 
@@ -25,7 +25,11 @@ export default function ShowCode(props: ShowCodeProps) {
             theme={theme}
             minHeight={'100%'}
             editable={false}
-            extensions={[rustLanguage, EditorState.readOnly.of(true), EditorView.lineWrapping]}
+            extensions={[
+                rustLanguage,
+                EditorState.readOnly.of(true),
+                EditorView.lineWrapping,
+            ]}
             basicSetup={{
                 lineNumbers: false,
                 foldGutter: false,

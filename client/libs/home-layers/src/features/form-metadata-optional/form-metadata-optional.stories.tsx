@@ -1,6 +1,5 @@
-import type { Meta, StoryObj } from '@storybook/react';
-
 import { FormMetadataOptional } from './form-metadata-optional';
+import type { Meta, StoryObj } from '@storybook/react';
 
 const meta: Meta<typeof FormMetadataOptional> = {
     title: 'unknown/form-metadata-optional',

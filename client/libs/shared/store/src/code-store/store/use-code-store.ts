@@ -17,7 +17,7 @@ interface Actions {
 
 type Store = State & Actions;
 
-export const useCodeStore = create<Store>((set, get): Store => {
+export const useCodeStore = create<Store>((): Store => {
     return {
         code: initialCode,
         formatCode: async (identity, functionalitySettings) => {
@@ -48,11 +48,15 @@ export const useCodeStore = create<Store>((set, get): Store => {
                 )
                 .replace(
                     '{permit}',
-                    functionalitySettings.permit ? `${endLine}permit_code();` : '',
+                    functionalitySettings.permit
+                        ? `${endLine}permit_code();`
+                        : '',
                 )
                 .replace(
                     '{roles}',
-                    functionalitySettings.roles ? `${endLine}roles_code();` : '',
+                    functionalitySettings.roles
+                        ? `${endLine}roles_code();`
+                        : '',
                 );
             // return initialCode;
             // return prettier.format(initialCode, {

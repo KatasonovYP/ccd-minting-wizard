@@ -1,15 +1,16 @@
 import cn from 'classnames';
-import cls from './form-metadata-optional.module.css';
 import { useForm } from 'react-hook-form';
-import { Cis2Optional, Cis2Url, useMintStore } from '@/shared/store/mint-store';
-import { InputCis2Url } from './ui/input-cis2-url';
-import { CheckboxControlled } from '@/shared/ui/checkbox';
-import { InputControlled } from '@/shared/ui/input';
-import { FormMetadataOptionalValues } from './model/form-metadata-optional-values';
-import { toFormAdapter } from './utils/to-form-adapter';
-import { toStoreAdapter } from './utils/to-store-adapter';
 import z from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
+import cls from './form-metadata-optional.module.css';
+import { InputCis2Url } from './ui/input-cis2-url';
+import { toFormAdapter } from './utils/to-form-adapter';
+import { toStoreAdapter } from './utils/to-store-adapter';
+import type { Cis2Optional, Cis2Url } from '@/shared/store/mint-store';
+import { useMintStore } from '@/shared/store/mint-store';
+import type { FormMetadataOptionalValues } from './model/form-metadata-optional-values';
+import { CheckboxControlled } from '@/shared/ui/checkbox';
+import { InputControlled } from '@/shared/ui/input';
 
 interface FormMetadataOptionalProps {
     className?: string;
@@ -36,12 +37,7 @@ const schema = z.object({
         .optional()
         .or(z.literal('')),
     unique: z.boolean().optional(),
-    decimals: z.coerce
-        .number()
-        .positive()
-        .max(10)
-        .optional()
-        .or(z.literal('')),
+    decimals: z.coerce.number().positive().max(10).optional().or(z.literal('')),
     'thumbnail url': zodUrl,
     'thumbnail hash': z.string().optional(),
     'display url': zodUrl,
@@ -63,7 +59,7 @@ export function FormMetadataOptional(props: FormMetadataOptionalProps) {
     });
 
     function onAction(data: FormMetadataOptionalValues) {
-        console.log(toStoreAdapter(data));
+        console.log(data);
         setOptionalFields(toStoreAdapter(data));
     }
 
@@ -78,14 +74,14 @@ export function FormMetadataOptional(props: FormMetadataOptionalProps) {
             />
             <InputControlled
                 control={control}
-                type={'number'}
                 name={'decimals'}
+                type='number'
             />
-            {fieldsUrl.map((name) => (
+            {fieldsUrl.map((name, id) => (
                 <InputCis2Url
                     control={control}
                     name={name as keyof FormMetadataOptionalValues}
-                    key={name}
+                    key={id}
                     url={(optionalFields[name] as Cis2Url)?.url}
                 />
             ))}

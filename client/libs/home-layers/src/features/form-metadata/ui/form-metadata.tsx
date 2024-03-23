@@ -5,7 +5,6 @@ import type { SubmitHandler } from 'react-hook-form';
 import type { FormMetadataValues } from '../model/form-metadata-values';
 import { InputFile } from '@/shared/ui/input';
 import { useMintStore } from '@/shared/store/mint-store';
-// import { postIpfs } from '../lib/post-ipfs';
 
 interface FormMetadataProps {
     className?: string;
@@ -22,14 +21,17 @@ export function FormMetadata(props: FormMetadataProps) {
 
     const setIdentity = useMintStore((store) => store.setIdentity);
     const setOptionalFields = useMintStore((store) => store.setOptionalFields);
+    const setAttributes = useMintStore((store) => store.setAttributes);
 
     const onAction: SubmitHandler<FormMetadataValues> = async (
         data,
     ): Promise<void> => {
         try {
-            fileRead(data.metadata[0], setIdentity, setError);
-            fileRead(data.metadata[0], setOptionalFields, setError);
-            // setMetadataFile(data.metadata);
+            fileRead(
+                data.metadata[0],
+                [setIdentity, setOptionalFields, setAttributes],
+                setError,
+            );
             // console.log(await postIpfs(data.metadata[0]));
         } catch (error) {
             console.error(error);
@@ -45,7 +47,7 @@ export function FormMetadata(props: FormMetadataProps) {
                 type='file'
                 accept='.json'
                 error={errors.metadata}
-                formReg={register('metadata', { required: true })}
+                formReg={register('metadata')}
             />
         </form>
     );

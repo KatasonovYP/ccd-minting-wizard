@@ -29,9 +29,7 @@ export function FormFunctionalitySettings(
     const setContractFeatures = useMintStore(
         (state) => state.setContractFeatures,
     );
-    const contractFeatures = useMintStore(
-        (state) => state.contractFeatures,
-    );
+    const contractFeatures = useMintStore((state) => state.contractFeatures);
 
     const { handleSubmit, control } = useForm<FormFunctionalitySettingsValues>({
         values: contractFeatures,

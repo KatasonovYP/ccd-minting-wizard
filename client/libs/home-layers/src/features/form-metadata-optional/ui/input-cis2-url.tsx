@@ -1,10 +1,8 @@
-import {
-    InputControlled,
-    InputControlledProps,
-} from '../../../../../shared/ui/src/input';
-import { FieldValues, Path } from 'react-hook-form';
-import { Text } from '../../../../../shared/ui/src/text';
 import * as React from 'react';
+import type { InputControlledProps } from '@/shared/ui/input';
+import type { FieldValues, Path } from 'react-hook-form';
+import { InputControlled } from '@/shared/ui/input';
+import { Text } from '@/shared/ui/text';
 
 interface InputCis2UrlProps<T extends FieldValues>
     extends InputControlledProps<T> {
@@ -26,13 +24,13 @@ export function InputCis2Url<T extends FieldValues>(
                 <InputControlled
                     control={control}
                     name={`${name} url` as Path<T>}
-                    label={false}
+                    labeled={false}
                     {...otherProps}
                 />
                 <InputControlled
                     control={control}
                     name={`${name} hash` as Path<T>}
-                    label={false}
+                    labeled={false}
                     disabled={!url}
                     {...otherProps}
                 />
