@@ -36,7 +36,7 @@ const schema = z.object({
         .optional()
         .or(z.literal('')),
     unique: z.boolean().optional(),
-    decimals: z.coerce.number().min(0).max(100).optional(),
+    decimals: z.coerce.number().min(0).max(12).optional(),
     'thumbnail url': zodUrl,
     'thumbnail hash': z.string().optional(),
     'display url': zodUrl,

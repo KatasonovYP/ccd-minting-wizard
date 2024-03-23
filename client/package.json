@@ -40,6 +40,7 @@
         "react-dom": "18.2.0",
         "react-hook-form": "7.51.0",
         "react-i18next": "14.0.1",
+        "react-number-format": "^5.3.4",
         "react-router-dom": "6.22.2",
         "react-stately": "3.29.1",
         "tailwindcss-animate": "^1.0.7",

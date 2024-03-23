@@ -12,7 +12,11 @@ interface FormMintingSettingsProps {
     className?: string;
 }
 
-const numberConstraints = z.coerce.number().gt(-1).lt(100).optional();
+const numberConstraints = z.coerce
+    .number()
+    .gt(-1)
+    .lt(10 ** 20)
+    .optional();
 
 const schema = z.object({
     premint: numberConstraints,
