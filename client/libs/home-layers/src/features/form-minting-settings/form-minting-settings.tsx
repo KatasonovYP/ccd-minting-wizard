@@ -17,6 +17,7 @@ const numberConstraints = z.coerce
     .gt(-1)
     .lt(10 ** 20)
     .optional();
+// .or(z.literal(''));
 
 const schema = z.object({
     premint: numberConstraints,

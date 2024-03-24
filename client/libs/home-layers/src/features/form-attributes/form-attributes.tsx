@@ -29,7 +29,6 @@ export function FormAttributes(props: FormAttributesProps) {
     });
 
     function onAction(data: FormAttributesValues) {
-        console.log(...data.attributes);
         setAttributes(data);
     }
 

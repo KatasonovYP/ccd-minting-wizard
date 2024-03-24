@@ -12,19 +12,19 @@ const options = { type: 'application/json' };
 export function DownloadMetadata(props: DownloadMetadataProps) {
     const { className } = props;
     const optionalFields = useMintStore((state) => state.optionalFields);
+    const mintingSettings = useMintStore((state) => state.mintingSettings);
     const identity = useMintStore((state) => state.identity);
     const attributes = useMintStore((state) => state.attributes);
     const assets = useMintStore((state) => state.assets);
     const [file, setFile] = useState<Blob>(new Blob([''], options));
     useEffect(() => {
-        const metadata: Cis2 = { ...identity, ...optionalFields };
+        const metadata: Cis2 = { ...identity, ...optionalFields, ...mintingSettings };
         metadata.attributes = optionalFields.unique
             ? attributes.attributes
             : undefined;
         metadata.assets = optionalFields.unique ? assets.assets : undefined;
-        console.log(metadata);
         setFile(new Blob([JSON.stringify(metadata)], options));
-    }, [optionalFields, identity, attributes, assets]);
+    }, [optionalFields, mintingSettings, identity, attributes, assets]);
 
     return (
         <div className={cn(className, cls.downloadMetadata)}>

@@ -29,7 +29,6 @@ export function FormAssets(props: FormAssetsProps) {
     });
 
     function onAction(data: FormAssetsValues) {
-        console.log(...data.assets);
         setAssets(data);
     }
 
