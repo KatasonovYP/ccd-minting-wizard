@@ -78,7 +78,6 @@ export function FormMetadataOptional(props: FormMetadataOptionalProps) {
                 name={'decimals'}
                 // type='number'
             />
-            <TokenAvatar />
             {fieldsUrl.map((name, id) => (
                 <InputCis2Url
                     control={control}
@@ -87,6 +86,8 @@ export function FormMetadataOptional(props: FormMetadataOptionalProps) {
                     url={(optionalFields[name] as Cis2Url)?.url}
                 />
             ))}
+            <TokenAvatar type='thumbnail' />
+            <TokenAvatar type='display' />
             <CheckboxControlled
                 control={control}
                 name={'unique'}
