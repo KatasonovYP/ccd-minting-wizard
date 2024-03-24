@@ -10,8 +10,8 @@ import { FormMetadataOptional } from '../../features/form-metadata-optional';
 import { DownloadMetadata } from '../../features/download-metadata';
 import { FormFunctionalitySettings } from '../../features/form-functionality-settings';
 import { FormAttributes } from '../../features/form-attributes';
-import { FormMetadataFile } from '../../features/form-metadata-file/ui/form-metadata-file';
-import { FormAssets } from '../../features/form-assets/form-assets';
+import { FormMetadataFile } from '@/home/features/form-metadata-file';
+import { FormAssets } from '@/home/features/form-assets';
 import cls from './wizard-page.module.css';
 import { ConcordiumLogoIcon } from '@/shared/assets/icons';
 

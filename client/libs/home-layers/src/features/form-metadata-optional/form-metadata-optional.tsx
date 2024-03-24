@@ -10,6 +10,7 @@ import type { FormMetadataOptionalValues } from './model/form-metadata-optional-
 import { CheckboxControlled } from '@/shared/ui/checkbox';
 import { InputControlled } from '@/shared/ui/input';
 import { formMetadataOptionalAdapter } from './utils/form-metadata-optional-adapter';
+import { TokenAvatar } from '@/home/entities/token-avatar';
 
 interface FormMetadataOptionalProps {
     className?: string;
@@ -77,6 +78,7 @@ export function FormMetadataOptional(props: FormMetadataOptionalProps) {
                 name={'decimals'}
                 // type='number'
             />
+            <TokenAvatar />
             {fieldsUrl.map((name, id) => (
                 <InputCis2Url
                     control={control}
