@@ -26,21 +26,4 @@
     @media screen and (max-width: 800px) {
         flex-direction: column;
     }
-
-    .forms {
-        overflow-y: auto;
-        max-width: 456px;
-        width: 100%;
-
-        &::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        &::-webkit-scrollbar-thumb {
-            background: rgba(126, 126, 126, 0.4);
-            background-clip: content-box;
-            border: 2px solid transparent;
-            border-radius: var(--border-radius-xl);
-        }
-    }
 }
