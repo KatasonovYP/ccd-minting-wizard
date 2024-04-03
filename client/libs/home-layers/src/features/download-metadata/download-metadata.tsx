@@ -14,11 +14,12 @@ export function DownloadMetadata(props: DownloadMetadataProps) {
     const optionalFields = useMintStore((state) => state.optionalFields);
     const mintingSettings = useMintStore((state) => state.mintingSettings);
     const identity = useMintStore((state) => state.identity);
+    const display = useMintStore((state) => state.display);
     const attributes = useMintStore((state) => state.attributes);
     const assets = useMintStore((state) => state.assets);
     const [file, setFile] = useState<Blob>(new Blob([''], options));
     useEffect(() => {
-        const metadata: Cis2 = { ...identity, ...optionalFields, ...mintingSettings };
+        const metadata: Cis2 = { ...identity, ...optionalFields, ...mintingSettings, ...display };
         metadata.attributes = optionalFields.unique
             ? attributes.attributes
             : undefined;

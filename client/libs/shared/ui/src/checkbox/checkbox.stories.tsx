@@ -1,4 +1,4 @@
-import { Checkbox } from './checkbox';
+import { Checkbox } from './ui/checkbox.shadcn';
 import type { Meta, StoryObj } from '@storybook/react';
 
 const meta: Meta<typeof Checkbox> = {
@@ -11,7 +11,7 @@ export default meta;
 type Story = StoryObj<typeof Checkbox>;
 
 export const Primary: Story = {
-    args: { label: 'click me' },
+    args: { title: 'click me' },
     parameters: {
         backgrounds: { default: 'light' },
     },

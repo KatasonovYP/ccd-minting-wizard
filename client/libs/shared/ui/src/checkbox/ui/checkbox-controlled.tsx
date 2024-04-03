@@ -1,9 +1,9 @@
+import type { Control, FieldValues, Path } from 'react-hook-form';
 import { Controller } from 'react-hook-form';
 import * as React from 'react';
 import cn from 'classnames';
-import { Text } from '../../text';
 import { Checkbox } from './checkbox.shadcn';
-import type { Control, FieldValues, Path } from 'react-hook-form';
+import { Label } from '../../label';
 
 interface CheckboxControlledProps<T extends FieldValues>
     extends Partial<Parameters<typeof Checkbox>[0]> {
@@ -31,16 +31,12 @@ export function CheckboxControlled<T extends FieldValues>(
                         checked={field.value}
                         onCheckedChange={field.onChange}
                     />
-                    <label
-                        className='capitalize'
+                    <Label
+                        className='capitalize cursor-pointer'
                         htmlFor={`checkbox-${name}`}
                     >
-                        <Text
-                            className='capitalize'
-                            text={name}
-                            size={'xs'}
-                        />
-                    </label>
+                        {name}
+                    </Label>
                 </div>
             )}
         />

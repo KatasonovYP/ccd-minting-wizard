@@ -9,6 +9,7 @@ import { FormMetadataOptional } from '@/home/features/form-metadata-optional';
 import { FormAttributes } from '@/home/features/form-attributes';
 import { FormAssets } from '@/home/features/form-assets';
 import { ScrollArea } from '@/shared/ui/scroll-area';
+import { FormImages } from '@/home/features/form-images';
 
 interface SidebarProps {
     className?: string;
@@ -29,12 +30,13 @@ export function Sidebar(props: SidebarProps) {
                 defaultValue='basic'
                 className={cn('')}
             >
-                <TabsList className='grid w-full grid-cols-2'>
+                <TabsList className='grid w-full grid-cols-2 mb-8'>
                     <TabsTrigger value='basic'>Basic</TabsTrigger>
                     <TabsTrigger value='advanced'>Advanced</TabsTrigger>
                 </TabsList>
                 <TabsContent value='basic'>
                     <FormIdentity />
+                    <FormImages className={'mb-4'} />
                     <FormMintingSettings />
                     <FormFunctionalitySettings />
                     <FormMetadataOptional />

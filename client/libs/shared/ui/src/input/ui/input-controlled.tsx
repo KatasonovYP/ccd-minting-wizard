@@ -4,6 +4,7 @@ import { Text } from '../../text';
 import { ErrorMessage } from '../../error-message';
 import { Input } from './input.shadcn';
 import type { Control, FieldValues, Path } from 'react-hook-form';
+import { Label } from '../../label';
 
 export interface InputControlledProps<T extends FieldValues>
     extends React.InputHTMLAttributes<HTMLInputElement> {
@@ -33,29 +34,22 @@ export function InputControlled<T extends FieldValues>(
             control={control}
             name={name}
             rules={rules}
-            render={({ field, fieldState: { error } }) => {
-                return (
-                    <div className={className}>
-                        {labeled && (
-                            <Text
-                                className='capitalize'
-                                text={label}
-                                size={'xs'}
-                            />
-                        )}
-                        <Input
-                            {...field}
-                            {...otherProps}
-                            onChange={(e) => {
-                                field.onChange(e);
-                                onChange && onChange(e);
-                            }}
-                            placeholder={`add ${label}...`}
-                        />
-                        <ErrorMessage message={error?.message} />
-                    </div>
-                );
-            }}
+            render={({ field, fieldState: { error } }) => (
+                <div className={className}>
+                    {labeled && <Label htmlFor={name}>{label}</Label>}
+                    <Input
+                        {...field}
+                        {...otherProps}
+                        id={name}
+                        onChange={(e) => {
+                            field.onChange(e);
+                            onChange && onChange(e);
+                        }}
+                        placeholder={`add ${label}...`}
+                    />
+                    <ErrorMessage message={error?.message} />
+                </div>
+            )}
         />
     );
 }

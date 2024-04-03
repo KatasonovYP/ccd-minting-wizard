@@ -12,6 +12,9 @@ export interface MintStoreState {
     optionalFields: Cis2Optional;
     attributes: { attributes: Cis2Attribute[] };
     assets: { assets: Cis2Url[] };
+    display: { display?: Cis2Url };
+    thumbnail: { thumbnail?: Cis2Url };
+    artifact: { artifact?: Cis2Url };
 }
 
 export type MintStoreActions = Setters<MintStoreState>;
@@ -41,8 +44,14 @@ export const useMintStore = create<Store>(
             symbol: undefined,
             unique: undefined,
             decimals: undefined,
-            thumbnail: undefined,
+        },
+        display: {
             display: undefined,
+        },
+        thumbnail: {
+            thumbnail: undefined,
+        },
+        artifact: {
             artifact: undefined,
         },
         attributes: {
@@ -58,5 +67,8 @@ export const useMintStore = create<Store>(
         setOptionalFields: (optionalFields) => set({ optionalFields }),
         setAttributes: (attributes) => set({ attributes }),
         setAssets: (assets) => set({ assets }),
+        setDisplay: (display) => set({ display }),
+        setThumbnail: (thumbnail) => set({ thumbnail }),
+        setArtifact: (artifact) => set({ artifact }),
     }),
 );

@@ -7,4 +7,9 @@
         box-shadow: inset 0 0 0 2rem theme(colors.yellow.100);
         caret-color: black;
     }
+
+    &[type=file]::file-selector-button {
+        color: black;
+        font-weight: 600;
+    }
 }
