@@ -30,16 +30,18 @@ export function FormImages(props: FormImagesProps) {
     const { className } = props;
 
     const [image, setImage] = useState('');
-    const [isUrl, setIsUrl] = useState(false);
     const setDisplay = useMintStore((state) => state.setDisplay);
     const setThumbnail = useMintStore((state) => state.setThumbnail);
     const display = useMintStore((state) => state.display)
     const thumbnail = useMintStore((state) => state.thumbnail);
+    const [isUrlDisplay, setIsUrlDisplay] = useState(!!display.display?.url);
+    const [isUrlThumbnail, setIsUrlThumbnail] = useState(!!thumbnail.thumbnail?.url);
 
     const { register, control, handleSubmit, watch, getValues } =
         useForm<FormImagesValues>({
             values: {
-                'url usage': display.display?.url ? true : isUrl,
+                'url usage display': display.display?.url ? true : isUrlDisplay,
+                'url usage thumbnail': thumbnail.thumbnail?.url ? true : isUrlThumbnail,
                 'file display': undefined,
                 'url display': display.display?.url || '',
                 'file thumbnail': undefined,
@@ -61,15 +63,15 @@ export function FormImages(props: FormImagesProps) {
 
     async function onAction(data: FormImagesValues) {
         console.log(data);
-        setIsUrl(data['url usage']);
-        if (!data['url usage'] && data['file display']?.length) {
+        setIsUrlDisplay(data['url usage display']);
+        if (!data['url usage display'] && data['file display']?.length) {
             readFileImage(data['file display'][0]);
             const ipfsUrl = await postIpfs(data['file display'][0]);
             setDisplay({ display: { url: ipfsUrl } });
         } else {
             setDisplay({ display: { url: data['url display'] } });
         }
-        if (!data['url usage'] && data['file thumbnail']?.length) {
+        if (!data['url usage thumbnail'] && data['file thumbnail']?.length) {
             readFileImage(data['file thumbnail'][0]);
             const ipfsUrl = await postIpfs(data['file thumbnail'][0]);
             setThumbnail({ thumbnail: { url: ipfsUrl } });
@@ -102,11 +104,17 @@ export function FormImages(props: FormImagesProps) {
                         <div className='flex flex-col gap-4'>
                             <Controller
                                 control={control}
-                                name={'url usage'}
+                                name={'url usage display'}
                                 render={({
                                     field: { onChange, value, name, ref },
                                 }) => (
                                     <div className='flex items-center gap-4'>
+                                        <Label
+                                            className='cursor-pointer text-sm capitalize'
+                                            htmlFor={`switch-${name}`}
+                                        >
+                                            {name}
+                                        </Label>
                                         <Switch
                                             ref={ref}
                                             id={`switch-${name}`}
@@ -116,16 +124,10 @@ export function FormImages(props: FormImagesProps) {
                                                 handleSubmit(onAction)();
                                             }}
                                         />
-                                        <Label
-                                            className='cursor-pointer text-sm capitalize'
-                                            htmlFor={`switch-${name}`}
-                                        >
-                                            {name}
-                                        </Label>
                                     </div>
                                 )}
                             />
-                            {isUrl ? (
+                            {isUrlDisplay ? (
                                 <InputControlled
                                     control={control}
                                     name={'url display'}
@@ -176,7 +178,7 @@ export function FormImages(props: FormImagesProps) {
                         <div className='flex flex-col gap-4'>
                             <Controller
                                 control={control}
-                                name={'url usage'}
+                                name={'url usage thumbnail'}
                                 render={({
                                     field: { onChange, value, name, ref },
                                 }) => (
@@ -199,7 +201,7 @@ export function FormImages(props: FormImagesProps) {
                                     </div>
                                 )}
                             />
-                            {isUrl ? (
+                            {isUrlDisplay ? (
                                 <InputControlled
                                     control={control}
                                     name={'url thumbnail'}

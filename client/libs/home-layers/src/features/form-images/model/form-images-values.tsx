@@ -3,5 +3,6 @@ export interface FormImagesValues {
     'url display': string;
     'file thumbnail'?: FileList;
     'url thumbnail': string;
-    'url usage': boolean;
+    'url usage display': boolean;
+    'url usage thumbnail': boolean;
 }
