@@ -4,5 +4,5 @@ export type Identity = Required<Pick<Cis2, 'name' | 'description'>>;
 
 export type Cis2Optional = Omit<
     Cis2,
-    keyof Identity | 'assets' | 'attributes' | 'localization'
+    keyof Identity | 'assets' | 'attributes' | 'localization' | 'display' | 'thumbnail'
 >;

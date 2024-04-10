@@ -10,15 +10,12 @@ import type { FormMetadataOptionalValues } from './model/form-metadata-optional-
 import { CheckboxControlled } from '@/shared/ui/checkbox';
 import { InputControlled } from '@/shared/ui/input';
 import { formMetadataOptionalAdapter } from './utils/form-metadata-optional-adapter';
-import { TokenAvatar } from '@/home/entities/token-avatar';
 
 interface FormMetadataOptionalProps {
     className?: string;
 }
 
 const fieldsUrl: Array<keyof Cis2Optional> = [
-    'thumbnail',
-    'display',
     'artifact',
 ];
 
@@ -38,10 +35,6 @@ const schema = z.object({
         .or(z.literal('')),
     unique: z.boolean().optional(),
     decimals: z.coerce.number().min(0).max(12).optional(),
-    'thumbnail url': zodUrl,
-    'thumbnail hash': z.string().optional(),
-    'display url': zodUrl,
-    'display hash': z.string().optional(),
     'artifact url': zodUrl,
     'artifact hash': z.string().optional(),
 } satisfies Record<keyof FormMetadataOptionalValues, unknown>);
@@ -76,7 +69,6 @@ export function FormMetadataOptional(props: FormMetadataOptionalProps) {
             <InputControlled
                 control={control}
                 name={'decimals'}
-                // type='number'
             />
             {fieldsUrl.map((name, id) => (
                 <InputCis2Url
@@ -86,8 +78,6 @@ export function FormMetadataOptional(props: FormMetadataOptionalProps) {
                     url={(optionalFields[name] as Cis2Url)?.url}
                 />
             ))}
-            <TokenAvatar type='thumbnail' />
-            <TokenAvatar type='display' />
             <CheckboxControlled
                 control={control}
                 name={'unique'}

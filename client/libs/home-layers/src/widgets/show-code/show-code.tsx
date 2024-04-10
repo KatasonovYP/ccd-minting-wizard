@@ -20,6 +20,7 @@ export default function ShowCode(props: ShowCodeProps) {
             className={cn(
                 className,
                 cls.showCode,
+                'rounded-md',
                 theme === 'dark' ? 'bg-[#282C34]' : 'bg-white',
             )}
             theme={theme}

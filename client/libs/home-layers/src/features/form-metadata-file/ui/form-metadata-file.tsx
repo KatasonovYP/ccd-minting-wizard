@@ -1,6 +1,6 @@
 import { useForm } from 'react-hook-form';
 import cn from 'classnames';
-import { fileRead } from '../lib/file-read';
+import { readFileJson } from '../lib/read-file-json';
 import type { SubmitHandler } from 'react-hook-form';
 import type { FormMetadataFileValues } from '../model/form-metadata-file-values';
 import { InputFile } from '@/shared/ui/input';
@@ -28,7 +28,7 @@ export function FormMetadataFile(props: FormMetadataProps) {
         data,
     ): Promise<void> => {
         try {
-            fileRead(
+            readFileJson(
                 data.metadata[0],
                 [setIdentity, setOptionalFields, setAttributes, setAssets],
                 setError,
@@ -45,7 +45,6 @@ export function FormMetadataFile(props: FormMetadataProps) {
             className={cn(className)}
         >
             <InputFile
-                type='file'
                 accept='.json'
                 error={errors.metadata}
                 formReg={register('metadata')}

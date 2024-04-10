@@ -7,18 +7,31 @@ import { Cis2, useMintStore } from '@/shared/store/mint-store';
 interface DownloadMetadataProps {
     className?: string;
 }
+
 const options = { type: 'application/json' };
 
 export function DownloadMetadata(props: DownloadMetadataProps) {
     const { className } = props;
-    const optionalFields = useMintStore((state) => state.optionalFields);
-    const mintingSettings = useMintStore((state) => state.mintingSettings);
-    const identity = useMintStore((state) => state.identity);
-    const attributes = useMintStore((state) => state.attributes);
-    const assets = useMintStore((state) => state.assets);
+    const {
+        optionalFields,
+        mintingSettings,
+        identity,
+        display,
+        thumbnail,
+        artifact,
+        attributes,
+        assets,
+    } = useMintStore((state) => state);
+
     const [file, setFile] = useState<Blob>(new Blob([''], options));
+
     useEffect(() => {
-        const metadata: Cis2 = { ...identity, ...optionalFields, ...mintingSettings };
+        const metadata: Cis2 = {
+            ...identity,
+            ...optionalFields,
+            ...mintingSettings,
+            ...display,
+        };
         metadata.attributes = optionalFields.unique
             ? attributes.attributes
             : undefined;
