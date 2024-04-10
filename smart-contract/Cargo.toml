@@ -11,9 +11,8 @@ std = ["concordium-std/std", "concordium-cis2/std"]
 bump_alloc = ["concordium-std/bump_alloc"]
 
 [dependencies]
-concordium-cis2 = "6.1.0"
+concordium-cis2 = {version = "6.1.0", default-features = false}
 concordium-std = {version = "10.1.0", default-features = false}
-sha256 = "1.1.3"
 
 [lib]
 crate-type=["cdylib", "rlib"]

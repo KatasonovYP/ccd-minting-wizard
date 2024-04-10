@@ -309,7 +309,7 @@ struct State<S = StateApi> {
     /// account to generate a signature.
     nonces_registry:    StateMap<AccountAddress, u64, S>,
     blacklist:          StateSet<Address, S>,
-    mint_airdrop:       ContractTokenAmount,
+    // mint_airdrop:       ContractTokenAmount,
     paused:             bool,
     /// A map containing all roles granted to addresses.
     roles:              StateMap<Address, AddressRoleState<S>, S>,
@@ -414,7 +414,8 @@ impl From<CustomContractError> for ContractError {
 }
 
 impl State {
-    fn empty(state_builder: &mut StateBuilder, mint_airdrop: ContractTokenAmount) -> Self {
+    fn empty(state_builder: &mut StateBuilder) -> Self {
+    // fn empty(state_builder: &mut StateBuilder, mint_airdrop: ContractTokenAmount) -> Self {
         State {
             state: state_builder.new_map(),
             tokens: state_builder.new_map(),
@@ -422,7 +423,7 @@ impl State {
             token_balance: state_builder.new_map(),
             implementors: state_builder.new_map(),
             nonces_registry: state_builder.new_map(),
-            mint_airdrop,
+            // mint_airdrop,
             blacklist: state_builder.new_set(),
             paused: false,
             roles: state_builder.new_map(),
@@ -641,7 +642,7 @@ fn get_canonical_address(address: Address) -> ContractResult<Address> {
 // Contract functions
 
 #[init(
-    contract = "cis2_multi",
+    contract = "ccd_minting_wizard2",
     parameter = "ContractTokenAmount",
     event = "Cis2Event<ContractTokenId, ContractTokenAmount>",
     enable_logger
@@ -651,9 +652,10 @@ fn contract_init(
     state_builder: &mut StateBuilder,
     logger: &mut impl HasLogger,
 ) -> InitResult<State> {
-    let mint_airdrop: ContractTokenAmount = ctx.parameter_cursor().get()?;
+    // let mint_airdrop: ContractTokenAmount = ctx.parameter_cursor().get()?;
 
-    let mut state = State::empty(state_builder, mint_airdrop);
+    let mut state = State::empty(state_builder);
+    // let mut state = State::empty(state_builder, mint_airdrop);
 
     let invoker = Address::Account(ctx.init_origin());
 
@@ -679,14 +681,14 @@ pub struct ViewState {
     pub nonces_registry: Vec<(AccountAddress, u64)>,
     pub blacklist:       Vec<Address>,
     pub roles:           Vec<(Address, Vec<Roles>)>,
-    pub mint_airdrop:    ContractTokenAmount,
+    // pub mint_airdrop:    ContractTokenAmount,
     pub paused:          bool,
     pub implementors:    Vec<(StandardIdentifierOwned, Vec<ContractAddress>)>,
 }
 
 /// View function for testing. This reports on the entire state of the contract
 /// for testing purposes.
-#[receive(contract = "cis2_multi", name = "view", return_value = "ViewState")]
+#[receive(contract = "ccd_minting_wizard2", name = "view", return_value = "ViewState")]
 fn contract_view(_ctx: &ReceiveContext, host: &Host<State>) -> ReceiveResult<ViewState> {
     let state = host.state();
 
@@ -744,7 +746,7 @@ fn contract_view(_ctx: &ReceiveContext, host: &Host<State>) -> ReceiveResult<Vie
         blacklist,
         roles,
         implementors,
-        mint_airdrop: host.state().mint_airdrop,
+        // mint_airdrop: host.state().mint_airdrop,
         paused: host.state().paused,
     })
 }
@@ -805,7 +807,7 @@ fn mint(
 }
 
 #[receive(
-    contract = "cis2_multi",
+    contract = "ccd_minting_wizard2",
     name = "mint",
     parameter = "MintParams",
     error = "ContractError",
@@ -862,7 +864,7 @@ fn burn(
 }
 
 #[receive(
-    contract = "cis2_multi",
+    contract = "ccd_minting_wizard2",
     name = "burn",
     parameter = "BurnParams",
     error = "ContractError",
@@ -932,7 +934,7 @@ fn transfer(
 }
 
 #[receive(
-    contract = "cis2_multi",
+    contract = "ccd_minting_wizard2",
     name = "transfer",
     parameter = "TransferParameter",
     error = "ContractError",
@@ -961,13 +963,13 @@ fn contract_transfer(
 
 /// Helper function that can be invoked at the front-end to serialize the
 /// `PermitMessage` before signing it in the wallet.
-#[receive(contract = "cis2_multi", name = "serializationHelper", parameter = "PermitMessage")]
+#[receive(contract = "ccd_minting_wizard2", name = "serializationHelper", parameter = "PermitMessage")]
 fn contract_serialization_helper(_ctx: &ReceiveContext, _host: &Host<State>) -> ContractResult<()> {
     Ok(())
 }
 
 #[receive(
-    contract = "cis2_multi",
+    contract = "ccd_minting_wizard2",
     name = "viewMessageHash",
     parameter = "PermitParam",
     return_value = "[u8;32]",
@@ -1008,7 +1010,7 @@ fn contract_view_message_hash(
 }
 
 #[receive(
-    contract = "cis2_multi",
+    contract = "ccd_minting_wizard2",
     name = "permit",
     parameter = "PermitParam",
     error = "ContractError",
@@ -1142,7 +1144,7 @@ fn update_operator(
 }
 
 #[receive(
-    contract = "cis2_multi",
+    contract = "ccd_minting_wizard2",
     name = "updateOperator",
     parameter = "UpdateOperatorParams",
     error = "ContractError",
@@ -1168,7 +1170,7 @@ pub type ContractBalanceOfQueryParams = BalanceOfQueryParams<ContractTokenId>;
 pub type ContractBalanceOfQueryResponse = BalanceOfQueryResponse<ContractTokenAmount>;
 
 #[receive(
-    contract = "cis2_multi",
+    contract = "ccd_minting_wizard2",
     name = "balanceOf",
     parameter = "ContractBalanceOfQueryParams",
     return_value = "ContractBalanceOfQueryResponse",
@@ -1189,7 +1191,7 @@ fn contract_balance_of(
 }
 
 #[receive(
-    contract = "cis2_multi",
+    contract = "ccd_minting_wizard2",
     name = "operatorOf",
     parameter = "OperatorOfQueryParams",
     return_value = "OperatorOfQueryResponse",
@@ -1217,7 +1219,7 @@ pub struct VecOfAddresses {
 }
 
 #[receive(
-    contract = "cis2_multi",
+    contract = "ccd_minting_wizard2",
     name = "isBlacklisted",
     parameter = "VecOfAddresses",
     return_value = "Vec<bool>",
@@ -1253,7 +1255,7 @@ pub struct VecOfAccountAddresses {
 }
 
 #[receive(
-    contract = "cis2_multi",
+    contract = "ccd_minting_wizard2",
     name = "publicKeyOf",
     parameter = "VecOfAccountAddresses",
     return_value = "PublicKeyOfQueryResponse",
@@ -1282,7 +1284,7 @@ impl From<Vec<u64>> for NonceOfQueryResponse {
 }
 
 #[receive(
-    contract = "cis2_multi",
+    contract = "ccd_minting_wizard2",
     name = "nonceOf",
     parameter = "VecOfAccountAddresses",
     return_value = "NonceOfQueryResponse",
@@ -1304,7 +1306,7 @@ fn contract_nonce_of(
 type ContractTokenMetadataQueryParams = TokenMetadataQueryParams<ContractTokenId>;
 
 #[receive(
-    contract = "cis2_multi",
+    contract = "ccd_minting_wizard2",
     name = "tokenMetadata",
     parameter = "ContractTokenMetadataQueryParams",
     return_value = "TokenMetadataQueryResponse",
@@ -1328,7 +1330,7 @@ fn contract_token_metadata(
 }
 
 #[receive(
-    contract = "cis2_multi",
+    contract = "ccd_minting_wizard2",
     name = "supports",
     parameter = "SupportsQueryParams",
     return_value = "SupportsQueryResponse",
@@ -1353,7 +1355,7 @@ fn contract_supports(
 }
 
 #[receive(
-    contract = "cis2_multi",
+    contract = "ccd_minting_wizard2",
     name = "supportsPermit",
     parameter = "SupportsPermitQueryParams",
     return_value = "SupportsQueryResponse",
@@ -1380,7 +1382,7 @@ fn contract_supports_permit(
 /// Set the addresses for an implementation given a standard identifier and a
 /// list of contract addresses.
 #[receive(
-    contract = "cis2_multi",
+    contract = "ccd_minting_wizard2",
     name = "setImplementors",
     parameter = "SetImplementorsParams",
     error = "ContractError",
@@ -1410,7 +1412,7 @@ pub struct UpdateBlacklist {
 pub struct UpdateBlacklistParams(#[concordium(size_length = 2)] pub Vec<UpdateBlacklist>);
 
 #[receive(
-    contract = "cis2_multi",
+    contract = "ccd_minting_wizard2",
     name = "updateBlacklist",
     parameter = "UpdateBlacklistParams",
     error = "ContractError",
@@ -1446,7 +1448,7 @@ fn contract_update_blacklist(
 }
 
 #[receive(
-    contract = "cis2_multi",
+    contract = "ccd_minting_wizard2",
     name = "upgrade",
     parameter = "UpgradeParams",
     error = "CustomContractError",
@@ -1472,7 +1474,7 @@ fn contract_upgrade(ctx: &ReceiveContext, host: &mut LowLevelHost) -> ContractRe
 }
 
 #[receive(
-    contract = "cis2_multi",
+    contract = "ccd_minting_wizard2",
     name = "setPaused",
     parameter = "SetPausedParams",
     error = "CustomContractError",
@@ -1491,7 +1493,7 @@ fn contract_set_paused(ctx: &ReceiveContext, host: &mut Host<State>) -> Contract
 }
 
 #[receive(
-    contract = "cis2_multi",
+    contract = "ccd_minting_wizard2",
     name = "grantRole",
     parameter = "GrantRoleParams",
     enable_logger,
@@ -1523,7 +1525,7 @@ fn contract_grant_role(
 }
 
 #[receive(
-    contract = "cis2_multi",
+    contract = "ccd_minting_wizard2",
     name = "revokeRole",
     parameter = "RevokeRoleParams",
     enable_logger,
