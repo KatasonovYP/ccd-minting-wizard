@@ -14,3 +14,64 @@
 ## Contract Deployment
 1. `concordium-client module deploy dist/module.wasm.v1 --sender <SENDER_ADDRESS> --name ccd_mint_wizard --grpc-port 20000 --grpc-ip node.testnet.concordium.com`
 2. `concordium-client contract init <CONTRACT_MODULE_REFERENCE> --sender <SENDER_ADDRESS> --energy 30000 --contract ccd_mint_wizard --grpc-port 20000 --grpc-ip node.testnet.concordium.com`
+
+
+## Contract Mint Function Schema
+```json
+{
+    "owner": {
+        "Account": [
+            "<TOKENS_OWNER>"
+        ]
+    },
+    "tokens": [
+        [
+            "01",
+            [
+                {
+                    "url": "<TOKEN_METADATA_URL>",
+                    "hash": "<METADATA_HASH>"
+                },
+                {
+                    "amount": "<MINTING_AMOUNT>",
+                    "max_supply": "<MAX_SUPPLY>"
+                }
+            ]
+        ]
+    ]
+}
+```
+
+## Contract Transfer Function Schema
+```json
+[
+    {
+        "token_id": "01",
+        "amount": "<TRANSFER_AMOUNT>",
+        "from": {
+            "Account": [
+                "<FROM_ACCOUNT>"
+            ]
+        },
+        "to": {
+            "Account": [
+                "<TO_ACCOUNT>"
+            ]
+        },
+        "data": ""
+    }
+]
+```
+
+## Contract Burn Function Schema
+```json
+{
+    "token_id": "01",
+    "amount": "<BURN_AMOUNT>"
+}
+```
+
+## Contract View State Function
+```bash
+concordium-client contract invoke <CONTRACT_INDEX> --entrypoint view --grpc-port 20000 --grpc-ip node.testnet.concordium.com
+```
