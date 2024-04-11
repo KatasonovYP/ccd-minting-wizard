@@ -9,11 +9,19 @@
 ```
 
 ## Contract Compilation
-`cargo concordium build -j dist/ -b dist/schemab64 --out dist/module.wasm.v1`
+```bash
+cargo concordium build -j dist/ -b dist/schemab64 --out dist/module.wasm.v1
+```
 
 ## Contract Deployment
-1. `concordium-client module deploy dist/module.wasm.v1 --sender <SENDER_ADDRESS> --name ccd_mint_wizard --grpc-port 20000 --grpc-ip node.testnet.concordium.com`
-2. `concordium-client contract init <CONTRACT_MODULE_REFERENCE> --sender <SENDER_ADDRESS> --energy 30000 --contract ccd_mint_wizard --grpc-port 20000 --grpc-ip node.testnet.concordium.com`
+1. 
+```bash
+concordium-client module deploy dist/module.wasm.v1 --sender <SENDER_ADDRESS> --name ccd_mint_wizard --grpc-port 20000 --grpc-ip node.testnet.concordium.com
+```
+2. 
+```bash
+concordium-client contract init <CONTRACT_MODULE_REFERENCE> --sender <SENDER_ADDRESS> --energy 30000 --contract ccd_mint_wizard --grpc-port 20000 --grpc-ip node.testnet.concordium.com
+```
 
 
 ## Contract Mint Function Schema
