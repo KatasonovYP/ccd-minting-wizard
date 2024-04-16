@@ -3,6 +3,9 @@
 concordium-client contract update 8625 --entrypoint mint --parameter-json mint_params.json --schema dist/schema.bin --sender 3T5VBsVEmuvkbEBxHaiAqQZ8N7fowWkYKfiXYywYjXYGZiag4L --energy 6000 --grpc-port 20000 --grpc-ip node.testnet.concordium.com
 ```
 Replace the `3T5VBsVEmuvkbEBxHaiAqQZ8N7fowWkYKfiXYywYjXYGZiag4L` address with your account address
+
+<br>
+
 # mint_params.json
 ### Non-Fungible Token Mint Params with Metadata hash provided
 ```json
@@ -31,6 +34,8 @@ Replace the `3T5VBsVEmuvkbEBxHaiAqQZ8N7fowWkYKfiXYywYjXYGZiag4L` address with yo
     ]
 }
 ```
+<br>
+
 ### Fungible Token Mint Params without Metadata hash
 ```json
 {
@@ -58,6 +63,8 @@ Replace the `3T5VBsVEmuvkbEBxHaiAqQZ8N7fowWkYKfiXYywYjXYGZiag4L` address with yo
     ]
 }
 ```
+<br>
+
 ### Fungible Token Mint Params after pre-minting (url, hash and max_supply fields can be blank after pre-mint)
 ```json
 {
