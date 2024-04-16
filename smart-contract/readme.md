@@ -10,7 +10,7 @@
 
 ## Contract Compilation
 ```bash
-cargo concordium build -j dist/ -b dist/schemab64 --out dist/module.wasm.v1
+cargo concordium build --schema-out="dist/schema.bin" --out dist/module.wasm.v1
 ```
 
 ## Contract Deployment
@@ -22,7 +22,7 @@ concordium-client module deploy dist/module.wasm.v1 --sender <SENDER_ADDRESS> --
 ```bash
 concordium-client contract init <CONTRACT_MODULE_REFERENCE> --sender <SENDER_ADDRESS> --energy 30000 --contract ccd_mint_wizard --grpc-port 20000 --grpc-ip node.testnet.concordium.com
 ```
-
+<br>
 
 ## Contract Mint Function Schema
 ```json
@@ -38,7 +38,12 @@ concordium-client contract init <CONTRACT_MODULE_REFERENCE> --sender <SENDER_ADD
             [
                 {
                     "url": "<TOKEN_METADATA_URL>",
-                    "hash": "<METADATA_HASH>"
+                    "hash": {
+                        // If METADATA_HASH:
+                        "Some": ["<METADATA_HASH>"]
+                        // Else:
+                        "None": []
+                    }
                 },
                 {
                     "amount": "<MINTING_AMOUNT>",
@@ -49,6 +54,8 @@ concordium-client contract init <CONTRACT_MODULE_REFERENCE> --sender <SENDER_ADD
     ]
 }
 ```
+### [Mint Example](examples/mint.md)
+<br>
 
 ## Contract Transfer Function Schema
 ```json
@@ -70,6 +77,8 @@ concordium-client contract init <CONTRACT_MODULE_REFERENCE> --sender <SENDER_ADD
     }
 ]
 ```
+### [Transfer Example](examples/transfer.md)
+<br>
 
 ## Contract Burn Function Schema
 ```json
@@ -78,6 +87,8 @@ concordium-client contract init <CONTRACT_MODULE_REFERENCE> --sender <SENDER_ADD
     "amount": "<BURN_AMOUNT>"
 }
 ```
+### [Burn Example](examples/burn.md)
+<br>
 
 ## Contract View State Function
 ```bash
