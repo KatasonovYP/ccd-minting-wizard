@@ -1,22 +1,27 @@
 import cn from 'classnames';
 import cls from './deploy-contract.module.css';
-import { useMintStore } from '@/shared/store/mint-store';
 import { Button } from '@/shared/ui/button';
+import { useConcordiumApi } from '@/shared/utils/hooks';
+import { contractMint } from '@/shared/utils/smart-contract';
 
 interface DeployContractProps {
     className?: string;
 }
 
+
+const explorerBaseUrl = 'https://testnet.ccdscan.io/?dcount=1&dentity=transaction&dhash=';
+
 export function DeployContract(props: DeployContractProps) {
     const { className } = props;
-    const mintStore = useMintStore((state) => state);
+    const { connection, account } = useConcordiumApi();
 
-    function handleClick() {
-        console.log(mintStore.identity);
-        console.log(mintStore.mintingSettings);
-        console.log(mintStore.contractFeatures);
-        console.log(mintStore.optionalFields);
-        console.log(mintStore.attributes);
+    async function handleClick() {
+        if (!account) {
+            console.error('no account');
+            return;
+        }
+        const result = await contractMint(connection!, account, 8625);
+        console.log(explorerBaseUrl + result, result);
     }
 
     return (

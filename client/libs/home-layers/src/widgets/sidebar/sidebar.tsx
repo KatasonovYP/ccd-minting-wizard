@@ -1,5 +1,4 @@
 import cn from 'classnames';
-import cls from './sidebar.module.css';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/ui/tabs';
 import { FormIdentity } from '@/home/features/form-identity';
 import { FormMintingSettings } from '@/home/features/form-minting-settings';
@@ -19,38 +18,46 @@ export function Sidebar(props: SidebarProps) {
     const { className } = props;
 
     return (
-        <ScrollArea
-            className={cn(
-                className,
-                cls.sidebar,
-                'rounded-md bg-white p-4 shadow-md',
-            )}
+        // <ScrollArea
+        //     className={cn(
+        //         className,
+        //         cls.sidebar,
+        //         'rounded-md bg-white p-4 shadow-md',
+        //     )}
+        // >
+        <Tabs
+            defaultValue='basic'
+            className={cn('')}
         >
-            <Tabs
-                defaultValue='basic'
-                className={cn('')}
-            >
-                <TabsList className='grid w-full grid-cols-2 mb-8'>
-                    <TabsTrigger value='basic'>Basic</TabsTrigger>
-                    <TabsTrigger value='advanced'>Advanced</TabsTrigger>
-                </TabsList>
-                <TabsContent value='basic'>
+            <TabsList className='mb-8 grid w-full grid-cols-2'>
+                <TabsTrigger value='basic'>Basic</TabsTrigger>
+                <TabsTrigger value='advanced'>Advanced</TabsTrigger>
+            </TabsList>
+            <ScrollArea>
+                <TabsContent
+                    value='basic'
+                    className='p-2'
+                >
                     <FormIdentity />
                     <FormImages className={'mb-4'} />
                     <FormMintingSettings />
                     <FormFunctionalitySettings />
                     <FormMetadataOptional />
                 </TabsContent>
-                <TabsContent value='advanced'>
-                    <FormMetadataFile />
-                    <FormIdentity />
-                    <FormMintingSettings />
-                    <FormFunctionalitySettings />
-                    <FormMetadataOptional />
-                    <FormAttributes className='mb-4' />
-                    <FormAssets />
-                </TabsContent>
-            </Tabs>
-        </ScrollArea>
+            </ScrollArea>
+            <TabsContent
+                value='advanced'
+                className='p-2'
+            >
+                <FormMetadataFile />
+                <FormIdentity />
+                <FormMintingSettings />
+                <FormFunctionalitySettings />
+                <FormMetadataOptional />
+                <FormAttributes className='mb-4' />
+                <FormAssets />
+            </TabsContent>
+        </Tabs>
+        // </ScrollArea>
     );
 }
