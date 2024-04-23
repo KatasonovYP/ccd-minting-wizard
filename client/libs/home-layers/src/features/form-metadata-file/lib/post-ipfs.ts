@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { URLS } from '@/shared/config/const';
 
-export async function postIpfs(file: File): Promise<string> {
+export async function postIpfs(file: File | Blob): Promise<string> {
     const formData = new FormData();
     formData.append('file', file);
 

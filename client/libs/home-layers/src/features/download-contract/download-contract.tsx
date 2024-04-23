@@ -2,8 +2,8 @@ import cn from 'classnames';
 import { useEffect, useState } from 'react';
 import cls from './download-contract.module.css';
 import { useCodeStore } from '@/shared/store/code-store';
-import { Button } from '@/shared/ui/button';
 import { useMintStore } from '@/shared/store/mint-store';
+import { DropdownMenuItem } from '@/shared/ui/dropdown-menu';
 
 interface DownloadContractProps {
     className?: string;
@@ -37,7 +37,9 @@ export function DownloadContract(props: DownloadContractProps) {
                     color: 'inherit',
                 }}
             >
-                <Button variant={'outline'}>Download Contract</Button>
+                <DropdownMenuItem>
+                    <span>Download Contract</span>
+                </DropdownMenuItem>
             </a>
         </div>
     );

@@ -9,6 +9,7 @@ import { FormAttributes } from '@/home/features/form-attributes';
 import { FormAssets } from '@/home/features/form-assets';
 import { ScrollArea } from '@/shared/ui/scroll-area';
 import { FormImages } from '@/home/features/form-images';
+import cls from './sidebar.module.css';
 
 interface SidebarProps {
     className?: string;
@@ -18,13 +19,13 @@ export function Sidebar(props: SidebarProps) {
     const { className } = props;
 
     return (
-        // <ScrollArea
-        //     className={cn(
-        //         className,
-        //         cls.sidebar,
-        //         'rounded-md bg-white p-4 shadow-md',
-        //     )}
-        // >
+        <ScrollArea
+            className={cn(
+                className,
+                cls.sidebar,
+                'rounded-md bg-white p-4 shadow-md',
+            )}
+        >
         <Tabs
             defaultValue='basic'
             className={cn('')}
@@ -33,7 +34,6 @@ export function Sidebar(props: SidebarProps) {
                 <TabsTrigger value='basic'>Basic</TabsTrigger>
                 <TabsTrigger value='advanced'>Advanced</TabsTrigger>
             </TabsList>
-            <ScrollArea>
                 <TabsContent
                     value='basic'
                     className='p-2'
@@ -41,10 +41,9 @@ export function Sidebar(props: SidebarProps) {
                     <FormIdentity />
                     <FormImages className={'mb-4'} />
                     <FormMintingSettings />
-                    <FormFunctionalitySettings />
-                    <FormMetadataOptional />
+                    {/*<FormFunctionalitySettings />*/}
+                    {/*<FormMetadataOptional />*/}
                 </TabsContent>
-            </ScrollArea>
             <TabsContent
                 value='advanced'
                 className='p-2'
@@ -58,6 +57,6 @@ export function Sidebar(props: SidebarProps) {
                 <FormAssets />
             </TabsContent>
         </Tabs>
-        // </ScrollArea>
+        </ScrollArea>
     );
 }
