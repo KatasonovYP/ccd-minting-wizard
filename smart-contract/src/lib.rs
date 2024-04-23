@@ -643,7 +643,7 @@ fn get_canonical_address(address: Address) -> ContractResult<Address> {
 // Contract functions
 
 #[init(
-    contract = "ccd_mint_wizard",
+    contract = "mint_wizard",
     parameter = "InitParams",
     event = "Cis2Event<ContractTokenId, ContractTokenAmount>",
     enable_logger
@@ -654,7 +654,6 @@ fn contract_init(
     logger: &mut impl HasLogger,
 ) -> InitResult<State> {
     let params: InitParams = ctx.parameter_cursor().get()?;
-    let premint_tokens = params.premint_tokens;
 
     let mut state = State::empty(state_builder);
 
@@ -667,7 +666,7 @@ fn contract_init(
     }))?;
 
     // Preminting of tokens
-    for (token_id, token_info) in premint_tokens {
+    for (token_id, token_info) in params.premint_tokens {
         state.set_max_supply(&token_id, token_info.1.max_supply);
 
         state.mint(
@@ -714,7 +713,7 @@ pub struct ViewState {
 
 /// View function for testing. This reports on the entire state of the contract
 /// for testing purposes.
-#[receive(contract = "ccd_mint_wizard", name = "view", return_value = "ViewState")]
+#[receive(contract = "mint_wizard", name = "view", return_value = "ViewState")]
 fn contract_view(_ctx: &ReceiveContext, host: &Host<State>) -> ReceiveResult<ViewState> {
     let state = host.state();
 
@@ -832,7 +831,7 @@ fn mint(
 }
 
 #[receive(
-    contract = "ccd_mint_wizard",
+    contract = "mint_wizard",
     name = "mint",
     parameter = "MintParams",
     error = "ContractError",
@@ -895,7 +894,7 @@ fn burn(
 }
 
 #[receive(
-    contract = "ccd_mint_wizard",
+    contract = "mint_wizard",
     name = "burn",
     parameter = "BurnParams",
     error = "ContractError",
@@ -965,7 +964,7 @@ fn transfer(
 }
 
 #[receive(
-    contract = "ccd_mint_wizard",
+    contract = "mint_wizard",
     name = "transfer",
     parameter = "TransferParameter",
     error = "ContractError",
@@ -994,13 +993,13 @@ fn contract_transfer(
 
 /// Helper function that can be invoked at the front-end to serialize the
 /// `PermitMessage` before signing it in the wallet.
-#[receive(contract = "ccd_mint_wizard", name = "serializationHelper", parameter = "PermitMessage")]
+#[receive(contract = "mint_wizard", name = "serializationHelper", parameter = "PermitMessage")]
 fn contract_serialization_helper(_ctx: &ReceiveContext, _host: &Host<State>) -> ContractResult<()> {
     Ok(())
 }
 
 #[receive(
-    contract = "ccd_mint_wizard",
+    contract = "mint_wizard",
     name = "viewMessageHash",
     parameter = "PermitParam",
     return_value = "[u8;32]",
@@ -1041,7 +1040,7 @@ fn contract_view_message_hash(
 }
 
 #[receive(
-    contract = "ccd_mint_wizard",
+    contract = "mint_wizard",
     name = "permit",
     parameter = "PermitParam",
     error = "ContractError",
@@ -1175,7 +1174,7 @@ fn update_operator(
 }
 
 #[receive(
-    contract = "ccd_mint_wizard",
+    contract = "mint_wizard",
     name = "updateOperator",
     parameter = "UpdateOperatorParams",
     error = "ContractError",
@@ -1201,7 +1200,7 @@ pub type ContractBalanceOfQueryParams = BalanceOfQueryParams<ContractTokenId>;
 pub type ContractBalanceOfQueryResponse = BalanceOfQueryResponse<ContractTokenAmount>;
 
 #[receive(
-    contract = "ccd_mint_wizard",
+    contract = "mint_wizard",
     name = "balanceOf",
     parameter = "ContractBalanceOfQueryParams",
     return_value = "ContractBalanceOfQueryResponse",
@@ -1222,7 +1221,7 @@ fn contract_balance_of(
 }
 
 #[receive(
-    contract = "ccd_mint_wizard",
+    contract = "mint_wizard",
     name = "operatorOf",
     parameter = "OperatorOfQueryParams",
     return_value = "OperatorOfQueryResponse",
@@ -1250,7 +1249,7 @@ pub struct VecOfAddresses {
 }
 
 #[receive(
-    contract = "ccd_mint_wizard",
+    contract = "mint_wizard",
     name = "isBlacklisted",
     parameter = "VecOfAddresses",
     return_value = "Vec<bool>",
@@ -1286,7 +1285,7 @@ pub struct VecOfAccountAddresses {
 }
 
 #[receive(
-    contract = "ccd_mint_wizard",
+    contract = "mint_wizard",
     name = "publicKeyOf",
     parameter = "VecOfAccountAddresses",
     return_value = "PublicKeyOfQueryResponse",
@@ -1315,7 +1314,7 @@ impl From<Vec<u64>> for NonceOfQueryResponse {
 }
 
 #[receive(
-    contract = "ccd_mint_wizard",
+    contract = "mint_wizard",
     name = "nonceOf",
     parameter = "VecOfAccountAddresses",
     return_value = "NonceOfQueryResponse",
@@ -1337,7 +1336,7 @@ fn contract_nonce_of(
 type ContractTokenMetadataQueryParams = TokenMetadataQueryParams<ContractTokenId>;
 
 #[receive(
-    contract = "ccd_mint_wizard",
+    contract = "mint_wizard",
     name = "tokenMetadata",
     parameter = "ContractTokenMetadataQueryParams",
     return_value = "TokenMetadataQueryResponse",
@@ -1361,7 +1360,7 @@ fn contract_token_metadata(
 }
 
 #[receive(
-    contract = "ccd_mint_wizard",
+    contract = "mint_wizard",
     name = "supports",
     parameter = "SupportsQueryParams",
     return_value = "SupportsQueryResponse",
@@ -1386,7 +1385,7 @@ fn contract_supports(
 }
 
 #[receive(
-    contract = "ccd_mint_wizard",
+    contract = "mint_wizard",
     name = "supportsPermit",
     parameter = "SupportsPermitQueryParams",
     return_value = "SupportsQueryResponse",
@@ -1413,7 +1412,7 @@ fn contract_supports_permit(
 /// Set the addresses for an implementation given a standard identifier and a
 /// list of contract addresses.
 #[receive(
-    contract = "ccd_mint_wizard",
+    contract = "mint_wizard",
     name = "setImplementors",
     parameter = "SetImplementorsParams",
     error = "ContractError",
@@ -1443,7 +1442,7 @@ pub struct UpdateBlacklist {
 pub struct UpdateBlacklistParams(#[concordium(size_length = 2)] pub Vec<UpdateBlacklist>);
 
 #[receive(
-    contract = "ccd_mint_wizard",
+    contract = "mint_wizard",
     name = "updateBlacklist",
     parameter = "UpdateBlacklistParams",
     error = "ContractError",
@@ -1479,7 +1478,7 @@ fn contract_update_blacklist(
 }
 
 #[receive(
-    contract = "ccd_mint_wizard",
+    contract = "mint_wizard",
     name = "upgrade",
     parameter = "UpgradeParams",
     error = "CustomContractError",
@@ -1505,7 +1504,7 @@ fn contract_upgrade(ctx: &ReceiveContext, host: &mut LowLevelHost) -> ContractRe
 }
 
 #[receive(
-    contract = "ccd_mint_wizard",
+    contract = "mint_wizard",
     name = "setPaused",
     parameter = "SetPausedParams",
     error = "CustomContractError",
@@ -1524,7 +1523,7 @@ fn contract_set_paused(ctx: &ReceiveContext, host: &mut Host<State>) -> Contract
 }
 
 #[receive(
-    contract = "ccd_mint_wizard",
+    contract = "mint_wizard",
     name = "grantRole",
     parameter = "GrantRoleParams",
     enable_logger,
@@ -1556,7 +1555,7 @@ fn contract_grant_role(
 }
 
 #[receive(
-    contract = "ccd_mint_wizard",
+    contract = "mint_wizard",
     name = "revokeRole",
     parameter = "RevokeRoleParams",
     enable_logger,

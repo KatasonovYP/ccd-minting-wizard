@@ -1,6 +1,6 @@
 # concordium-client command to init the smart contract function
 ```bash
-concordium-client contract init a476eb345c0e3b311d1581ab42e6e7f7c7f972837d1a6687302e0d4465383538 --parameter-json init_params.json --schema dist/schema.bin --sender 3T5VBsVEmuvkbEBxHaiAqQZ8N7fowWkYKfiXYywYjXYGZiag4L --energy 30000 --contract ccd_mint_wizard --grpc-port 20000 --grpc-ip node.testnet.concordium.com
+concordium-client contract init a476eb345c0e3b311d1581ab42e6e7f7c7f972837d1a6687302e0d4465383538 --parameter-json init_params.json --schema dist/schema.bin --sender 3T5VBsVEmuvkbEBxHaiAqQZ8N7fowWkYKfiXYywYjXYGZiag4L --energy 30000 --contract mint_wizard --grpc-port 20000 --grpc-ip node.testnet.concordium.com
 ```
 Replace the `3T5VBsVEmuvkbEBxHaiAqQZ8N7fowWkYKfiXYywYjXYGZiag4L` address with your account address
 
