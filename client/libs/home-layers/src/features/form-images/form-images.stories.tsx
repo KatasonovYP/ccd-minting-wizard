@@ -1,7 +1,6 @@
 import { FormImages } from './form-images';
 import type { Meta, StoryObj } from '@storybook/react';
 
-
 const meta: Meta<typeof FormImages> = {
     title: 'unknown/form-images',
     component: FormImages,

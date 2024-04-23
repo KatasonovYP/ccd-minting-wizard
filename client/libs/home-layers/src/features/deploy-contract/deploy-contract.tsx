@@ -27,6 +27,7 @@ export function DeployContract(props: DeployContractProps) {
     async function handleClick() {
         setIsDeploying(true);
         try {
+            console.log(metadata);
             const metadataUrl = await postIpfs(metadata);
             console.log(metadataUrl);
             const result = await contractMint(

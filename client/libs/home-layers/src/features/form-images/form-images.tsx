@@ -29,7 +29,8 @@ interface FormImagesProps {
 export function FormImages(props: FormImagesProps) {
     const { className } = props;
 
-    const [image, setImage] = useState('');
+    const [displayImage, setDisplayImage] = useState('');
+    const [thumbnailImage, setThumbnailImage] = useState('');
     const setDisplay = useMintStore((state) => state.setDisplay);
     const setThumbnail = useMintStore((state) => state.setThumbnail);
     const display = useMintStore((state) => state.display);
@@ -53,11 +54,11 @@ export function FormImages(props: FormImagesProps) {
             },
         });
 
-    function readFileImage(blob: Blob) {
+    function readFileImage(blob: Blob, set: (buffer: string) => void) {
         const onLoadEnd = (event: ProgressEvent<FileReader>) => {
             const buffer = event.target?.result;
             if (typeof buffer !== 'string') return;
-            setImage(buffer);
+            set(buffer);
         };
 
         const metadataReader = new FileReader();
@@ -67,16 +68,20 @@ export function FormImages(props: FormImagesProps) {
 
     async function onAction(data: FormImagesValues) {
         console.log(data);
+
         setIsUrlDisplay(data['url usage display']);
+        setIsUrlThumbnail(data['url usage thumbnail']);
+
         if (!data['url usage display'] && data['file display']?.length) {
-            readFileImage(data['file display'][0]);
+            readFileImage(data['file display'][0], setDisplayImage);
             const ipfsUrl = await postIpfs(data['file display'][0]);
             setDisplay({ display: { url: ipfsUrl } });
         } else {
             setDisplay({ display: { url: data['url display'] } });
         }
+
         if (!data['url usage thumbnail'] && data['file thumbnail']?.length) {
-            readFileImage(data['file thumbnail'][0]);
+            readFileImage(data['file thumbnail'][0], setThumbnailImage);
             const ipfsUrl = await postIpfs(data['file thumbnail'][0]);
             setThumbnail({ thumbnail: { url: ipfsUrl } });
         } else {
@@ -145,7 +150,7 @@ export function FormImages(props: FormImagesProps) {
                         </div>
                         <Avatar className={cn(cls.tokenAvatar, 'h-64 w-64')}>
                             <AvatarImage
-                                src={image}
+                                src={displayImage}
                                 alt={'image'}
                             />
                             <AvatarFallback>no display chosen</AvatarFallback>
@@ -200,7 +205,7 @@ export function FormImages(props: FormImagesProps) {
                                     </div>
                                 )}
                             />
-                            {isUrlDisplay ? (
+                            {isUrlThumbnail ? (
                                 <InputControlled
                                     control={control}
                                     name={'url thumbnail'}
@@ -214,7 +219,7 @@ export function FormImages(props: FormImagesProps) {
                         </div>
                         <Avatar className={cn(cls.tokenAvatar, 'h-8 w-8')}>
                             <AvatarImage
-                                src={image}
+                                src={thumbnailImage}
                                 alt={'image'}
                             />
                             <AvatarFallback>no thumbnail chosen</AvatarFallback>

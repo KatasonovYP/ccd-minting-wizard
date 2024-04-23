@@ -23,14 +23,16 @@ export function useMetadata() {
             ...identity,
             ...optionalFields,
             ...mintingSettings,
+            ...thumbnail,
             ...display,
         };
         metadata.attributes = optionalFields.unique
             ? attributes.attributes
             : undefined;
         metadata.assets = optionalFields.unique ? assets.assets : undefined;
+        console.log(metadata);
         setFile(new Blob([JSON.stringify(metadata)], options));
-    }, [optionalFields, mintingSettings, identity, attributes, assets]);
+    }, [optionalFields, mintingSettings, identity, display, thumbnail, attributes, assets]);
 
     return { metadata: file, name: identity.name };
 }
