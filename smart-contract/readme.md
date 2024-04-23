@@ -45,7 +45,6 @@ concordium-client module deploy dist/module.wasm.v1 --sender <SENDER_ADDRESS> --
 ```
 ### [Init Example](examples/init.md)
 <br>
-<br>
 
 ## Contract Mint Function Schema
 ```json
