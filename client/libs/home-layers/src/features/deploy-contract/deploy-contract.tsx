@@ -1,13 +1,13 @@
 import cn from 'classnames';
+import { useState } from 'react';
+import { LoaderCircle } from 'lucide-react';
+import { postIpfs } from '../form-metadata-file/lib/post-ipfs';
 import cls from './deploy-contract.module.css';
 import { Button } from '@/shared/ui/button';
 import { useAuth, useConcordiumApi } from '@/shared/utils/hooks';
 import { contractMint } from '@/shared/utils/smart-contract';
-import { postIpfs } from '../form-metadata-file/lib/post-ipfs';
 import { useMetadata } from '@/shared/utils/hooks/use-metadata';
 import { useMintStore } from '@/shared/store/mint-store';
-import { useState } from 'react';
-import { Loader, LoaderCircle } from 'lucide-react';
 
 interface DeployContractProps {
     className?: string;
@@ -49,7 +49,14 @@ export function DeployContract(props: DeployContractProps) {
                 onClick={handleClick}
                 className={'min-w-[80px]'}
             >
-                {isDeploying ? <LoaderCircle size={'24'} className={'animate-spin'} /> : 'Deploy'}
+                {isDeploying ? (
+                    <LoaderCircle
+                        size={'24'}
+                        className={'animate-spin'}
+                    />
+                ) : (
+                    'Deploy'
+                )}
             </Button>
         </div>
     );

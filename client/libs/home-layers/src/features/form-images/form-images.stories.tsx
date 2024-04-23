@@ -1,6 +1,6 @@
+import { FormImages } from './form-images';
 import type { Meta, StoryObj } from '@storybook/react';
 
-import { FormImages } from './form-images';
 
 const meta: Meta<typeof FormImages> = {
     title: 'unknown/form-images',

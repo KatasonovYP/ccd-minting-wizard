@@ -1,9 +1,9 @@
-import type { Control, FieldValues, Path } from 'react-hook-form';
 import { Controller } from 'react-hook-form';
 import * as React from 'react';
 import cn from 'classnames';
-import { Checkbox } from './checkbox.shadcn';
 import { Label } from '../../label';
+import { Checkbox } from './checkbox.shadcn';
+import type { Control, FieldValues, Path } from 'react-hook-form';
 
 interface CheckboxControlledProps<T extends FieldValues>
     extends Partial<Parameters<typeof Checkbox>[0]> {
@@ -32,7 +32,7 @@ export function CheckboxControlled<T extends FieldValues>(
                         onCheckedChange={field.onChange}
                     />
                     <Label
-                        className='capitalize cursor-pointer'
+                        className='cursor-pointer capitalize'
                         htmlFor={`checkbox-${name}`}
                     >
                         {name}

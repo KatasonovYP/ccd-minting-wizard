@@ -1,5 +1,4 @@
 import { render } from '@testing-library/react';
-
 import { DropdownMenu } from './dropdown-menu';
 
 describe('dropdown-menu', () => {

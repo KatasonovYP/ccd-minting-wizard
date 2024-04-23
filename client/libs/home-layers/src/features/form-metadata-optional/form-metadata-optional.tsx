@@ -4,12 +4,12 @@ import z from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import cls from './form-metadata-optional.module.css';
 import { InputCis2Url } from './ui/input-cis2-url';
+import { formMetadataOptionalAdapter } from './utils/form-metadata-optional-adapter';
 import type { Cis2Optional, Cis2Url } from '@/shared/store/mint-store';
-import { useMintStore } from '@/shared/store/mint-store';
 import type { FormMetadataOptionalValues } from './model/form-metadata-optional-values';
+import { useMintStore } from '@/shared/store/mint-store';
 import { CheckboxControlled } from '@/shared/ui/checkbox';
 import { InputControlled } from '@/shared/ui/input';
-import { formMetadataOptionalAdapter } from './utils/form-metadata-optional-adapter';
 
 interface FormMetadataOptionalProps {
     className?: string;

@@ -1,5 +1,5 @@
-import { FormMetadataOptionalValues } from '../model/form-metadata-optional-values';
 import { getCleanUrl } from './get-clean-url';
+import type { FormMetadataOptionalValues } from '../model/form-metadata-optional-values';
 import type { Cis2Optional } from '@/shared/store/mint-store';
 
 export const formMetadataOptionalAdapter = {

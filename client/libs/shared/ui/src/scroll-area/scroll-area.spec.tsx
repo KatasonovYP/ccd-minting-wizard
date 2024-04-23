@@ -1,5 +1,4 @@
 import { render } from '@testing-library/react';
-
 import { ScrollArea } from './scroll-area';
 
 describe('scroll-area', () => {

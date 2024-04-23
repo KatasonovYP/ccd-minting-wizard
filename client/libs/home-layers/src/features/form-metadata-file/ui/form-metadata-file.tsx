@@ -1,11 +1,11 @@
 import { useForm } from 'react-hook-form';
 import cn from 'classnames';
 import { readFileJson } from '../lib/read-file-json';
+import { postIpfs } from '../lib/post-ipfs';
 import type { SubmitHandler } from 'react-hook-form';
 import type { FormMetadataFileValues } from '../model/form-metadata-file-values';
 import { InputFile } from '@/shared/ui/input';
 import { useMintStore } from '@/shared/store/mint-store';
-import { postIpfs } from '../lib/post-ipfs';
 
 interface FormMetadataProps {
     className?: string;

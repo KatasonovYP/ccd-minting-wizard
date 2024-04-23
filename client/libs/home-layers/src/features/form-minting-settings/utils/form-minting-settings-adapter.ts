@@ -1,5 +1,5 @@
-import { MintingSettings } from '@/shared/store/mint-store';
-import { FormMintingSettingsValues } from '../model/form-minting-settings-values';
+import type { FormMintingSettingsValues } from '../model/form-minting-settings-values';
+import type { MintingSettings } from '@/shared/store/mint-store';
 
 export const formMintingSettingsAdapter = {
     toForm: (data: MintingSettings) => ({
@@ -9,5 +9,5 @@ export const formMintingSettingsAdapter = {
     toStore: (data: FormMintingSettingsValues) => ({
         premint: +data.premint || undefined,
         'maximum tokens': +data['maximum tokens'] || undefined,
-    })
+    }),
 } as const;

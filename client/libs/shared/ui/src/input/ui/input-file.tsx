@@ -2,9 +2,9 @@ import * as React from 'react';
 import { Input } from '../../input';
 import { Text } from '../../text';
 import { ErrorMessage } from '../../error-message';
+import { Label } from '../../label';
 import type { FieldError } from 'react-hook-form';
 import type { InputHTMLAttributes } from 'react';
-import { Label } from '../../label';
 
 interface InputFileProps extends InputHTMLAttributes<HTMLInputElement> {
     className?: string;

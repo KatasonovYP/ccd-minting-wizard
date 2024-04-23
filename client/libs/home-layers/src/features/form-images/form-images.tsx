@@ -1,10 +1,11 @@
 import cn from 'classnames';
-import cls from './form-images.module.css';
-import { InputControlled, InputFile } from '@/shared/ui/input';
 import { Controller, useForm } from 'react-hook-form';
 import * as React from 'react';
 import { useState } from 'react';
 import { postIpfs } from '../form-metadata-file/lib/post-ipfs';
+import cls from './form-images.module.css';
+import type { FormImagesValues } from './model/form-images-values';
+import { InputControlled, InputFile } from '@/shared/ui/input';
 import {
     Dialog,
     DialogClose,
@@ -20,7 +21,6 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
 import { Switch } from '@/shared/ui/switch';
 import { Label } from '@/shared/ui/label';
 import { useMintStore } from '@/shared/store/mint-store';
-import { FormImagesValues } from './model/form-images-values';
 
 interface FormImagesProps {
     className?: string;
@@ -32,16 +32,20 @@ export function FormImages(props: FormImagesProps) {
     const [image, setImage] = useState('');
     const setDisplay = useMintStore((state) => state.setDisplay);
     const setThumbnail = useMintStore((state) => state.setThumbnail);
-    const display = useMintStore((state) => state.display)
+    const display = useMintStore((state) => state.display);
     const thumbnail = useMintStore((state) => state.thumbnail);
     const [isUrlDisplay, setIsUrlDisplay] = useState(!!display.display?.url);
-    const [isUrlThumbnail, setIsUrlThumbnail] = useState(!!thumbnail.thumbnail?.url);
+    const [isUrlThumbnail, setIsUrlThumbnail] = useState(
+        !!thumbnail.thumbnail?.url,
+    );
 
     const { register, control, handleSubmit, watch, getValues } =
         useForm<FormImagesValues>({
             values: {
                 'url usage display': display.display?.url ? true : isUrlDisplay,
-                'url usage thumbnail': thumbnail.thumbnail?.url ? true : isUrlThumbnail,
+                'url usage thumbnail': thumbnail.thumbnail?.url
+                    ? true
+                    : isUrlThumbnail,
                 'file display': undefined,
                 'url display': display.display?.url || '',
                 'file thumbnail': undefined,
@@ -139,12 +143,7 @@ export function FormImages(props: FormImagesProps) {
                                 />
                             )}
                         </div>
-                        <Avatar
-                            className={cn(
-                                cls.tokenAvatar,
-                                'h-64 w-64',
-                            )}
-                        >
+                        <Avatar className={cn(cls.tokenAvatar, 'h-64 w-64')}>
                             <AvatarImage
                                 src={image}
                                 alt={'image'}
@@ -213,12 +212,7 @@ export function FormImages(props: FormImagesProps) {
                                 />
                             )}
                         </div>
-                        <Avatar
-                            className={cn(
-                                cls.tokenAvatar,
-                                'h-8 w-8',
-                            )}
-                        >
+                        <Avatar className={cn(cls.tokenAvatar, 'h-8 w-8')}>
                             <AvatarImage
                                 src={image}
                                 alt={'image'}

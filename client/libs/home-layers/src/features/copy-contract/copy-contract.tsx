@@ -1,9 +1,9 @@
 import cn from 'classnames';
+import { Check, Copy } from 'lucide-react';
+import { useState } from 'react';
 import cls from './copy-contract.module.css';
 import { Button } from '@/shared/ui/button';
 import { useCode } from '@/shared/utils/hooks';
-import { Check, Copy } from 'lucide-react';
-import { useState } from 'react';
 
 interface CopyContractProps {
     className?: string;
