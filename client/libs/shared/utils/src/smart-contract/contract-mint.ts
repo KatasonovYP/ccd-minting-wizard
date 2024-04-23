@@ -1,44 +1,52 @@
 import { WalletConnection } from '@concordium/react-components';
-import { AccountTransactionType, CcdAmount } from '@concordium/web-sdk';
-import { CONTRACT_NAME, MAX_CONTRACT_EXECUTION_ENERGY, RAW_SCHEMA } from '@/shared/config/concordium';
+import {
+    AccountTransactionType,
+    CcdAmount,
+    SchemaVersion,
+} from '@concordium/web-sdk';
+import {
+    CONTRACT_NAME,
+    MAX_CONTRACT_EXECUTION_ENERGY,
+    MODULE_REFERENCE,
+    RAW_SCHEMA,
+} from '@/shared/config/concordium';
 
 export async function contractMint(
     connection: WalletConnection,
     account: string,
-    index: number,
+    metadataUrl: string,
+    amount: number,
+    maxSupply: number,
 ): Promise<string> {
     return connection.signAndSendTransaction(
         account,
-        AccountTransactionType.Update,
+        AccountTransactionType.InitContract,
         {
             amount: new CcdAmount(BigInt(0)),
-            address: {
-                index: BigInt(index),
-                subindex: BigInt(0),
-            },
-            receiveName: `${CONTRACT_NAME}.mint`,
+            moduleRef: MODULE_REFERENCE,
+            initName: CONTRACT_NAME,
             maxContractExecutionEnergy: MAX_CONTRACT_EXECUTION_ENERGY,
         },
         {
-            owner: {
-                Account: [account],
-            },
-            tokens: [[
-                '22',
+            premint_tokens: [
                 [
-                    {
-                        url: 'https://moccasin-lovely-unicorn-304.mypinata.cloud/ipfs/QmdopfNTweiJu7UtGKhwHyvTAkMJb6zat8DtSvEZpPvXFN',
-                        hash: {
-                            None: [],
+                    '01',
+                    [
+                        {
+                            url: metadataUrl,
+                            hash: {
+                                None: [],
+                            },
                         },
-                    },
-                    {
-                        amount: '1',
-                        max_supply: '100',
-                    },
+                        {
+                            amount: `${amount}`,
+                            max_supply: `${maxSupply}`,
+                        },
+                    ],
                 ],
-            ]],
+            ],
         },
         RAW_SCHEMA,
+        SchemaVersion.V1,
     );
 }

@@ -8,6 +8,14 @@ import { DownloadMetadata } from '../../features/download-metadata';
 import cls from './wizard-page.module.css';
 import { ConcordiumLogoIcon } from '@/shared/assets/icons';
 import { Sidebar } from '@/home/widgets/sidebar';
+import { Download } from 'lucide-react';
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+} from '@/shared/ui/dropdown-menu';
+import { Button } from '@/shared/ui/button';
 
 interface WizardPageProps {
     className?: string;
@@ -23,8 +31,20 @@ export function WizardPage(props: WizardPageProps) {
                 <div className='flex gap-4'>
                     <ConnectButton />
                     <CopyContract />
-                    <DownloadContract />
-                    <DownloadMetadata />
+                    <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                            <Button
+                                size={'icon'}
+                                variant={'outline'}
+                            >
+                                <Download size={'16'} />
+                            </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align={'end'}>
+                                <DownloadContract />
+                                <DownloadMetadata />
+                        </DropdownMenuContent>
+                    </DropdownMenu>
                     <DeployContract />
                 </div>
             </div>

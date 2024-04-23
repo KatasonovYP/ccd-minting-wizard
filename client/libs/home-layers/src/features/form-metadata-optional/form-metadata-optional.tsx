@@ -15,10 +15,6 @@ interface FormMetadataOptionalProps {
     className?: string;
 }
 
-const fieldsUrl: Array<keyof Cis2Optional> = [
-    'artifact',
-];
-
 const zodUrl = z
     .string()
     .url()
@@ -70,14 +66,6 @@ export function FormMetadataOptional(props: FormMetadataOptionalProps) {
                 control={control}
                 name={'decimals'}
             />
-            {fieldsUrl.map((name, id) => (
-                <InputCis2Url
-                    control={control}
-                    name={name as keyof FormMetadataOptionalValues}
-                    key={id}
-                    url={(optionalFields[name] as Cis2Url)?.url}
-                />
-            ))}
             <CheckboxControlled
                 control={control}
                 name={'unique'}
