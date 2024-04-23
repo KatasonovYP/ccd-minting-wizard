@@ -1,6 +1,6 @@
 # concordium-client command to invoke contract transfer function
 ```bash
-concordium-client contract update 8772 --entrypoint transfer --parameter-json transfer_params.json --schema dist/schema.bin --sender 3T5VBsVEmuvkbEBxHaiAqQZ8N7fowWkYKfiXYywYjXYGZiag4L --energy 6000 --grpc-port 20000 --grpc-ip node.testnet.concordium.com
+concordium-client contract update 8785 --entrypoint transfer --parameter-json transfer_params.json --schema dist/schema.bin --sender 3T5VBsVEmuvkbEBxHaiAqQZ8N7fowWkYKfiXYywYjXYGZiag4L --energy 6000 --grpc-port 20000 --grpc-ip node.testnet.concordium.com
 ```
 Replace the `3T5VBsVEmuvkbEBxHaiAqQZ8N7fowWkYKfiXYywYjXYGZiag4L` address with your account address
 
