@@ -27,17 +27,16 @@ export function DeployContract(props: DeployContractProps) {
     async function handleClick() {
         setIsDeploying(true);
         try {
-            console.log(metadata);
             const metadataUrl = await postIpfs(metadata);
-            console.log(metadataUrl);
-            const result = await contractMint(
+            const hash = await contractMint(
                 connection!,
                 account!,
                 metadataUrl,
                 mintingSettings.premint || 0,
                 mintingSettings['maximum tokens'] || 100,
             );
-            console.log(explorerBaseUrl + result, result);
+            console.log(explorerBaseUrl + hash, hash);
+            // console.log(contractCheck(connection!,hash));
         } finally {
             setIsDeploying(false);
         }
