@@ -179,6 +179,11 @@ pub struct TokenParams {
 }
 
 #[derive(Serialize, SchemaType)]
+pub struct InitParams {
+    pub premint_tokens: collections::BTreeMap<ContractTokenId, (MetadataUrl, TokenParams)>,
+}
+
+#[derive(Serialize, SchemaType)]
 pub struct MintParams {
     pub owner:          Address,
     pub tokens:         collections::BTreeMap<ContractTokenId, (MetadataUrl, TokenParams)>,
@@ -189,7 +194,6 @@ pub struct BurnParams {
     pub owner:          Address,
     pub token_id:       ContractTokenId,
     pub amount:         ContractTokenAmount,
-    // pub tokens:         collections::BTreeMap<ContractTokenId, (MetadataUrl, TokenParams)>,
 }
 
 #[derive(Debug, Serialize, SchemaType)]
@@ -309,7 +313,6 @@ struct State<S = StateApi> {
     /// account to generate a signature.
     nonces_registry:    StateMap<AccountAddress, u64, S>,
     blacklist:          StateSet<Address, S>,
-    // mint_airdrop:       ContractTokenAmount,
     paused:             bool,
     /// A map containing all roles granted to addresses.
     roles:              StateMap<Address, AddressRoleState<S>, S>,
@@ -415,7 +418,6 @@ impl From<CustomContractError> for ContractError {
 
 impl State {
     fn empty(state_builder: &mut StateBuilder) -> Self {
-    // fn empty(state_builder: &mut StateBuilder, mint_airdrop: ContractTokenAmount) -> Self {
         State {
             state: state_builder.new_map(),
             tokens: state_builder.new_map(),
@@ -423,7 +425,6 @@ impl State {
             token_balance: state_builder.new_map(),
             implementors: state_builder.new_map(),
             nonces_registry: state_builder.new_map(),
-            // mint_airdrop,
             blacklist: state_builder.new_set(),
             paused: false,
             roles: state_builder.new_map(),
@@ -643,7 +644,7 @@ fn get_canonical_address(address: Address) -> ContractResult<Address> {
 
 #[init(
     contract = "ccd_mint_wizard",
-    parameter = "ContractTokenAmount",
+    parameter = "InitParams",
     event = "Cis2Event<ContractTokenId, ContractTokenAmount>",
     enable_logger
 )]
@@ -652,10 +653,10 @@ fn contract_init(
     state_builder: &mut StateBuilder,
     logger: &mut impl HasLogger,
 ) -> InitResult<State> {
-    // let mint_airdrop: ContractTokenAmount = ctx.parameter_cursor().get()?;
+    let params: InitParams = ctx.parameter_cursor().get()?;
+    let premint_tokens = params.premint_tokens;
 
     let mut state = State::empty(state_builder);
-    // let mut state = State::empty(state_builder, mint_airdrop);
 
     let invoker = Address::Account(ctx.init_origin());
 
@@ -664,6 +665,32 @@ fn contract_init(
         address: invoker,
         role:    Roles::ADMIN,
     }))?;
+
+    // Preminting of tokens
+    for (token_id, token_info) in premint_tokens {
+        state.set_max_supply(&token_id, token_info.1.max_supply);
+
+        state.mint(
+            &token_id,
+            &token_info.0,
+            token_info.1.amount,
+            &invoker,
+            state_builder,
+        );
+
+        logger.log(&Cis2Event::Mint(MintEvent {
+            token_id,
+            amount: token_info.1.amount,
+            owner: invoker,
+        }))?;
+
+        logger.log(&Cis2Event::TokenMetadata::<_, ContractTokenAmount>(
+            TokenMetadataEvent {
+                token_id,
+                metadata_url: token_info.0,
+            },
+        ))?;
+    }
 
     Ok(state)
 }
@@ -681,7 +708,6 @@ pub struct ViewState {
     pub nonces_registry: Vec<(AccountAddress, u64)>,
     pub blacklist:       Vec<Address>,
     pub roles:           Vec<(Address, Vec<Roles>)>,
-    // pub mint_airdrop:    ContractTokenAmount,
     pub paused:          bool,
     pub implementors:    Vec<(StandardIdentifierOwned, Vec<ContractAddress>)>,
 }
@@ -746,7 +772,6 @@ fn contract_view(_ctx: &ReceiveContext, host: &Host<State>) -> ReceiveResult<Vie
         blacklist,
         roles,
         implementors,
-        // mint_airdrop: host.state().mint_airdrop,
         paused: host.state().paused,
     })
 }
@@ -765,7 +790,7 @@ fn mint(
     let (state, builder) = host.state_and_builder();
     for (token_id, token_info) in params.tokens {
         if !state.contains_token(&token_id) {
-            state.set_max_supply(&token_id, token_info.1.max_supply)
+            state.set_max_supply(&token_id, token_info.1.max_supply);
         } else {
             let max_supply = state.get_token_supply(&token_id)?;
             let circulating_supply = state.get_circulating_supply(&token_id)?;
@@ -823,6 +848,12 @@ fn contract_mint(
     let sender = ctx.sender();
 
     ensure!(sender.matches_account(&owner), ContractError::Unauthorized);
+
+    ensure!(
+        host.state().has_role(&sender, Roles::MINTER)
+        || sender == Address::from(ctx.owner()),
+        ContractError::Unauthorized
+    );
 
     let params: MintParams = ctx.parameter_cursor().get()?;
 
