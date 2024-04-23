@@ -5,6 +5,7 @@ import type { SubmitHandler } from 'react-hook-form';
 import type { FormMetadataFileValues } from '../model/form-metadata-file-values';
 import { InputFile } from '@/shared/ui/input';
 import { useMintStore } from '@/shared/store/mint-store';
+import { postIpfs } from '../lib/post-ipfs';
 
 interface FormMetadataProps {
     className?: string;
@@ -33,7 +34,7 @@ export function FormMetadataFile(props: FormMetadataProps) {
                 [setIdentity, setOptionalFields, setAttributes, setAssets],
                 setError,
             );
-            // console.log(await postIpfs(data.metadata[0]));
+            console.log(await postIpfs(data.metadata[0]));
         } catch (error) {
             console.error(error);
         }
