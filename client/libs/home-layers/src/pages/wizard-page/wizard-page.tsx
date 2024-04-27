@@ -1,14 +1,14 @@
 import cn from 'classnames';
+import { Download } from 'lucide-react';
 import { ConnectButton } from '../../features/connect-button';
 import { DeployContract } from '../../features/deploy-contract';
 import { ShowCode } from '../../widgets/show-code';
 import { DownloadContract } from '../../features/download-contract';
 import { CopyContract } from '../../features/copy-contract';
 import { DownloadMetadata } from '../../features/download-metadata';
+import { Sidebar } from '../../widgets/sidebar/sidebar';
 import cls from './wizard-page.module.css';
 import { ConcordiumLogoIcon } from '@/shared/assets/icons';
-import { Sidebar } from '@/home/widgets/sidebar';
-import { Download } from 'lucide-react';
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -41,8 +41,8 @@ export function WizardPage(props: WizardPageProps) {
                             </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align={'end'}>
-                                <DownloadContract />
-                                <DownloadMetadata />
+                            <DownloadContract />
+                            <DownloadMetadata />
                         </DropdownMenuContent>
                     </DropdownMenu>
                     <DeployContract />

@@ -2,9 +2,9 @@ import { Controller } from 'react-hook-form';
 import * as React from 'react';
 import { Text } from '../../text';
 import { ErrorMessage } from '../../error-message';
+import { Label } from '../../label';
 import { Input } from './input.shadcn';
 import type { Control, FieldValues, Path } from 'react-hook-form';
-import { Label } from '../../label';
 
 export interface InputControlledProps<T extends FieldValues>
     extends React.InputHTMLAttributes<HTMLInputElement> {

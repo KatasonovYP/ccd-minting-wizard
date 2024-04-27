@@ -1,5 +1,4 @@
 import { render } from '@testing-library/react';
-
 import { Dialog } from './dialog';
 
 describe('dialog', () => {

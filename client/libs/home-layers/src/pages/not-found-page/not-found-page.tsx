@@ -10,7 +10,7 @@ export function NotFoundPage(props: NotFoundPageProps) {
 
     return (
         <div className={cn(className, cls.notFoundPage)}>
-            <h1>not-found-page</h1>
+            <h1 className={'text-white'}>not-found-page</h1>
         </div>
     );
 }

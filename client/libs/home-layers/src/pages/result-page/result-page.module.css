@@ -1,0 +1,16 @@
+.resultPage {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+}
+
+.link {
+    text-decoration: underline;
+    color: theme('colors.blue.500');
+
+    &:hover {
+        color: theme('colors.blue.600');
+    }
+}

@@ -1,9 +1,9 @@
 import { render } from '@testing-library/react';
-import { DropdownMenu } from './dropdown-menu';
+import { ResultPage } from './result-page';
 
-describe('dropdown-menu', () => {
+describe('result-page', () => {
     it('should render successfully', () => {
-        const { baseElement } = render(<DropdownMenu />);
+        const { baseElement } = render(<ResultPage />);
         expect(baseElement).toBeTruthy();
     });
 });

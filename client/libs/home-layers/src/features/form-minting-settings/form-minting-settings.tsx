@@ -3,10 +3,10 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import z from 'zod';
 import cls from './form-minting-settings.module.css';
+import { formMintingSettingsAdapter } from './utils/form-minting-settings-adapter';
+import type { FormMintingSettingsValues } from './model/form-minting-settings-values';
 import { useMintStore } from '@/shared/store/mint-store';
 import { InputControlled } from '@/shared/ui/input';
-import { FormMintingSettingsValues } from './model/form-minting-settings-values';
-import { formMintingSettingsAdapter } from './utils/form-minting-settings-adapter';
 
 interface FormMintingSettingsProps {
     className?: string;

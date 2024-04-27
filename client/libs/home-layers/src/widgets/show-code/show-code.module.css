@@ -1,8 +1,20 @@
+.scrollArea {
+    width: 100%;
+}
+
 .showCode {
     flex: 1;
     padding: 12px;
     width: 100%;
     max-width: 950px;
+    font-size: 12px;
+
+    *:focus,
+    *:focus-within,
+    *:focus-visible {
+        outline: none;
+        border: none;
+    }
 }
 
 * pre {

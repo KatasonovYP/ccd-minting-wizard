@@ -1,7 +1,9 @@
-import { WalletConnection } from '@concordium/react-components';
 import {
     AccountTransactionType,
     CcdAmount,
+    ContractName,
+    Energy,
+    ModuleReference,
     SchemaVersion,
 } from '@concordium/web-sdk';
 import {
@@ -10,22 +12,25 @@ import {
     MODULE_REFERENCE,
     RAW_SCHEMA,
 } from '@/shared/config/concordium';
+import { detectConcordiumProvider } from '@concordium/browser-wallet-api-helpers';
 
 export async function contractMint(
-    connection: WalletConnection,
-    account: string,
     metadataUrl: string,
     amount: number,
     maxSupply: number,
 ): Promise<string> {
-    return connection.signAndSendTransaction(
-        account,
+    const provider = await detectConcordiumProvider();
+    const accountAddress = await provider.requestAccounts();
+    return await provider.sendTransaction(
+        accountAddress[0],
         AccountTransactionType.InitContract,
         {
-            amount: new CcdAmount(BigInt(0)),
-            moduleRef: MODULE_REFERENCE,
-            initName: CONTRACT_NAME,
-            maxContractExecutionEnergy: MAX_CONTRACT_EXECUTION_ENERGY,
+            initName: ContractName.fromString(CONTRACT_NAME),
+            amount: CcdAmount.fromCcd(0),
+            maxContractExecutionEnergy: Energy.create(
+                MAX_CONTRACT_EXECUTION_ENERGY,
+            ),
+            moduleRef: ModuleReference.fromHexString(MODULE_REFERENCE),
         },
         {
             premint_tokens: [
@@ -46,7 +51,10 @@ export async function contractMint(
                 ],
             ],
         },
-        RAW_SCHEMA,
+        {
+            type: 'module',
+            value: RAW_SCHEMA,
+        },
         SchemaVersion.V1,
     );
 }

@@ -8,7 +8,7 @@
         caret-color: black;
     }
 
-    &[type=file]::file-selector-button {
+    &[type='file']::file-selector-button {
         color: black;
         font-weight: 600;
     }
