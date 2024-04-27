@@ -2,9 +2,7 @@ import {
     BrowserWalletConnector,
     ephemeralConnectorType,
 } from '@concordium/react-components';
-import { ModuleReference } from '@concordium/web-sdk';
 import { LOCAL_STORAGE_KEY } from '../const';
-import type { Network } from '@concordium/react-components';
 
 export const MAX_CONTRACT_EXECUTION_ENERGY = BigInt(6_000);
 
@@ -17,9 +15,8 @@ const storedModuleReference = sessionStorage.getItem(
 export const DEFAULT_RAW_MODULE_REFERENCE =
     'aae3e88adaf35a26ee2e132385fc5b2e8395e5592370627e30239b019acc2fb2';
 
-export const MODULE_REFERENCE = new ModuleReference(
-    storedModuleReference ?? DEFAULT_RAW_MODULE_REFERENCE,
-);
+export const MODULE_REFERENCE =
+    storedModuleReference ?? DEFAULT_RAW_MODULE_REFERENCE;
 
 const storedRawSchema = sessionStorage.getItem(
     LOCAL_STORAGE_KEY.MODULE_REFERENCE,
@@ -33,10 +30,3 @@ export const RAW_SCHEMA = storedRawSchema ?? DEFAULT_RAW_SCHEMA;
 export const BROWSER_WALLET = ephemeralConnectorType(
     BrowserWalletConnector.create,
 );
-export const testnet: Network = {
-    name: 'testnet',
-    genesisHash:
-        '4221332d34e1694168c2a0c0b3fd0f273809612cb13d000d5c2e00e85f50f796',
-    ccdScanBaseUrl: 'https://testnet.ccdscan.io',
-    jsonRpcUrl: 'https://grpc.testnet.concordium.com:20000',
-};

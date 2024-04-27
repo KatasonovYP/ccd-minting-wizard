@@ -1,6 +1,7 @@
 import cn from 'classnames';
 import { useState } from 'react';
 import { LoaderCircle } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { postIpfs } from '../form-metadata-file/lib/post-ipfs';
 import cls from './deploy-contract.module.css';
 import { Button } from '@/shared/ui/button';
@@ -13,30 +14,24 @@ interface DeployContractProps {
     className?: string;
 }
 
-const explorerBaseUrl =
-    'https://testnet.ccdscan.io/?dcount=1&dentity=transaction&dhash=';
-
 export function DeployContract(props: DeployContractProps) {
     const { className } = props;
-    const { connection, account } = useConcordiumApi();
     const { isAuth } = useAuth();
     const { metadata } = useMetadata();
     const mintingSettings = useMintStore((state) => state.mintingSettings);
     const [isDeploying, setIsDeploying] = useState(false);
+    const navigate = useNavigate();
 
     async function handleClick() {
         setIsDeploying(true);
         try {
             const metadataUrl = await postIpfs(metadata);
             const hash = await contractMint(
-                connection!,
-                account!,
                 metadataUrl,
                 mintingSettings.premint || 0,
                 mintingSettings['maximum tokens'] || 100,
             );
-            console.log(explorerBaseUrl + hash, hash);
-            // console.log(contractCheck(connection!,hash));
+            navigate(`result?hash=${hash}`);
         } finally {
             setIsDeploying(false);
         }
