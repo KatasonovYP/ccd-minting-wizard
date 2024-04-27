@@ -10,7 +10,7 @@
 
 ## Contract Compilation
 ```bash
-cargo concordium build --schema-out="dist/schema.bin" --out dist/module.wasm.v1
+cargo concordium build -b "dist/schemab64.txt" --out dist/module.wasm.v1
 ```
 
 ## Contract Deployment
