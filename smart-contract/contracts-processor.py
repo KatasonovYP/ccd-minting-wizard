@@ -9,7 +9,7 @@ from pathlib import Path
 VERSION = 1
 SOURCE_CARGO = Path('Cargo.toml')
 
-sem = asyncio.Semaphore(10)
+sem = asyncio.Semaphore(16)
 
 
 async def source_compile(binary, bar):
@@ -26,8 +26,8 @@ async def safe_source_compile(binary, bar):
 
 async def run_compile(bar):
     tasks = []
-    for i in range(0, 128):
-        binary = f"{i:07b}"
+    for i in range(0, 64):
+        binary = f"{i:06b}"
         tasks.append(asyncio.ensure_future(safe_source_compile(binary, bar)))
     await asyncio.gather(*tasks)
 
@@ -38,17 +38,16 @@ def main():
         autoescape=select_autoescape()
     )
     template = env.get_template("lib.rs")
-    with ShadyBar('1 | Processing Variations', max=128) as bar:
-        for i in range(0, 128):
-            binary = f"{i:07b}"
+    with ShadyBar('1 | Processing Variations\t', max=64) as bar:
+        for i in range(0, 64):
+            binary = f"{i:06b}"
             context = {
                 "mintable":     binary[0] != "0",
                 "burnable":     binary[1] != "0",
                 "pausable":     binary[2] != "0",
-                "permit":       binary[3] != "0",
-                "roles":        binary[4] != "0",
-                "updates":      binary[5] != "0",
-                "sponsored":    binary[6] != "0",
+                "roles":        binary[3] != "0",
+                "updates":      binary[4] != "0",
+                "sponsored":    binary[5] != "0",
                 "code":         binary,
                 "version":      VERSION,
             }
@@ -58,7 +57,7 @@ def main():
                 f.writelines(result)
             Path(f"src/processed/{binary}/Cargo.toml").write_text(SOURCE_CARGO.read_text())
             bar.next()
-    with ShadyBar('2 | Compiling Sources', max=128) as bar:
+    with ShadyBar('2 | Compiling Sources\t\t', max=64) as bar:
         loop = asyncio.get_event_loop()
         loop.run_until_complete(run_compile(bar))
 

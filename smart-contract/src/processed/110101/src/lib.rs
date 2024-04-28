@@ -5,10 +5,10 @@ use concordium_std::{collections::BTreeMap, EntrypointName, *};
 const SUPPORTS_STANDARDS: [StandardIdentifier<'static>; 2] =
     [CIS0_STANDARD_IDENTIFIER, CIS2_STANDARD_IDENTIFIER];
 
-{% if sponsored %}
+
 const SUPPORTS_PERMIT_ENTRYPOINTS: [EntrypointName; 2] =
     [EntrypointName::new_unchecked("updateOperator"), EntrypointName::new_unchecked("transfer")];
-{% endif %}
+
 
 /// Event tags.
 pub const UPDATE_BLACKLIST_EVENT_TAG: u8 = 0;
@@ -19,43 +19,43 @@ pub const NONCE_EVENT_TAG: u8 = 250;
 const TRANSFER_ENTRYPOINT: EntrypointName<'_> = EntrypointName::new_unchecked("transfer");
 const UPDATE_OPERATOR_ENTRYPOINT: EntrypointName<'_> =
     EntrypointName::new_unchecked("updateOperator");
-{% if mintable %}
+
 const MINT_ENTRYPOINT: EntrypointName<'_> = EntrypointName::new_unchecked("mint");
-{% endif %}
-{% if burnable %}
+
+
 const BURN_ENTRYPOINT: EntrypointName<'_> = EntrypointName::new_unchecked("burn");
-{% endif %}
+
 
 #[derive(Debug, Serial, Deserial, PartialEq, Eq)]
 #[concordium(repr(u8))]
 pub enum Event {
     #[concordium(tag = 0)]
     UpdateBlacklist(UpdateBlacklistEvent),
-    {% if roles %}
+    
     #[concordium(tag = 1)]
     GrantRole(GrantRoleEvent),
     #[concordium(tag = 2)]
     RevokeRole(RevokeRoleEvent),
-    {% endif %}
-    {% if sponsored %}
+    
+    
     /// Cis3 event.
     /// The event tracks the nonce used by the signer of the `PermitMessage`
     /// whenever the `permit` function is invoked.
     #[concordium(tag = 250)]
     Nonce(NonceEvent),
-    {% endif %}
+    
     /// Cis2 token events.
     #[concordium(forward = cis2_events)]
     Cis2Event(Cis2Event<ContractTokenId, ContractTokenAmount>),
 }
 
-{% if sponsored %}
+
 #[derive(Debug, Serialize, SchemaType, PartialEq, Eq)]
 pub struct NonceEvent {
     pub account: AccountAddress,
     pub nonce:   u64,
 }
-{% endif %}
+
 
 #[derive(Debug, Serialize, SchemaType, PartialEq, Eq)]
 pub struct UpdateBlacklistEvent {
@@ -63,7 +63,7 @@ pub struct UpdateBlacklistEvent {
     pub address: Address,
 }
 
-{% if roles %}
+
 #[derive(Serialize, SchemaType, Debug, PartialEq, Eq)]
 pub struct GrantRoleEvent {
     pub address: Address,
@@ -76,12 +76,12 @@ pub struct RevokeRoleEvent {
     pub address: Address,
     pub role:    Roles,
 }
-{% endif %}
+
 
 impl schema::SchemaType for Event {
     fn get_type() -> schema::Type {
         let mut event_map = BTreeMap::new();
-        {% if sponsored %}
+        
         event_map.insert(
             NONCE_EVENT_TAG,
             (
@@ -92,8 +92,8 @@ impl schema::SchemaType for Event {
                 ]),
             ),
         );
-        {% endif %}
-        {% if roles %}
+        
+        
         event_map.insert(
             GRANT_ROLE_EVENT_TAG,
             (
@@ -114,7 +114,7 @@ impl schema::SchemaType for Event {
                 ]),
             ),
         );
-        {% endif %}
+        
         event_map.insert(
             UPDATE_BLACKLIST_EVENT_TAG,
             (
@@ -148,7 +148,7 @@ impl schema::SchemaType for Event {
                 ]),
             ),
         );
-        {% if burnable %}
+        
         event_map.insert(
             BURN_EVENT_TAG,
             (
@@ -160,7 +160,7 @@ impl schema::SchemaType for Event {
                 ]),
             ),
         );
-        {% endif %}
+        
         event_map.insert(
             UPDATE_OPERATOR_EVENT_TAG,
             (
@@ -203,30 +203,30 @@ pub struct InitParams {
     pub premint_tokens: collections::BTreeMap<ContractTokenId, (MetadataUrl, TokenParams)>,
 }
 
-{% if mintable %}
+
 #[derive(Serialize, SchemaType)]
 pub struct MintParams {
     pub owner:          Address,
     pub tokens:         collections::BTreeMap<ContractTokenId, (MetadataUrl, TokenParams)>,
 }
-{% endif %}
 
-{% if burnable %}
+
+
 #[derive(Serialize, SchemaType)]
 pub struct BurnParams {
     pub owner:          Address,
     pub token_id:       ContractTokenId,
     pub amount:         ContractTokenAmount,
 }
-{% endif %}
 
-{% if sponsored %}
+
+
 #[derive(Debug, Serialize, SchemaType)]
 pub struct SupportsPermitQueryParams {
     #[concordium(size_length = 2)]
     pub queries: Vec<OwnedEntrypointName>,
 }
-{% endif %}
+
 
 #[derive(Debug, Serialize, SchemaType)]
 struct SetImplementorsParams {
@@ -235,7 +235,7 @@ struct SetImplementorsParams {
     implementors: Vec<ContractAddress>,
 }
 
-{% if sponsored %}
+
 #[derive(SchemaType, Serialize)]
 pub struct PermitMessage {
     /// The contract_address that the signature is intended for.
@@ -264,25 +264,13 @@ pub struct PermitParamPartial {
     pub signature: AccountSignatures,
     pub signer:    AccountAddress,
 }
-{% endif %}
 
-{% if pausable %}
-#[derive(Serialize, SchemaType)]
-#[repr(transparent)]
-pub struct SetPausedParams {
-    pub paused: bool,
-}
-{% endif %}
 
-{% if updates %}
-#[derive(Serialize, SchemaType)]
-pub struct UpgradeParams {
-    pub module:  ModuleReference,
-    pub migrate: Option<(OwnedEntrypointName, OwnedParameter)>,
-}
-{% endif %}
 
-{% if roles %}
+
+
+
+
 #[derive(Serialize, SchemaType)]
 pub struct GrantRoleParams {
     pub address: Address,
@@ -304,18 +292,14 @@ struct AddressRoleState<S> {
 #[derive(Serialize, PartialEq, Eq, Reject, SchemaType, Clone, Copy, Debug)]
 pub enum Roles {
     ADMIN,
-    {% if updates %}
-    UPGRADER,
-    {% endif %}
+    
     BLACKLISTER,
-    {% if pausable %}
-    PAUSER,
-    {% endif %}
-    {% if mintable %}
+    
+    
     MINTER,
-    {% endif %}
+    
 }
-{% endif %}
+
 
 #[derive(Serial, DeserialWithState, Deletable)]
 #[concordium(state_parameter = "S")]
@@ -345,7 +329,7 @@ struct State<S = StateApi> {
     /// A map with contract addresses providing implementations of additional
     /// standards.
     implementors:       StateMap<StandardIdentifierOwned, Vec<ContractAddress>, S>,
-    {% if sponsored %}
+    
     /// A registry to link an account to its next nonce. The nonce is used to
     /// prevent replay attacks of the signed message. The nonce is increased
     /// sequentially every time a signed message (corresponding to the
@@ -353,15 +337,13 @@ struct State<S = StateApi> {
     /// mapping keeps track of the next nonce that needs to be used by the
     /// account to generate a signature.
     nonces_registry:    StateMap<AccountAddress, u64, S>,
-    {% endif %}
+    
     blacklist:          StateSet<Address, S>,
-    {% if pausable %}
-    paused:             bool,
-    {% endif %}
-    {% if roles %}
+    
+    
     /// A map containing all roles granted to addresses.
     roles:              StateMap<Address, AddressRoleState<S>, S>,
-    {% endif %}
+    
 }
 
 /// The different errors the contract can produce.
@@ -380,7 +362,7 @@ pub enum CustomContractError {
     ContractOnly, // -5
     /// Failed to invoke a contract.
     InvokeContractError, // -6
-    {% if sponsored %}
+    
     /// Failed to verify signature because signer account does not exist on
     /// chain.
     MissingAccount, // -7
@@ -398,57 +380,34 @@ pub enum CustomContractError {
     WrongEntryPoint, // -12
     /// Failed signature verification: Signature is expired.
     Expired, // -13
-    {% endif %}
+    
     /// Token owner address is blacklisted.
     Blacklisted, // -14
     /// Account address has no canonical address.
     NoCanonicalAddress, // -15
-    {% if updates %}
-    /// Upgrade failed because the new module does not exist.
-    FailedUpgradeMissingModule, // -16
-    /// Upgrade failed because the new module does not contain a contract with a
-    /// matching name.
-    FailedUpgradeMissingContract, // -17
-    /// Upgrade failed because the smart contract version of the module is not
-    /// supported.
-    FailedUpgradeUnsupportedModuleVersion, // -18
-    {% endif %}
-    {% if pausable %}
-    /// Contract is paused.
-    Paused, // -19
-    {% endif %}
-    {% if roles %}
+    
+    
+    
     /// Failed to revoke role because it was not granted in the first place.
     RoleWasNotGranted, // -20
     /// Failed to grant role because it was granted already in the first place.
     RoleWasAlreadyGranted, // -21
-    {% endif %}
+    
     /// Max supply reached
     MaxSupplyReached, // -22
-    {% if burnable %}
+    
     /// No balance to burn
     NoBalanceToBurn, // -23
-    {% endif %}
+    
 }
 
 pub type ContractError = Cis2Error<CustomContractError>;
 
 pub type ContractResult<A> = Result<A, ContractError>;
 
-{% if updates %}
-impl From<UpgradeError> for CustomContractError {
-    #[inline(always)]
-    fn from(ue: UpgradeError) -> Self {
-        match ue {
-            UpgradeError::MissingModule => Self::FailedUpgradeMissingModule,
-            UpgradeError::MissingContract => Self::FailedUpgradeMissingContract,
-            UpgradeError::UnsupportedModuleVersion => Self::FailedUpgradeUnsupportedModuleVersion,
-        }
-    }
-}
-{% endif %}
 
-{% if sponsored %}
+
+
 impl From<CheckAccountSignatureError> for CustomContractError {
     fn from(e: CheckAccountSignatureError) -> Self {
         match e {
@@ -457,7 +416,7 @@ impl From<CheckAccountSignatureError> for CustomContractError {
         }
     }
 }
-{% endif %}
+
 
 impl From<LogError> for CustomContractError {
     fn from(le: LogError) -> Self {
@@ -484,16 +443,14 @@ impl State {
             max_supply: state_builder.new_map(),
             token_balance: state_builder.new_map(),
             implementors: state_builder.new_map(),
-            {% if sponsored %}
+            
             nonces_registry: state_builder.new_map(),
-            {% endif %}
+            
             blacklist: state_builder.new_set(),
-            {% if pausable %}
-            paused: false,
-            {% endif %}
-            {% if roles %}
+            
+            
             roles: state_builder.new_map(),
-            {% endif %}
+            
         }
     }
 
@@ -520,7 +477,7 @@ impl State {
         *circulating_supply += amount;
     }
 
-    {% if burnable %}
+    
     fn burn(
         &mut self,
         token_id: &ContractTokenId,
@@ -548,7 +505,7 @@ impl State {
             None => Err(Cis2Error::Custom(CustomContractError::NoBalanceToBurn)),
         }
     }
-    {% endif %}
+    
 
     /// Check that the token ID currently exists in this contract.
     #[inline(always)]
@@ -672,7 +629,7 @@ impl State {
         let _ = self.implementors.insert(std_id, implementors);
     }
 
-    {% if roles %}
+    
     fn grant_role(&mut self, account: &Address, role: Roles, state_builder: &mut StateBuilder) {
         self.roles.entry(*account).or_insert_with(|| AddressRoleState {
             roles: state_builder.new_set(),
@@ -695,7 +652,7 @@ impl State {
             Some(roles) => roles.roles.contains(&role),
         };
     }
-    {% endif %}
+    
 }
 
 /// Convert the address into its canonical account address (in case it is an
@@ -713,7 +670,7 @@ fn get_canonical_address(address: Address) -> ContractResult<Address> {
 // Contract functions
 
 #[init(
-    contract = "mint_wizard_{{ code }}_v{{ version }}",
+    contract = "mint_wizard_110101_v1",
     parameter = "InitParams",
     event = "Cis2Event<ContractTokenId, ContractTokenAmount>",
     enable_logger
@@ -729,13 +686,13 @@ fn contract_init(
 
     let invoker = Address::Account(ctx.init_origin());
 
-    {% if roles %}
+    
     state.grant_role(&invoker, Roles::ADMIN, state_builder);
     logger.log(&Event::GrantRole(GrantRoleEvent {
         address: invoker,
         role:    Roles::ADMIN,
     }))?;
-    {% endif %}
+    
 
     // Preminting of tokens
     for (token_id, token_info) in params.premint_tokens {
@@ -776,22 +733,20 @@ pub struct ViewAddressState {
 pub struct ViewState {
     pub state:           Vec<(Address, ViewAddressState)>,
     pub tokens:          Vec<ContractTokenId>,
-    {% if sponsored %}
+    
     pub nonces_registry: Vec<(AccountAddress, u64)>,
-    {% endif %}
+    
     pub blacklist:       Vec<Address>,
-    {% if roles %}
+    
     pub roles:           Vec<(Address, Vec<Roles>)>,
-    {% endif %}
-    {% if pausable %}
-    pub paused:          bool,
-    {% endif %}
+    
+    
     pub implementors:    Vec<(StandardIdentifierOwned, Vec<ContractAddress>)>,
 }
 
 /// View function for testing. This reports on the entire state of the contract
 /// for testing purposes.
-#[receive(contract = "mint_wizard_{{ code }}_v{{ version }}", name = "view", return_value = "ViewState")]
+#[receive(contract = "mint_wizard_110101_v1", name = "view", return_value = "ViewState")]
 fn contract_view(_ctx: &ReceiveContext, host: &Host<State>) -> ReceiveResult<ViewState> {
     let state = host.state();
 
@@ -815,11 +770,11 @@ fn contract_view(_ctx: &ReceiveContext, host: &Host<State>) -> ReceiveResult<Vie
         .collect();
 
     let tokens = state.tokens.iter().map(|a| *a.0).collect();
-    {% if sponsored %}
+    
     let nonces_registry = state.nonces_registry.iter().map(|(a, b)| (*a, *b)).collect();
-    {% endif %}
+    
     let blacklist = state.blacklist.iter().map(|a| *a).collect();
-    {% if roles %}
+    
     let roles: Vec<(Address, Vec<Roles>)> = state
         .roles
         .iter()
@@ -831,7 +786,7 @@ fn contract_view(_ctx: &ReceiveContext, host: &Host<State>) -> ReceiveResult<Vie
             (*key, roles_vec)
         })
         .collect();
-    {% endif %}
+    
 
     let implementors: Vec<(StandardIdentifierOwned, Vec<ContractAddress>)> = state
         .implementors
@@ -849,21 +804,19 @@ fn contract_view(_ctx: &ReceiveContext, host: &Host<State>) -> ReceiveResult<Vie
     Ok(ViewState {
         state: contract_state,
         tokens,
-        {% if sponsored %}
+        
         nonces_registry,
-        {% endif %}
+        
         blacklist,
-        {% if roles %}
+        
         roles,
-        {% endif %}
+        
         implementors,
-        {% if pausable %}
-        paused: host.state().paused,
-        {% endif %}
+        
     })
 }
 
-{% if mintable %}
+
 fn mint(
     params: MintParams,
     host: &mut Host<State>,
@@ -873,9 +826,7 @@ fn mint(
 
     ensure!(!is_blacklisted, CustomContractError::Blacklisted.into());
 
-    {% if pausable %}
-    ensure!(!host.state().paused, CustomContractError::Paused.into());
-    {% endif %}
+    
 
     let (state, builder) = host.state_and_builder();
     for (token_id, token_info) in params.tokens {
@@ -922,7 +873,7 @@ fn mint(
 }
 
 #[receive(
-    contract = "mint_wizard_{{ code }}_v{{ version }}",
+    contract = "mint_wizard_110101_v1",
     name = "mint",
     parameter = "MintParams",
     error = "ContractError",
@@ -939,17 +890,13 @@ fn contract_mint(
 
     ensure!(sender.matches_account(&owner), ContractError::Unauthorized);
 
-    {% if roles %}
+    
     ensure!(
         host.state().has_role(&sender, Roles::MINTER)
         || sender == Address::from(ctx.owner()),
         ContractError::Unauthorized
     );
-    {% else %}
-    ensure!(
-        sender == Address::from(ctx.owner()),
-    );
-    {% endif %}
+    
     
     let params: MintParams = ctx.parameter_cursor().get()?;
 
@@ -957,17 +904,15 @@ fn contract_mint(
 
     Ok(())
 }
-{% endif %}
 
-{% if burnable %}
+
+
 fn burn(
     params: BurnParams,
     host: &mut Host<State>,
     logger: &mut impl HasLogger,
 ) -> ContractResult<()> {
-    {% if pausable %}
-    ensure!(!host.state().paused, CustomContractError::Paused.into());
-    {% endif %}
+    
 
     let is_blacklisted = host.state().blacklist.contains(&get_canonical_address(params.owner)?);
 
@@ -995,7 +940,7 @@ fn burn(
 }
 
 #[receive(
-    contract = "mint_wizard_{{ code }}_v{{ version }}",
+    contract = "mint_wizard_110101_v1",
     name = "burn",
     parameter = "BurnParams",
     error = "ContractError",
@@ -1018,7 +963,7 @@ fn contract_burn(
 
     Ok(())
 }
-{% endif %}
+
 
 type TransferParameter = TransferParams<ContractTokenId, ContractTokenAmount>;
 
@@ -1039,9 +984,7 @@ fn transfer(
         CustomContractError::Blacklisted.into()
     );
 
-    {% if pausable %}
-    ensure!(!host.state().paused, CustomContractError::Paused.into());
-    {% endif %}
+    
 
     let (state, builder) = host.state_and_builder();
 
@@ -1068,7 +1011,7 @@ fn transfer(
 }
 
 #[receive(
-    contract = "mint_wizard_{{ code }}_v{{ version }}",
+    contract = "mint_wizard_110101_v1",
     name = "transfer",
     parameter = "TransferParameter",
     error = "ContractError",
@@ -1095,16 +1038,16 @@ fn contract_transfer(
     Ok(())
 }
 
-{% if sponsored %}
+
 /// Helper function that can be invoked at the front-end to serialize the
 /// `PermitMessage` before signing it in the wallet.
-#[receive(contract = "mint_wizard_{{ code }}_v{{ version }}", name = "serializationHelper", parameter = "PermitMessage")]
+#[receive(contract = "mint_wizard_110101_v1", name = "serializationHelper", parameter = "PermitMessage")]
 fn contract_serialization_helper(_ctx: &ReceiveContext, _host: &Host<State>) -> ContractResult<()> {
     Ok(())
 }
 
 #[receive(
-    contract = "mint_wizard_{{ code }}_v{{ version }}",
+    contract = "mint_wizard_110101_v1",
     name = "viewMessageHash",
     parameter = "PermitParam",
     return_value = "[u8;32]",
@@ -1145,7 +1088,7 @@ fn contract_view_message_hash(
 }
 
 #[receive(
-    contract = "mint_wizard_{{ code }}_v{{ version }}",
+    contract = "mint_wizard_110101_v1",
     name = "permit",
     parameter = "PermitParam",
     error = "ContractError",
@@ -1217,21 +1160,21 @@ fn contract_permit(
                 )?;
             }
         }
-        {% if mintable %}
+        
         MINT_ENTRYPOINT => {
             let params: MintParams = from_bytes(&message.payload)?;
 
             ensure!(
-                {% if roles %}
+                
                 host.state().has_role(&Address::from(param.signer), Roles::MINTER)
-                ||{% endif %} Address::from(param.signer) == Address::from(ctx.owner()),
+                || Address::from(param.signer) == Address::from(ctx.owner()),
                 ContractError::Unauthorized
             );
 
             mint(params, host, logger)?;
         }
-        {% endif %}
-        {% if burnable %}
+        
+        
         BURN_ENTRYPOINT => {
             let params: BurnParams = from_bytes(&message.payload)?;
 
@@ -1243,7 +1186,7 @@ fn contract_permit(
 
             burn(params, host, logger)?;
         }
-        {% endif %}
+        
         _ => {
             bail!(CustomContractError::WrongEntryPoint.into())
         }
@@ -1256,7 +1199,7 @@ fn contract_permit(
 
     Ok(())
 }
-{% endif %}
+
 
 fn update_operator(
     update: OperatorUpdate,
@@ -1266,9 +1209,7 @@ fn update_operator(
     builder: &mut StateBuilder,
     logger: &mut impl HasLogger,
 ) -> ContractResult<()> {
-    {% if pausable %}
-    ensure!(!state.paused, CustomContractError::Paused.into());
-    {% endif %}
+    
 
     match update {
         OperatorUpdate::Add => state.add_operator(&sender, &operator, builder),
@@ -1287,7 +1228,7 @@ fn update_operator(
 }
 
 #[receive(
-    contract = "mint_wizard_{{ code }}_v{{ version }}",
+    contract = "mint_wizard_110101_v1",
     name = "updateOperator",
     parameter = "UpdateOperatorParams",
     error = "ContractError",
@@ -1313,7 +1254,7 @@ pub type ContractBalanceOfQueryParams = BalanceOfQueryParams<ContractTokenId>;
 pub type ContractBalanceOfQueryResponse = BalanceOfQueryResponse<ContractTokenAmount>;
 
 #[receive(
-    contract = "mint_wizard_{{ code }}_v{{ version }}",
+    contract = "mint_wizard_110101_v1",
     name = "balanceOf",
     parameter = "ContractBalanceOfQueryParams",
     return_value = "ContractBalanceOfQueryResponse",
@@ -1334,7 +1275,7 @@ fn contract_balance_of(
 }
 
 #[receive(
-    contract = "mint_wizard_{{ code }}_v{{ version }}",
+    contract = "mint_wizard_110101_v1",
     name = "operatorOf",
     parameter = "OperatorOfQueryParams",
     return_value = "OperatorOfQueryResponse",
@@ -1362,7 +1303,7 @@ pub struct VecOfAddresses {
 }
 
 #[receive(
-    contract = "mint_wizard_{{ code }}_v{{ version }}",
+    contract = "mint_wizard_110101_v1",
     name = "isBlacklisted",
     parameter = "VecOfAddresses",
     return_value = "Vec<bool>",
@@ -1398,7 +1339,7 @@ pub struct VecOfAccountAddresses {
 }
 
 #[receive(
-    contract = "mint_wizard_{{ code }}_v{{ version }}",
+    contract = "mint_wizard_110101_v1",
     name = "publicKeyOf",
     parameter = "VecOfAccountAddresses",
     return_value = "PublicKeyOfQueryResponse",
@@ -1426,9 +1367,9 @@ impl From<Vec<u64>> for NonceOfQueryResponse {
     fn from(results: concordium_std::Vec<u64>) -> Self { NonceOfQueryResponse(results) }
 }
 
-{% if sponsored %}
+
 #[receive(
-    contract = "mint_wizard_{{ code }}_v{{ version }}",
+    contract = "mint_wizard_110101_v1",
     name = "nonceOf",
     parameter = "VecOfAccountAddresses",
     return_value = "NonceOfQueryResponse",
@@ -1446,12 +1387,12 @@ fn contract_nonce_of(
     }
     Ok(NonceOfQueryResponse::from(response))
 }
-{% endif %}
+
 
 type ContractTokenMetadataQueryParams = TokenMetadataQueryParams<ContractTokenId>;
 
 #[receive(
-    contract = "mint_wizard_{{ code }}_v{{ version }}",
+    contract = "mint_wizard_110101_v1",
     name = "tokenMetadata",
     parameter = "ContractTokenMetadataQueryParams",
     return_value = "TokenMetadataQueryResponse",
@@ -1475,7 +1416,7 @@ fn contract_token_metadata(
 }
 
 #[receive(
-    contract = "mint_wizard_{{ code }}_v{{ version }}",
+    contract = "mint_wizard_110101_v1",
     name = "supports",
     parameter = "SupportsQueryParams",
     return_value = "SupportsQueryResponse",
@@ -1499,9 +1440,9 @@ fn contract_supports(
     Ok(result)
 }
 
-{% if sponsored %}
+
 #[receive(
-    contract = "mint_wizard_{{ code }}_v{{ version }}",
+    contract = "mint_wizard_110101_v1",
     name = "supportsPermit",
     parameter = "SupportsPermitQueryParams",
     return_value = "SupportsQueryResponse",
@@ -1524,12 +1465,12 @@ fn contract_supports_permit(
     let result = SupportsQueryResponse::from(response);
     Ok(result)
 }
-{% endif %}
+
 
 /// Set the addresses for an implementation given a standard identifier and a
 /// list of contract addresses.
 #[receive(
-    contract = "mint_wizard_{{ code }}_v{{ version }}",
+    contract = "mint_wizard_110101_v1",
     name = "setImplementors",
     parameter = "SetImplementorsParams",
     error = "ContractError",
@@ -1559,7 +1500,7 @@ pub struct UpdateBlacklist {
 pub struct UpdateBlacklistParams(#[concordium(size_length = 2)] pub Vec<UpdateBlacklist>);
 
 #[receive(
-    contract = "mint_wizard_{{ code }}_v{{ version }}",
+    contract = "mint_wizard_110101_v1",
     name = "updateBlacklist",
     parameter = "UpdateBlacklistParams",
     error = "ContractError",
@@ -1573,11 +1514,9 @@ fn contract_update_blacklist(
 ) -> ContractResult<()> {
     let sender = ctx.sender();
 
-    {% if roles %}
+    
     ensure!(host.state().has_role(&sender, Roles::BLACKLISTER), ContractError::Unauthorized);
-    {% else %}
-    ensure!(sender.matches_account(&ctx.owner()), ContractError::Unauthorized);
-    {% endif %}
+    
 
     let UpdateBlacklistParams(params) = ctx.parameter_cursor().get()?;
 
@@ -1598,67 +1537,13 @@ fn contract_update_blacklist(
     Ok(())
 }
 
-{% if updates %}
+
+
+
+
+
 #[receive(
-    contract = "mint_wizard_{{ code }}_v{{ version }}",
-    name = "upgrade",
-    parameter = "UpgradeParams",
-    error = "CustomContractError",
-    low_level
-)]
-fn contract_upgrade(ctx: &ReceiveContext, host: &mut LowLevelHost) -> ContractResult<()> {
-    let state: State = host.state().read_root()?;
-
-    let sender = ctx.sender();
-
-    {% if roles %}
-    ensure!(state.has_role(&sender, Roles::UPGRADER), ContractError::Unauthorized);
-    {% else %}
-    ensure!(sender.matches_account(&ctx.owner()), ContractError::Unauthorized);
-    {% endif %}
-
-    let params: UpgradeParams = ctx.parameter_cursor().get()?;
-    host.upgrade(params.module)?;
-    if let Some((func, parameters)) = params.migrate {
-        host.invoke_contract_raw(
-            &ctx.self_address(),
-            parameters.as_parameter(),
-            func.as_entrypoint_name(),
-            Amount::zero(),
-        )?;
-    }
-    Ok(())
-}
-{% endif %}
-
-{% if pausable %}
-#[receive(
-    contract = "mint_wizard_{{ code }}_v{{ version }}",
-    name = "setPaused",
-    parameter = "SetPausedParams",
-    error = "CustomContractError",
-    mutable
-)]
-fn contract_set_paused(ctx: &ReceiveContext, host: &mut Host<State>) -> ContractResult<()> {
-    let sender = ctx.sender();
-
-    {% if roles %}
-    ensure!(host.state().has_role(&sender, Roles::PAUSER), ContractError::Unauthorized);
-    {% else %}
-    ensure!(sender.matches_account(&ctx.owner()), ContractError::Unauthorized);
-    {% endif %}
-
-    let params: SetPausedParams = ctx.parameter_cursor().get()?;
-
-    host.state_mut().paused = params.paused;
-
-    Ok(())
-}
-{% endif %}
-
-{% if roles %}
-#[receive(
-    contract = "mint_wizard_{{ code }}_v{{ version }}",
+    contract = "mint_wizard_110101_v1",
     name = "grantRole",
     parameter = "GrantRoleParams",
     enable_logger,
@@ -1690,7 +1575,7 @@ fn contract_grant_role(
 }
 
 #[receive(
-    contract = "mint_wizard_{{ code }}_v{{ version }}",
+    contract = "mint_wizard_110101_v1",
     name = "revokeRole",
     parameter = "RevokeRoleParams",
     enable_logger,
@@ -1720,4 +1605,3 @@ fn contract_revoke_role(
     }))?;
     Ok(())
 }
-{% endif %}
