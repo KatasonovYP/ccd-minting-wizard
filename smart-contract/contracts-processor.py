@@ -13,7 +13,7 @@ logging.basicConfig(level=logging.INFO, filename=f"logs/{datetime.datetime.now()
 
 
 async def source_build(binary, bar):
-    command = "cargo concordium build -b \"dist/schemab64.txt\" --out dist/module.wasm.v1"
+    command = f"cargo concordium build -v V{VERSION} -b \"dist/schemab64.txt\" --out dist/module.wasm.v1"
     process = await asyncio.create_subprocess_shell(command, cwd=Path(f"src/processed/{binary}/"), stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE)
     _, stderr = await process.communicate()
     if process.returncode != 0:

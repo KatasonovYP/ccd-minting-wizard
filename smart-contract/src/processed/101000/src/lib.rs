@@ -432,7 +432,7 @@ fn get_canonical_address(address: Address) -> ContractResult<Address> {
 // Contract functions
 
 #[init(
-    contract = "mint_wizard_101000_v1",
+    contract = "mint_wizard_101000",
     parameter = "InitParams",
     event = "Cis2Event<ContractTokenId, ContractTokenAmount>",
     enable_logger
@@ -500,7 +500,7 @@ pub struct ViewState {
 
 /// View function for testing. This reports on the entire state of the contract
 /// for testing purposes.
-#[receive(contract = "mint_wizard_101000_v1", name = "view", return_value = "ViewState")]
+#[receive(contract = "mint_wizard_101000", name = "view", return_value = "ViewState")]
 fn contract_view(_ctx: &ReceiveContext, host: &Host<State>) -> ReceiveResult<ViewState> {
     let state = host.state();
 
@@ -613,7 +613,7 @@ fn mint(
 }
 
 #[receive(
-    contract = "mint_wizard_101000_v1",
+    contract = "mint_wizard_101000",
     name = "mint",
     parameter = "MintParams",
     error = "ContractError",
@@ -690,7 +690,7 @@ fn transfer(
 }
 
 #[receive(
-    contract = "mint_wizard_101000_v1",
+    contract = "mint_wizard_101000",
     name = "transfer",
     parameter = "TransferParameter",
     error = "ContractError",
@@ -748,7 +748,7 @@ fn update_operator(
 }
 
 #[receive(
-    contract = "mint_wizard_101000_v1",
+    contract = "mint_wizard_101000",
     name = "updateOperator",
     parameter = "UpdateOperatorParams",
     error = "ContractError",
@@ -774,7 +774,7 @@ pub type ContractBalanceOfQueryParams = BalanceOfQueryParams<ContractTokenId>;
 pub type ContractBalanceOfQueryResponse = BalanceOfQueryResponse<ContractTokenAmount>;
 
 #[receive(
-    contract = "mint_wizard_101000_v1",
+    contract = "mint_wizard_101000",
     name = "balanceOf",
     parameter = "ContractBalanceOfQueryParams",
     return_value = "ContractBalanceOfQueryResponse",
@@ -795,7 +795,7 @@ fn contract_balance_of(
 }
 
 #[receive(
-    contract = "mint_wizard_101000_v1",
+    contract = "mint_wizard_101000",
     name = "operatorOf",
     parameter = "OperatorOfQueryParams",
     return_value = "OperatorOfQueryResponse",
@@ -823,7 +823,7 @@ pub struct VecOfAddresses {
 }
 
 #[receive(
-    contract = "mint_wizard_101000_v1",
+    contract = "mint_wizard_101000",
     name = "isBlacklisted",
     parameter = "VecOfAddresses",
     return_value = "Vec<bool>",
@@ -859,7 +859,7 @@ pub struct VecOfAccountAddresses {
 }
 
 #[receive(
-    contract = "mint_wizard_101000_v1",
+    contract = "mint_wizard_101000",
     name = "publicKeyOf",
     parameter = "VecOfAccountAddresses",
     return_value = "PublicKeyOfQueryResponse",
@@ -892,7 +892,7 @@ impl From<Vec<u64>> for NonceOfQueryResponse {
 type ContractTokenMetadataQueryParams = TokenMetadataQueryParams<ContractTokenId>;
 
 #[receive(
-    contract = "mint_wizard_101000_v1",
+    contract = "mint_wizard_101000",
     name = "tokenMetadata",
     parameter = "ContractTokenMetadataQueryParams",
     return_value = "TokenMetadataQueryResponse",
@@ -916,7 +916,7 @@ fn contract_token_metadata(
 }
 
 #[receive(
-    contract = "mint_wizard_101000_v1",
+    contract = "mint_wizard_101000",
     name = "supports",
     parameter = "SupportsQueryParams",
     return_value = "SupportsQueryResponse",
@@ -945,7 +945,7 @@ fn contract_supports(
 /// Set the addresses for an implementation given a standard identifier and a
 /// list of contract addresses.
 #[receive(
-    contract = "mint_wizard_101000_v1",
+    contract = "mint_wizard_101000",
     name = "setImplementors",
     parameter = "SetImplementorsParams",
     error = "ContractError",
@@ -975,7 +975,7 @@ pub struct UpdateBlacklist {
 pub struct UpdateBlacklistParams(#[concordium(size_length = 2)] pub Vec<UpdateBlacklist>);
 
 #[receive(
-    contract = "mint_wizard_101000_v1",
+    contract = "mint_wizard_101000",
     name = "updateBlacklist",
     parameter = "UpdateBlacklistParams",
     error = "ContractError",
@@ -1016,7 +1016,7 @@ fn contract_update_blacklist(
 
 
 #[receive(
-    contract = "mint_wizard_101000_v1",
+    contract = "mint_wizard_101000",
     name = "setPaused",
     parameter = "SetPausedParams",
     error = "CustomContractError",
