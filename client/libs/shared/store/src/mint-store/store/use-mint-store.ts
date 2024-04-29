@@ -32,12 +32,11 @@ export const useMintStore = create<Store>(
             'maximum tokens': undefined,
         },
         contractFeatures: {
-            burnable: false,
             mintable: false,
+            burnable: false,
             pausable: false,
-            permit: false,
-            roles: false,
             sponsored: false,
+            roles: false,
             'allow updates': false,
         },
         optionalFields: {

@@ -9,6 +9,7 @@ import { useAuth, useConcordiumApi } from '@/shared/utils/hooks';
 import { contractMint } from '@/shared/utils/smart-contract';
 import { useMetadata } from '@/shared/utils/hooks/use-metadata';
 import { useMintStore } from '@/shared/store/mint-store';
+import { useContractFeaturesCode } from '@/shared/utils/hooks/use-contract-features-code';
 
 interface DeployContractProps {
     className?: string;
@@ -19,6 +20,7 @@ export function DeployContract(props: DeployContractProps) {
     const { isAuth } = useAuth();
     const { metadata } = useMetadata();
     const mintingSettings = useMintStore((state) => state.mintingSettings);
+    const contractFeaturesCode = useContractFeaturesCode();
     const [isDeploying, setIsDeploying] = useState(false);
     const navigate = useNavigate();
 

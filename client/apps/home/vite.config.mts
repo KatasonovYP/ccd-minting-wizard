@@ -38,7 +38,7 @@ export default defineConfig({
     server: {
         port: 4200,
         host: 'localhost',
-        fs: { allow: ['../../libs/shared/assets'] },
+        fs: { allow: ['../../libs/shared/assets', '../../../smart-contract/src/processed/'] },
     },
 
     preview: { port: 4300, host: 'localhost' },

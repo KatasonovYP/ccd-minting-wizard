@@ -2,25 +2,34 @@ import cn from 'classnames';
 import CodeMirror, { EditorState, EditorView } from '@uiw/react-codemirror';
 import { rustLanguage } from '@codemirror/lang-rust';
 import cls from './show-code.module.css';
-import { useCode } from '@/shared/utils/hooks';
-import { plainText as initialCode } from '../../../../../../smart-contract/src/lib.rs';
 import { ScrollArea } from '@/shared/ui/scroll-area';
+import { useState } from 'react';
+import { Spinner } from '@/shared/ui/spinner';
+import { useContractFeaturesCode } from '@/shared/utils/hooks/use-contract-features-code';
 
 interface ShowCodeProps {
     className?: string;
 }
 
+const SMART_CONTRACT_PATH = '../../../../../../smart-contract/src/processed'
+
 export default function ShowCode(props: ShowCodeProps) {
     const { className } = props;
-    // const { code } = useCode();
-    // console.log(initialCode);
-
+    const contractFeaturesCode = useContractFeaturesCode();
+    const [code, setCode] = useState<string>();
+    import((`${SMART_CONTRACT_PATH}/${contractFeaturesCode}/src/lib.rs`)).then((lib) =>
+        setCode(lib.plainText),
+    );
     const theme = 'dark';
+
+    if (!code) {
+        return <Spinner />
+    }
 
     return (
         <ScrollArea className={cn('rounded-md', cls.scrollArea)}>
             <CodeMirror
-                value={initialCode}
+                value={code}
                 className={cn(
                     className,
                     cls.showCode,
