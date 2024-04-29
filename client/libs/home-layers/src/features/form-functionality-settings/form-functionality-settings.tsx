@@ -15,10 +15,9 @@ const names: Array<keyof ContractFeatures> = [
     'mintable',
     'burnable',
     'pausable',
-    'permit',
+    'sponsored',
     'roles',
     'allow updates',
-    'sponsored',
 ];
 
 export function FormFunctionalitySettings(
