@@ -2,3 +2,5 @@
 target/
 env/
 logs/*
+local_secrets.py
+__pycache__
