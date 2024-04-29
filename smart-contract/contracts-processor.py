@@ -1,6 +1,6 @@
-# import subprocess
 import asyncio
 import logging
+import datetime
 
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 from progress.bar import ShadyBar
@@ -9,27 +9,27 @@ from pathlib import Path
 VERSION = 1
 SOURCE_CARGO = Path('Cargo.toml')
 
-sem = asyncio.Semaphore(16)
+logging.basicConfig(level=logging.INFO, filename=f"logs/{datetime.datetime.now()}.log")
 
 
-async def source_compile(binary, bar):
-    process = await asyncio.create_subprocess_shell("cargo concordium build -b \"dist/schemab64.txt\" --out dist/module.wasm.v1", cwd=Path(f"src/processed/{binary}/"), stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE)
-    await process.communicate()
+async def source_build(binary, bar):
+    command = "cargo concordium build -b \"dist/schemab64.txt\" --out dist/module.wasm.v1"
+    process = await asyncio.create_subprocess_shell(command, cwd=Path(f"src/processed/{binary}/"), stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE)
+    _, stderr = await process.communicate()
+    if process.returncode != 0:
+        logging.error(f"Error while building {binary} source:\n{stderr.decode()}")
     bar.next()
     return process.returncode
 
 
-async def safe_source_compile(binary, bar):
-    async with sem:
-        return await source_compile(binary, bar)
-
-
-async def run_compile(bar):
+async def build_sources(bar):
     tasks = []
     for i in range(0, 64):
         binary = f"{i:06b}"
-        tasks.append(asyncio.ensure_future(safe_source_compile(binary, bar)))
-    await asyncio.gather(*tasks)
+        tasks.append(asyncio.ensure_future(source_build(binary, bar)))
+    semaphore = asyncio.Semaphore(16)
+    async with semaphore:
+        await asyncio.gather(*tasks)
 
 
 def main():
@@ -59,7 +59,7 @@ def main():
             bar.next()
     with ShadyBar('2 | Compiling Sources\t\t', max=64) as bar:
         loop = asyncio.get_event_loop()
-        loop.run_until_complete(run_compile(bar))
+        loop.run_until_complete(build_sources(bar))
 
 
 if __name__ == "__main__":

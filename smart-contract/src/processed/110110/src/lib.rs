@@ -812,12 +812,10 @@ fn contract_mint(
     let owner = ctx.owner();
     let sender = ctx.sender();
 
-    ensure!(sender.matches_account(&owner), ContractError::Unauthorized);
-
     
     ensure!(
         host.state().has_role(&sender, Roles::MINTER)
-        || sender == Address::from(ctx.owner()),
+        || sender.matches_account(&owner),
         ContractError::Unauthorized
     );
     

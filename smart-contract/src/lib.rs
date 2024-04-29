@@ -937,18 +937,14 @@ fn contract_mint(
     let owner = ctx.owner();
     let sender = ctx.sender();
 
-    ensure!(sender.matches_account(&owner), ContractError::Unauthorized);
-
     {% if roles %}
     ensure!(
         host.state().has_role(&sender, Roles::MINTER)
-        || sender == Address::from(ctx.owner()),
+        || sender.matches_account(&owner),
         ContractError::Unauthorized
     );
     {% else %}
-    ensure!(
-        sender == Address::from(ctx.owner()),
-    );
+    ensure!(sender.matches_account(&owner), ContractError::Unauthorized);
     {% endif %}
     
     let params: MintParams = ctx.parameter_cursor().get()?;
