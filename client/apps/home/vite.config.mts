@@ -4,6 +4,7 @@ import react from '@vitejs/plugin-react';
 import { nxViteTsPaths } from '@nx/vite/plugins/nx-tsconfig-paths.plugin';
 import svgr from 'vite-plugin-svgr';
 import plainText from 'vite-plugin-plain-text';
+import dynamicImport from 'vite-plugin-dynamic-import';
 
 const props = {
     isDev: process.env.IS_DEV || true,
@@ -26,6 +27,7 @@ export default defineConfig({
             svgrOptions: {},
         }),
         plainText(['**/*.text', '**/*.rs']),
+        dynamicImport(),
     ],
     define: {
         __IS_DEV__: JSON.stringify(props.isDev),
@@ -38,7 +40,7 @@ export default defineConfig({
     server: {
         port: 4200,
         host: 'localhost',
-        fs: { allow: ['../../libs/shared/assets', '../../../smart-contract/src/processed/'] },
+        fs: { allow: ['../../libs/shared/assets', '../../libs/shared/hooks', '../../../smart-contract/src/processed/'] },
     },
 
     preview: { port: 4300, host: 'localhost' },
@@ -48,6 +50,7 @@ export default defineConfig({
         emptyOutDir: true,
         reportCompressedSize: true,
         commonjsOptions: { transformMixedEsModules: true },
+
     },
     // test: {
     //     globals: true,
