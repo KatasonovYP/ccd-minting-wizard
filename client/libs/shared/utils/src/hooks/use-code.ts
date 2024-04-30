@@ -12,20 +12,20 @@ export function useCode() {
 
     import(`./processed/${contractFeaturesCode}/src/lib.rs`).then(
         (lib) => {
-            setCode(lib.plainText);
+            setCode(lib.plainText.trim());
         },
     );
 
     import(`./processed/${contractFeaturesCode}/reference.text`).then(
         (lib) => {
-            setReference(lib.plainText);
+            setReference(lib.plainText.trim());
         },
     );
 
     import(
         `./processed/${contractFeaturesCode}/dist/schemab64.text`
     ).then((lib) => {
-        setSchema(lib.plainText);
+        setSchema(lib.plainText.trim());
     });
 
     return { code, reference, schema, name: `mint_wizard_${contractFeaturesCode}` };
