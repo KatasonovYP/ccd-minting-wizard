@@ -3,23 +3,16 @@ import CodeMirror, { EditorState, EditorView } from '@uiw/react-codemirror';
 import { rustLanguage } from '@codemirror/lang-rust';
 import cls from './show-code.module.css';
 import { ScrollArea } from '@/shared/ui/scroll-area';
-import { useState } from 'react';
 import { Spinner } from '@/shared/ui/spinner';
-import { useContractFeaturesCode } from '@/shared/utils/hooks/use-contract-features-code';
+import { useCode } from '@/shared/utils/hooks';
 
 interface ShowCodeProps {
     className?: string;
 }
 
-const SMART_CONTRACT_PATH = '../../../../../../smart-contract/src/processed'
-
 export default function ShowCode(props: ShowCodeProps) {
     const { className } = props;
-    const contractFeaturesCode = useContractFeaturesCode();
-    const [code, setCode] = useState<string>();
-    import((`${SMART_CONTRACT_PATH}/${contractFeaturesCode}/src/lib.rs`)).then((lib) =>
-        setCode(lib.plainText),
-    );
+    const {code, schema} = useCode();
     const theme = 'dark';
 
     if (!code) {

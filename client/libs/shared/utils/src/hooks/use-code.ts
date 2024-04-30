@@ -1,17 +1,31 @@
-import { useMintStore } from '../../../store/src/mint-store';
-import { useEffect, useState } from 'react';
-import { useCodeStore } from '../../../store/src/code-store';
+import { useState } from 'react';
+import { useContractFeaturesCode } from './use-contract-features-code';
+const SMART_CONTRACT_PATH = '../../../../../../smart-contract/src/processed';
 
 export function useCode() {
-    const identity = useMintStore((state) => state.identity);
-    const functionalitySettings = useMintStore(
-        (state) => state.contractFeatures,
-    );
-    const [code, setCode] = useState<string>('');
-    const formatCode = useCodeStore((state) => state.formatCode);
+    const contractFeaturesCode = useContractFeaturesCode();
 
-    useEffect(() => {
-        formatCode(identity, functionalitySettings).then(setCode);
-    }, [identity, functionalitySettings, formatCode]);
-    return { code };
+    const [code, setCode] = useState<string>();
+    const [reference, setReference] = useState<string>();
+    const [schema, setSchema] = useState<string>();
+
+    import(`${SMART_CONTRACT_PATH}/${contractFeaturesCode}/src/lib.rs`).then(
+        (lib) => {
+            setCode(lib.plainText);
+        },
+    );
+
+    import(`${SMART_CONTRACT_PATH}/${contractFeaturesCode}/reference.text`).then(
+        (lib) => {
+            setReference(lib.plainText);
+        },
+    );
+
+    import(
+        `${SMART_CONTRACT_PATH}/${contractFeaturesCode}/dist/schemab64.text`
+    ).then((lib) => {
+        setSchema(lib.plainText);
+    });
+
+    return { code, reference, schema, name: `mint_wizard_${contractFeaturesCode}` };
 }

@@ -25,7 +25,7 @@ export default defineConfig({
         svgr({
             svgrOptions: {},
         }),
-        plainText(['**/*.rs']),
+        plainText(['**/*.text', '**/*.rs']),
     ],
     define: {
         __IS_DEV__: JSON.stringify(props.isDev),

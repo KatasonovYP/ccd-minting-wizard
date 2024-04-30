@@ -10,7 +10,7 @@ declare module '*.rs' {
     export const plainText: string
 }
 
-declare module '@katasonovyp/react-burger-menu' {
-    export * from '@types/react-burger-menu';
+declare module '*.txt' {
+    export const plainText: string
 }
 

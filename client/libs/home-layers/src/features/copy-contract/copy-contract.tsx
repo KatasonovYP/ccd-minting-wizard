@@ -15,7 +15,7 @@ export function CopyContract(props: CopyContractProps) {
     const [copied, setCopied] = useState(false);
 
     function clickHandler() {
-        navigator.clipboard.writeText(code).then(null);
+        navigator.clipboard.writeText(code!).then(null);
         setCopied(true);
         setTimeout(() => setCopied(false), 1500);
     }
