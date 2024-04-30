@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useContractFeaturesCode } from './use-contract-features-code';
-const SMART_CONTRACT_PATH = '../../../../../../smart-contract/src/processed';
+
+const SMART_CONTRACT_PATH = '../../../assets/src/processed';
 
 export function useCode() {
     const contractFeaturesCode = useContractFeaturesCode();

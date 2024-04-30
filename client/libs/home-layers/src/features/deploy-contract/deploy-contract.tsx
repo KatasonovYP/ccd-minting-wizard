@@ -10,8 +10,6 @@ import { contractMint } from '@/shared/utils/smart-contract';
 import { useMetadata } from '@/shared/utils/hooks/use-metadata';
 import { useMintStore } from '@/shared/store/mint-store';
 
-const SMART_CONTRACT_PATH = '../../';
-
 interface DeployContractProps {
     className?: string;
 }
