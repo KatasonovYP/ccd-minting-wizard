@@ -47,12 +47,6 @@ export const useCodeStore = create<Store>((): Store => {
                         : '',
                 )
                 .replace(
-                    '{permit}',
-                    functionalitySettings.permit
-                        ? `${endLine}permit_code();`
-                        : '',
-                )
-                .replace(
                     '{roles}',
                     functionalitySettings.roles
                         ? `${endLine}roles_code();`
