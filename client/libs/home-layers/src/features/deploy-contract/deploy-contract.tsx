@@ -27,6 +27,8 @@ export function DeployContract(props: DeployContractProps) {
         setIsDeploying(true);
         try {
             if (!reference || !schema) {
+                console.warn('reference', reference);
+                console.warn('schema', schema);
                 console.error('no schema or reference');
                 return;
             }
