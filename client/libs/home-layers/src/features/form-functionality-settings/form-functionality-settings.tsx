@@ -17,7 +17,7 @@ const names: Array<keyof ContractFeatures> = [
     'pausable',
     'sponsored',
     'roles',
-    'allow updates',
+    'upgradable',
 ];
 
 export function FormFunctionalitySettings(

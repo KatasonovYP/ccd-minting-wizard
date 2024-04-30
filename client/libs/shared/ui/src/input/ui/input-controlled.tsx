@@ -36,7 +36,14 @@ export function InputControlled<T extends FieldValues>(
             rules={rules}
             render={({ field, fieldState: { error } }) => (
                 <div className={className}>
-                    {labeled && <Label htmlFor={name}>{label}</Label>}
+                    {labeled && (
+                        <Label
+                            className={'capitalize placeholder:capitalize'}
+                            htmlFor={name}
+                        >
+                            {label}
+                        </Label>
+                    )}
                     <Input
                         {...field}
                         {...otherProps}
@@ -45,7 +52,7 @@ export function InputControlled<T extends FieldValues>(
                             field.onChange(e);
                             onChange && onChange(e);
                         }}
-                        placeholder={`add ${label}...`}
+                        placeholder={`Add ${label}...`}
                     />
                     <ErrorMessage message={error?.message} />
                 </div>

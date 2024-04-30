@@ -7,6 +7,7 @@ import { DownloadContract } from '../../features/download-contract';
 import { CopyContract } from '../../features/copy-contract';
 import { DownloadMetadata } from '../../features/download-metadata';
 import { Sidebar } from '../../widgets/sidebar/sidebar';
+import { SelectNetwork } from '../../features/select-network/select-network';
 import cls from './wizard-page.module.css';
 import { ConcordiumLogoIcon } from '@/shared/assets/icons';
 import {
@@ -29,6 +30,7 @@ export function WizardPage(props: WizardPageProps) {
             <div className='mb-4 flex items-center justify-between'>
                 <ConcordiumLogoIcon />
                 <div className='flex gap-4'>
+                    <SelectNetwork />
                     <ConnectButton />
                     <CopyContract />
                     <DropdownMenu>

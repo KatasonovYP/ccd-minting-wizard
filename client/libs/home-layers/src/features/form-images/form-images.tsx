@@ -2,6 +2,7 @@ import cn from 'classnames';
 import { Controller, useForm } from 'react-hook-form';
 import * as React from 'react';
 import { useState } from 'react';
+import { Check, LoaderCircle, Upload } from 'lucide-react';
 import { postIpfs } from '../form-metadata-file/lib/post-ipfs';
 import cls from './form-images.module.css';
 import type { FormImagesValues } from './model/form-images-values';
@@ -26,6 +27,11 @@ interface FormImagesProps {
     className?: string;
 }
 
+const spinnerProps = {
+    size: '16',
+    className: 'animate-spin',
+};
+
 export function FormImages(props: FormImagesProps) {
     const { className } = props;
 
@@ -33,12 +39,18 @@ export function FormImages(props: FormImagesProps) {
     const [thumbnailImage, setThumbnailImage] = useState('');
     const setDisplay = useMintStore((state) => state.setDisplay);
     const setThumbnail = useMintStore((state) => state.setThumbnail);
+    const savedDisplay = useMintStore((state) => !!state.display.display?.url);
+    const savedThumbnail = useMintStore(
+        (state) => !!state.thumbnail.thumbnail?.url,
+    );
     const display = useMintStore((state) => state.display);
     const thumbnail = useMintStore((state) => state.thumbnail);
     const [isUrlDisplay, setIsUrlDisplay] = useState(!!display.display?.url);
     const [isUrlThumbnail, setIsUrlThumbnail] = useState(
         !!thumbnail.thumbnail?.url,
     );
+    const [isDisplayLoading, setIsDisplayLoading] = useState(false);
+    const [isThumbnailLoading, setIsThumbnailLoading] = useState(false);
 
     const { register, control, handleSubmit, watch, getValues } =
         useForm<FormImagesValues>({
@@ -73,17 +85,27 @@ export function FormImages(props: FormImagesProps) {
         setIsUrlThumbnail(data['url usage thumbnail']);
 
         if (!data['url usage display'] && data['file display']?.length) {
-            readFileImage(data['file display'][0], setDisplayImage);
-            const ipfsUrl = await postIpfs(data['file display'][0]);
-            setDisplay({ display: { url: ipfsUrl } });
+            setIsDisplayLoading(true);
+            try {
+                readFileImage(data['file display'][0], setDisplayImage);
+                const ipfsUrl = await postIpfs(data['file display'][0]);
+                setDisplay({ display: { url: ipfsUrl } });
+            } finally {
+                setIsDisplayLoading(false);
+            }
         } else {
             setDisplay({ display: { url: data['url display'] } });
         }
 
         if (!data['url usage thumbnail'] && data['file thumbnail']?.length) {
-            readFileImage(data['file thumbnail'][0], setThumbnailImage);
-            const ipfsUrl = await postIpfs(data['file thumbnail'][0]);
-            setThumbnail({ thumbnail: { url: ipfsUrl } });
+            setIsThumbnailLoading(true);
+            try {
+                readFileImage(data['file thumbnail'][0], setThumbnailImage);
+                const ipfsUrl = await postIpfs(data['file thumbnail'][0]);
+                setThumbnail({ thumbnail: { url: ipfsUrl } });
+            } finally {
+                setIsThumbnailLoading(false);
+            }
         } else {
             setThumbnail({ thumbnail: { url: data['url thumbnail'] } });
         }
@@ -99,7 +121,20 @@ export function FormImages(props: FormImagesProps) {
                     asChild
                     type='button'
                 >
-                    <Button>add display</Button>
+                    <Button
+                        className={'flex gap-2'}
+                        variant={'outline'}
+                        disabled={isDisplayLoading}
+                    >
+                        Add Display{' '}
+                        {isDisplayLoading ? (
+                            <LoaderCircle {...spinnerProps} />
+                        ) : savedDisplay ? (
+                            <Check size={16} />
+                        ) : (
+                            <Upload size={16} />
+                        )}
+                    </Button>
                 </DialogTrigger>
                 <DialogContent>
                     <DialogHeader>
@@ -168,7 +203,20 @@ export function FormImages(props: FormImagesProps) {
                     asChild
                     type='button'
                 >
-                    <Button>add thumbnail</Button>
+                    <Button
+                        className='flex gap-2'
+                        variant={'outline'}
+                        disabled={isThumbnailLoading}
+                    >
+                        Add Thumbnail{' '}
+                        {isThumbnailLoading ? (
+                            <LoaderCircle {...spinnerProps} />
+                        ) : savedThumbnail ? (
+                            <Check size={16} />
+                        ) : (
+                            <Upload size={16} />
+                        )}
+                    </Button>
                 </DialogTrigger>
                 <DialogContent>
                     <DialogHeader>

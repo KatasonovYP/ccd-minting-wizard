@@ -12,11 +12,11 @@ interface ShowCodeProps {
 
 export default function ShowCode(props: ShowCodeProps) {
     const { className } = props;
-    const {code, schema} = useCode();
+    const { code, schema } = useCode();
     const theme = 'dark';
 
     if (!code) {
-        return <Spinner />
+        return <Spinner />;
     }
 
     return (

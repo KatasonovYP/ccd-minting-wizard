@@ -3,6 +3,6 @@ export interface ContractFeatures {
     burnable: boolean;
     pausable: boolean;
     roles: boolean;
-    'allow updates': boolean;
+    upgradable: boolean;
     sponsored: boolean;
 }

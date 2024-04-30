@@ -15,6 +15,7 @@ export interface MintStoreState {
     display: { display?: Cis2Url };
     thumbnail: { thumbnail?: Cis2Url };
     artifact: { artifact?: Cis2Url };
+    isTestNet: boolean;
 }
 
 export type MintStoreActions = Setters<MintStoreState>;
@@ -25,7 +26,7 @@ export const useMintStore = create<Store>(
     (set): Store => ({
         identity: {
             name: 'myToken',
-            description: 'Token description',
+            description: '',
         },
         mintingSettings: {
             premint: undefined,
@@ -37,7 +38,7 @@ export const useMintStore = create<Store>(
             pausable: false,
             sponsored: false,
             roles: false,
-            'allow updates': false,
+            upgradable: false,
         },
         optionalFields: {
             symbol: undefined,
@@ -59,6 +60,7 @@ export const useMintStore = create<Store>(
         assets: {
             assets: [],
         },
+        isTestNet: false,
 
         setIdentity: (identity) => set({ identity }),
         setMintingSettings: (mintingSettings) => set({ mintingSettings }),
@@ -69,5 +71,6 @@ export const useMintStore = create<Store>(
         setDisplay: (display) => set({ display }),
         setThumbnail: (thumbnail) => set({ thumbnail }),
         setArtifact: (artifact) => set({ artifact }),
+        setIsTestNet: (isTestNet) => set({ isTestNet }),
     }),
 );

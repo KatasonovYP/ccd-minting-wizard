@@ -49,15 +49,17 @@ export function ResultPage(props: ResultPageProps) {
 
     return (
         <div className={cn(className, cls.resultPage)}>
-            <h1>{`<${address}, 0>`}</h1>
+            <h1>Your contract index is: {`<${address}, 0>`}</h1>
             <Link
                 className={cls.link}
                 href={explorerBaseUrl + hash}
                 target={'_blank'}
             >
-                explorer
+                See the transaction details in ccd explorer
             </Link>
-            <Button onClick={() => navigate(staticRoutes.main)}>back</Button>
+            <Button onClick={() => navigate(staticRoutes.main)}>
+                Mint a new token
+            </Button>
         </div>
     );
 }

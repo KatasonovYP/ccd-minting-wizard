@@ -1,4 +1,5 @@
 .sidebar {
     max-width: 456px;
     width: 100%;
+    min-height: 400px;
 }

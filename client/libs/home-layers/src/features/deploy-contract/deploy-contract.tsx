@@ -19,7 +19,7 @@ export function DeployContract(props: DeployContractProps) {
     const { isAuth } = useAuth();
     const { metadata } = useMetadata();
     const mintingSettings = useMintStore((state) => state.mintingSettings);
-    const {name, schema, reference } = useCode();
+    const { name, schema, reference } = useCode();
     const [isDeploying, setIsDeploying] = useState(false);
     const navigate = useNavigate();
 
