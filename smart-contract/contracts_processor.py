@@ -19,11 +19,16 @@ lock = asyncio.Lock()
 
 
 async def source_build(binary, bar):
-    command = f"cargo concordium build -v V{VERSION} -b \"dist/schemab64.txt\" --out dist/module.wasm.v1"
-    process = await asyncio.create_subprocess_shell(command, cwd=Path(f"processed/{binary}/"), stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE)
-    
+    command = f'cargo concordium build -v V{VERSION} -b "dist/schemab64.txt" --out dist/module.wasm.v1'
+    process = await asyncio.create_subprocess_shell(
+        command,
+        cwd=Path(f"processed/{binary}/"),
+        stdout=asyncio.subprocess.PIPE,
+        stderr=asyncio.subprocess.PIPE,
+    )
+
     _, stderr = await process.communicate()
-    
+
     if process.returncode != 0:
         logging.error(f"Error while building {binary} source:\n{stderr.decode()}")
     bar.next()
@@ -47,7 +52,13 @@ async def build_sources(bar):
 async def contract_deploy(binary, bar):
     async with lock:
         command = f"concordium-client module deploy dist/module.wasm.v1 --sender {local_secrets.SENDER_ADDRESS} --name mint_wizard_{binary} --no-confirm --grpc-port 20000 --grpc-ip node.testnet.concordium.com"
-        process = await asyncio.create_subprocess_shell(command, cwd=Path(f"processed/{binary}/"), stdin=asyncio.subprocess.PIPE, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE)
+        process = await asyncio.create_subprocess_shell(
+            command,
+            cwd=Path(f"processed/{binary}/"),
+            stdin=asyncio.subprocess.PIPE,
+            stdout=asyncio.subprocess.PIPE,
+            stderr=asyncio.subprocess.PIPE,
+        )
 
         async def handle_input():
             sender_password = local_secrets.SENDER_PASSWORD
@@ -89,8 +100,7 @@ async def deploy_contracts(bar):
 
 def main():
     env = Environment(
-        loader=FileSystemLoader("templates"),
-        autoescape=select_autoescape()
+        loader=FileSystemLoader("templates"), autoescape=select_autoescape()
     )
     source_template = env.get_template("src/lib.rs")
     tests_template = env.get_template("tests/tests.rs")
@@ -98,13 +108,13 @@ def main():
         for i in range(0, 64):
             binary = f"{i:06b}"
             context = {
-                "mintable":     binary[0] != "0",
-                "burnable":     binary[1] != "0",
-                "pausable":     binary[2] != "0",
-                "roles":        binary[3] != "0",
-                "updates":      binary[4] != "0",
-                "sponsored":    binary[5] != "0",
-                "code":         binary,
+                "mintable": binary[0] != "0",
+                "burnable": binary[1] != "0",
+                "pausable": binary[2] != "0",
+                "roles": binary[3] != "0",
+                "updates": binary[4] != "0",
+                "sponsored": binary[5] != "0",
+                "code": binary,
             }
             source_result = source_template.render(context)
             Path(f"processed/{binary}/src/").mkdir(parents=True, exist_ok=True)
