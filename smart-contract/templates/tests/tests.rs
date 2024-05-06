@@ -297,6 +297,7 @@ fn test_operator_can_transfer() {
     ]);
 }
 
+{% if mintable % }
 /// Test permit mint function. The signature is generated in the test
 /// case. ALICE mints tokens to her account.
 #[test]
@@ -348,6 +349,7 @@ fn test_permit_mint() {
 
     assert_eq!(balance_of_alice_and_bob.0, [TokenAmountU64(200), TokenAmountU64(0)]);
 }
+{% endif %}
 
 /// Test permit burn function. The signature is generated in the test
 /// case. ALICE burns tokens from her account.
@@ -700,6 +702,7 @@ fn test_no_execution_of_state_mutative_functions_when_paused() {
         .expect_err("Update operator");
     assert_contract_paused_error(&update_operator);
 
+    {% if mintable %}
     // Try to mint tokens.
     let params = MintParams {
         owner:      Receiver::from_account(ALICE),
@@ -715,6 +718,7 @@ fn test_no_execution_of_state_mutative_functions_when_paused() {
         })
         .expect_err("Update operator");
     assert_contract_paused_error(&update_operator);
+    {% endif %}
 
     // Try to burn tokens.
     let params = BurnParams {
@@ -873,6 +877,7 @@ fn get_balances(
     rv
 }
 
+{% if mintable %}
 /// Helper function that sets up the contract with two types of tokens minted to
 /// Alice. She has 100 of `TOKEN_0` and 100 of `TOKEN_1`.
 /// Alice's account is created with keys.
@@ -921,6 +926,8 @@ fn initialize_contract_with_alice_tokens(
 
     (chain, keypairs, contract_address, update, module_reference)
 }
+{% endif %}
+
 
 /// Setup chain and contract.
 /// The function creates the five accounts: ALICE, BOB, UPGRADER, PAUSER.
