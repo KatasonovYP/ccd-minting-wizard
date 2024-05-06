@@ -30,12 +30,16 @@ async def source_build(binary, bar):
 
 async def build_sources(bar):
     tasks = []
+    semaphore = asyncio.Semaphore(2)
     for i in range(0, 64):
         binary = f"{i:06b}"
-        tasks.append(asyncio.ensure_future(source_build(binary, bar)))
-    semaphore = asyncio.Semaphore(16)
-    async with semaphore:
-        await asyncio.gather(*tasks)
+
+        async def task():
+            async with semaphore:  # Используем семафор здесь
+                await source_build(binary, bar)
+
+        tasks.append(asyncio.create_task(task()))
+    await asyncio.gather(*tasks)
 
 
 async def contract_deploy(binary, bar):
