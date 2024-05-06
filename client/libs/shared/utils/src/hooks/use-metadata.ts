@@ -30,7 +30,6 @@ export function useMetadata() {
             ? attributes.attributes
             : undefined;
         metadata.assets = optionalFields.unique ? assets.assets : undefined;
-        console.log(metadata);
         setFile(new Blob([JSON.stringify(metadata)], options));
     }, [optionalFields, mintingSettings, identity, display, thumbnail, attributes, assets]);
 

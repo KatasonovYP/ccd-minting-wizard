@@ -41,8 +41,6 @@ export function Sidebar(props: SidebarProps) {
                     <FormIdentity />
                     <FormImages className={'mb-4'} />
                     <FormMintingSettings />
-                    {/*<FormFunctionalitySettings />*/}
-                    {/*<FormMetadataOptional />*/}
                 </TabsContent>
                 <TabsContent
                     value='advanced'

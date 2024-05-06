@@ -40,3 +40,7 @@ body::-webkit-scrollbar-thumb {
     border: 3px solid transparent;
     border-radius: var(--border-radius-xl);
 }
+
+button {
+    text-transform: capitalize;
+}

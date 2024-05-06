@@ -1,17 +1,31 @@
-import { useMintStore } from '../../../store/src/mint-store';
 import { useEffect, useState } from 'react';
-import { useCodeStore } from '../../../store/src/code-store';
+import { useContractFeaturesCode } from './use-contract-features-code';
 
 export function useCode() {
-    const identity = useMintStore((state) => state.identity);
-    const functionalitySettings = useMintStore(
-        (state) => state.contractFeatures,
-    );
-    const [code, setCode] = useState<string>('');
-    const formatCode = useCodeStore((state) => state.formatCode);
+    const contractFeaturesCode = useContractFeaturesCode();
+
+    const [code, setCode] = useState<string>();
+    const [reference, setReference] = useState<string>();
+    const [schema, setSchema] = useState<string>();
 
     useEffect(() => {
-        formatCode(identity, functionalitySettings).then(setCode);
-    }, [identity, functionalitySettings, formatCode]);
-    return { code };
+        import(`./processed/${contractFeaturesCode}/src/lib.rs`)
+            .then((lib) => setCode(lib.plainText.trim()))
+            .catch(console.error);
+
+        import(`./processed/${contractFeaturesCode}/reference.text`)
+            .then((lib) => setReference(lib.plainText.trim()))
+            .catch(console.error);
+
+        import(`./processed/${contractFeaturesCode}/dist/schemab64.text`)
+            .then((lib) => setSchema(lib.plainText.trim()))
+            .catch(console.error);
+    }, [contractFeaturesCode]);
+
+    return {
+        name: `mint_wizard_${contractFeaturesCode}`,
+        code,
+        reference,
+        schema,
+    };
 }

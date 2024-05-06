@@ -15,6 +15,9 @@ import {
 import { detectConcordiumProvider } from '@concordium/browser-wallet-api-helpers';
 
 export async function contractMint(
+    schema: string,
+    reference: string,
+    contractName: string,
     metadataUrl: string,
     amount: number,
     maxSupply: number,
@@ -25,12 +28,12 @@ export async function contractMint(
         accountAddress[0],
         AccountTransactionType.InitContract,
         {
-            initName: ContractName.fromString(CONTRACT_NAME),
+            initName: ContractName.fromString(contractName),
             amount: CcdAmount.fromCcd(0),
             maxContractExecutionEnergy: Energy.create(
                 MAX_CONTRACT_EXECUTION_ENERGY,
             ),
-            moduleRef: ModuleReference.fromHexString(MODULE_REFERENCE),
+            moduleRef: ModuleReference.fromHexString(reference),
         },
         {
             premint_tokens: [
@@ -53,7 +56,7 @@ export async function contractMint(
         },
         {
             type: 'module',
-            value: RAW_SCHEMA,
+            value: schema,
         },
         SchemaVersion.V1,
     );

@@ -1,6 +1,8 @@
+import { useEffect } from 'react';
 import { useConnectButton } from '../hooks/use-connect-button';
 import { Button } from '@/shared/ui/button';
 import { useConcordiumApi } from '@/shared/utils/hooks';
+import { useMintStore } from '@/shared/store/mint-store';
 
 export function ConnectButton() {
     const { toggleConnection, isConnected } = useConnectButton();
