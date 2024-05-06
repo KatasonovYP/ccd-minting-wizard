@@ -13,7 +13,6 @@ const props = {
     pinataApiKey: process.env.PINATA_API_KEY,
     pinataSecretApiKey: process.env.PINATA_SECRET_API_KEY,
 };
-console.log(props);
 
 // eslint-disable-next-line import/no-default-export
 export default defineConfig({

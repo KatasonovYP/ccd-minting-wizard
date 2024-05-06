@@ -32,7 +32,6 @@ export function FormIdentity(props: FormIdentityProps) {
     });
 
     function onAction(data: FormIdentityValues) {
-        console.log(data);
         setIdentity(data);
     }
 

@@ -5,13 +5,10 @@ import { PublicRoutesLayout } from '../ui/public-routes-layout';
 import type { RouteObject } from 'react-router-dom';
 import { staticRoutes } from '@/shared/config/const';
 import { NotFoundPage } from '@/home/pages/not-found-page';
-// import { HomePage } from '@/home/pages/home-page';
 import { WizardPage } from '@/home/pages/wizard-page';
-import { ResultPage } from '@/home/pages/result-page';
 
 const publicRoutes: RouteObject[] = [
     { path: staticRoutes.main, element: <WizardPage /> },
-    { path: staticRoutes.result, element: <ResultPage /> },
 ];
 
 const protectedRoutes: RouteObject[] = [];

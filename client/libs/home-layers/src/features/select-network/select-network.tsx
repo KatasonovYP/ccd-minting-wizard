@@ -29,8 +29,8 @@ export function SelectNetwork(props: SelectNetworkProps) {
                     <SelectValue placeholder='select net' />
                 </SelectTrigger>
                 <SelectContent align={'end'}>
-                    <SelectItem value='mainnet'>MainNet</SelectItem>
-                    <SelectItem value='testnet'>TestNet</SelectItem>
+                    <SelectItem value='mainnet'>Mainnet</SelectItem>
+                    <SelectItem value='testnet'>Testnet</SelectItem>
                 </SelectContent>
             </Select>
         </div>

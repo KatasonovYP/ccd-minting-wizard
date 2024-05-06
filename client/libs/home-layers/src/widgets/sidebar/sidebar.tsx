@@ -38,21 +38,28 @@ export function Sidebar(props: SidebarProps) {
                     value='basic'
                     className='p-2'
                 >
+                    <h2 className='mb-4 text-xl'>Metadata settings</h2>
                     <FormIdentity />
                     <FormImages className={'mb-4'} />
+                    <FormMetadataOptional />
+                    <div className='my-4 h-[1px] w-full bg-neutral-300' />
+                    <h2 className='mb-4 text-xl'>Contract settings</h2>
                     <FormMintingSettings />
                 </TabsContent>
                 <TabsContent
                     value='advanced'
                     className='p-2'
                 >
-                    <FormMetadataFile />
+                    <h2 className='mb-4 text-xl'>Metadata settings</h2>
                     <FormIdentity />
-                    <FormMintingSettings />
-                    <FormFunctionalitySettings />
+                    <FormImages className={'mb-4'} />
                     <FormMetadataOptional />
                     <FormAttributes className='mb-4' />
-                    <FormAssets />
+                    {/*<FormMetadataFile />*/}
+                    <div className='my-4 h-[1px] w-full bg-neutral-300' />
+                    <h2 className='mb-4 text-xl'>Contract settings</h2>
+                    <FormMintingSettings />
+                    <FormFunctionalitySettings />
                 </TabsContent>
             </Tabs>
         </ScrollArea>

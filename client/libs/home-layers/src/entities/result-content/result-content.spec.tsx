@@ -1,9 +1,10 @@
 import { render } from '@testing-library/react';
-import { ResultPage } from './result-page';
 
-describe('result-page', () => {
+import { ResultContent } from './result-content';
+
+describe('result-content', () => {
     it('should render successfully', () => {
-        const { baseElement } = render(<ResultPage />);
+        const { baseElement } = render(<ResultContent />);
         expect(baseElement).toBeTruthy();
     });
 });

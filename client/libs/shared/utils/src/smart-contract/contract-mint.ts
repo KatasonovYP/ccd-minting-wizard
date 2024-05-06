@@ -7,10 +7,7 @@ import {
     SchemaVersion,
 } from '@concordium/web-sdk';
 import {
-    CONTRACT_NAME,
     MAX_CONTRACT_EXECUTION_ENERGY,
-    MODULE_REFERENCE,
-    RAW_SCHEMA,
 } from '@/shared/config/concordium';
 import { detectConcordiumProvider } from '@concordium/browser-wallet-api-helpers';
 

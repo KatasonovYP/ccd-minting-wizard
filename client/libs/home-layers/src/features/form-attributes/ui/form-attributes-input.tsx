@@ -1,10 +1,18 @@
 import { Trash } from 'lucide-react';
+import { Controller } from 'react-hook-form';
 import type { InputControlledProps } from '@/shared/ui/input';
+import { InputControlled } from '@/shared/ui/input';
 import type { Cis2Attribute } from '@/shared/store/mint-store';
 import type { FormAttributesValues } from '../model/form-attributes-values';
-import { InputControlled } from '@/shared/ui/input';
 import { Text } from '@/shared/ui/text';
 import { Button } from '@/shared/ui/button';
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/shared/ui/select';
 
 interface FormAttributesInputProps
     extends InputControlledProps<FormAttributesValues> {
@@ -34,12 +42,27 @@ export function FormAttributesInput(props: FormAttributesInputProps) {
                 </Button>
             </div>
             <div className={''}>
-                <InputControlled
-                    control={control}
+                <Controller
                     name={`${name}.${index}.type` as 'attributes.0.type'}
-                    labeled={false}
-                    label={'type'}
-                    {...otherProps}
+                    control={control}
+                    render={({ field }) => (
+                        <Select
+                            {...field}
+                            onValueChange={(e) => {
+                                field.onChange(e);
+                            }}
+                        >
+                            <SelectTrigger className='mb-6'>
+                                <SelectValue placeholder='select type' />
+                            </SelectTrigger>
+                            <SelectContent align={'end'}>
+                                <SelectItem value='string'>String</SelectItem>
+                                <SelectItem value='date'>Date</SelectItem>
+                                <SelectItem value='number'>Number</SelectItem>
+                                {/*<SelectItem value='boolean'>Boolean</SelectItem>*/}
+                            </SelectContent>
+                        </Select>
+                    )}
                 />
                 <InputControlled
                     control={control}
@@ -53,6 +76,7 @@ export function FormAttributesInput(props: FormAttributesInputProps) {
                     name={`${name}.${index}.value` as 'attributes.0.value'}
                     labeled={false}
                     label={'value'}
+                    type={field.type}
                     {...otherProps}
                 />
             </div>

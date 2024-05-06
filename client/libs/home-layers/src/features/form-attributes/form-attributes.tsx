@@ -13,14 +13,11 @@ interface FormAttributesProps {
 export function FormAttributes(props: FormAttributesProps) {
     const { className } = props;
 
-    const unique = useMintStore((state) => state.optionalFields.unique);
     const attributes = useMintStore((state) => state.attributes);
     const setAttributes = useMintStore((state) => state.setAttributes);
 
     const { control, handleSubmit } = useForm<FormAttributesValues>({
         values: attributes,
-        // resolver: zodResolver(schema),
-        // shouldFocusError: false,
     });
 
     const { fields, append, remove } = useFieldArray({
@@ -30,10 +27,6 @@ export function FormAttributes(props: FormAttributesProps) {
 
     function onAction(data: FormAttributesValues) {
         setAttributes(data);
-    }
-
-    if (!unique) {
-        return null;
     }
 
     return (
@@ -57,7 +50,7 @@ export function FormAttributes(props: FormAttributesProps) {
             <Button
                 type='button'
                 onClick={() => {
-                    append({ type: '', name: '', value: '' });
+                    append({ type: 'string', name: '', value: '' });
                     handleSubmit(onAction)();
                 }}
             >

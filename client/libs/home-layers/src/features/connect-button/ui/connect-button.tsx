@@ -2,12 +2,25 @@ import { useEffect } from 'react';
 import { useConnectButton } from '../hooks/use-connect-button';
 import { Button } from '@/shared/ui/button';
 import { useConcordiumApi } from '@/shared/utils/hooks';
-import { useMintStore } from '@/shared/store/mint-store';
+import { detectConcordiumProvider } from '@concordium/browser-wallet-api-helpers';
 
 export function ConnectButton() {
     const { toggleConnection, isConnected } = useConnectButton();
-    const { account } = useConcordiumApi();
+    const { account, connect } =
+        useConcordiumApi();
     const accountPreview = `${account?.slice(0, 4)}...${account?.slice(-4)}`;
+
+    useEffect(() => {
+        if (!connect) return;
+        detectConcordiumProvider().then(async (provider) => {
+            const isAllowed =
+                !!(await provider.getMostRecentlySelectedAccount());
+            if (isAllowed) {
+                connect();
+            }
+        });
+    }, [connect]);
+
     return (
         <Button
             onClick={toggleConnection}

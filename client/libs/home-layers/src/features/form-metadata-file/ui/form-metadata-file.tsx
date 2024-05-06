@@ -34,7 +34,6 @@ export function FormMetadataFile(props: FormMetadataProps) {
                 [setIdentity, setOptionalFields, setAttributes, setAssets],
                 setError,
             );
-            console.log(await postIpfs(data.metadata[0]));
         } catch (error) {
             console.error(error);
         }
