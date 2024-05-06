@@ -19,8 +19,8 @@ export async function postIpfs(file: File | Blob): Promise<string> {
 
         return `${URLS.PINATA.VIEW}/${resFile.data.IpfsHash}`;
     } catch (error) {
-        console.log('Error sending File to IPFS: ');
-        console.log(error);
+        console.error('Error sending File to IPFS: ');
+        console.error(error);
         throw new Error('Error sending File to IPFS: ');
     }
 }

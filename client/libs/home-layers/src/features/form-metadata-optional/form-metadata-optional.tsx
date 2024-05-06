@@ -47,8 +47,6 @@ export function FormMetadataOptional(props: FormMetadataOptionalProps) {
         shouldFocusError: false,
     });
 
-    // console.log(z.number().min(0).max(10).parse('123-123-123'));
-
     function onAction(data: FormMetadataOptionalValues) {
         setOptionalFields(formMetadataOptionalAdapter.toStore(data));
     }

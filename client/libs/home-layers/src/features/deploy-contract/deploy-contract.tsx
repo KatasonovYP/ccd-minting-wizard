@@ -1,14 +1,14 @@
 import cn from 'classnames';
 import { useState } from 'react';
-import { LoaderCircle } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
 import { postIpfs } from '../form-metadata-file/lib/post-ipfs';
 import cls from './deploy-contract.module.css';
 import { Button } from '@/shared/ui/button';
 import { useAuth, useCode } from '@/shared/utils/hooks';
 import { contractMint } from '@/shared/utils/smart-contract';
-import { useMetadata } from '@/shared/utils/hooks/use-metadata';
+import { useBlobMetadata } from '@/shared/utils/hooks/use-blob-metadata';
 import { useMintStore } from '@/shared/store/mint-store';
+import { Popover, PopoverContent, PopoverTrigger } from '@/shared/ui/popover';
+import { ResultContent } from '@/home/entities/result-content';
 
 interface DeployContractProps {
     className?: string;
@@ -17,22 +17,21 @@ interface DeployContractProps {
 export function DeployContract(props: DeployContractProps) {
     const { className } = props;
     const { isAuth } = useAuth();
-    const { metadata } = useMetadata();
+    const { metadata } = useBlobMetadata();
     const mintingSettings = useMintStore((state) => state.mintingSettings);
     const { name, schema, reference } = useCode();
-    const [isDeploying, setIsDeploying] = useState(false);
-    const navigate = useNavigate();
+    const [hash, setHash] = useState<string>();
+    const [isOpen, setIsOpen] = useState(false);
 
     async function handleClick() {
-        setIsDeploying(true);
+        setHash(undefined);
         try {
             if (!reference || !schema) {
-                console.warn('reference', reference);
-                console.warn('schema', schema);
+                console.error('reference', reference);
+                console.error('schema', schema);
                 console.error('no schema or reference');
                 return;
             }
-            console.log(reference);
             const metadataUrl = await postIpfs(metadata);
             const hash = await contractMint(
                 schema,
@@ -42,28 +41,31 @@ export function DeployContract(props: DeployContractProps) {
                 mintingSettings.premint || 0,
                 mintingSettings['maximum tokens'] || 100,
             );
-            navigate(`result?hash=${hash}`);
-        } finally {
-            setIsDeploying(false);
+            setHash(hash);
+        } catch (error) {
+            console.error(error);
         }
     }
 
     return (
         <div className={cn(className, cls.deployContract)}>
-            <Button
-                disabled={!isAuth}
-                onClick={handleClick}
-                className={'min-w-[80px]'}
-            >
-                {isDeploying ? (
-                    <LoaderCircle
-                        size={'24'}
-                        className={'animate-spin'}
-                    />
-                ) : (
-                    'Deploy'
-                )}
-            </Button>
+            <Popover onOpenChange={(open) => setIsOpen(open)}>
+                <PopoverTrigger asChild>
+                    <Button
+                        disabled={!isAuth || isOpen}
+                        onClick={handleClick}
+                        className={'min-w-[80px]'}
+                    >
+                        Deploy
+                    </Button>
+                </PopoverTrigger>
+                <PopoverContent
+                    align='end'
+                    className={'w-80'}
+                >
+                    <ResultContent hash={hash} />
+                </PopoverContent>
+            </Popover>
         </div>
     );
 }

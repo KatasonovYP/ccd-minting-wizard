@@ -1,6 +1,6 @@
 import cn from 'classnames';
 import cls from './download-metadata.module.css';
-import { useMetadata } from '@/shared/utils/hooks/use-metadata';
+import { useBlobMetadata } from '@/shared/utils/hooks/use-blob-metadata';
 import { DropdownMenuItem } from '@/shared/ui/dropdown-menu';
 
 interface DownloadMetadataProps {
@@ -11,7 +11,7 @@ const options = { type: 'application/json' };
 
 export function DownloadMetadata(props: DownloadMetadataProps) {
     const { className } = props;
-    const { metadata, name } = useMetadata();
+    const { metadata, name } = useBlobMetadata();
 
     return (
         <div className={cn(className, cls.downloadMetadata)}>

@@ -79,8 +79,6 @@ export function FormImages(props: FormImagesProps) {
     }
 
     async function onAction(data: FormImagesValues) {
-        console.log(data);
-
         setIsUrlDisplay(data['url usage display']);
         setIsUrlThumbnail(data['url usage thumbnail']);
 
