@@ -1,6 +1,7 @@
 import asyncio
 import logging
 import datetime
+import os
 
 import local_secrets
 
@@ -11,6 +12,7 @@ from pathlib import Path
 VERSION = 1
 SOURCE_CARGO = Path("templates/Cargo.toml")
 
+os.makedirs("logs", exist_ok=True)
 logging.basicConfig(level=logging.INFO, filename=f"logs/{datetime.datetime.now()}.log")
 
 lock = asyncio.Lock()
