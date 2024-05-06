@@ -9,7 +9,7 @@ from progress.bar import ShadyBar
 from pathlib import Path
 
 VERSION = 1
-SOURCE_CARGO = Path("Cargo.toml")
+SOURCE_CARGO = Path("templates/Cargo.toml")
 
 logging.basicConfig(level=logging.INFO, filename=f"logs/{datetime.datetime.now()}.log")
 
@@ -18,7 +18,7 @@ lock = asyncio.Lock()
 
 async def source_build(binary, bar):
     command = f"cargo concordium build -v V{VERSION} -b \"dist/schemab64.txt\" --out dist/module.wasm.v1"
-    process = await asyncio.create_subprocess_shell(command, cwd=Path(f"src/processed/{binary}/"), stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE)
+    process = await asyncio.create_subprocess_shell(command, cwd=Path(f"processed/{binary}/"), stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE)
     
     _, stderr = await process.communicate()
     
@@ -41,7 +41,7 @@ async def build_sources(bar):
 async def contract_deploy(binary, bar):
     async with lock:
         command = f"concordium-client module deploy dist/module.wasm.v1 --sender {local_secrets.SENDER_ADDRESS} --name mint_wizard_{binary} --no-confirm --grpc-port 20000 --grpc-ip node.testnet.concordium.com"
-        process = await asyncio.create_subprocess_shell(command, cwd=Path(f"src/processed/{binary}/"), stdin=asyncio.subprocess.PIPE, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE)
+        process = await asyncio.create_subprocess_shell(command, cwd=Path(f"processed/{binary}/"), stdin=asyncio.subprocess.PIPE, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE)
 
         async def handle_input():
             sender_password = local_secrets.SENDER_PASSWORD
@@ -59,7 +59,7 @@ async def contract_deploy(binary, bar):
                     for char in ["'", "."]:
                         module_reference = module_reference.replace(char, "")
                     module_reference.strip()
-                    with open(f"src/processed/{binary}/reference.txt", "w") as f:
+                    with open(f"processed/{binary}/reference.txt", "w") as f:
                         f.write(module_reference)
 
         await asyncio.gather(
@@ -83,10 +83,11 @@ async def deploy_contracts(bar):
 
 def main():
     env = Environment(
-        loader=FileSystemLoader("src"),
+        loader=FileSystemLoader("templates"),
         autoescape=select_autoescape()
     )
-    template = env.get_template("lib.rs")
+    source_template = env.get_template("src/lib.rs")
+    tests_template = env.get_template("tests/tests.rs")
     with ShadyBar("1 | Processing Variations\t", max=64) as bar:
         for i in range(0, 64):
             binary = f"{i:06b}"
@@ -99,18 +100,22 @@ def main():
                 "sponsored":    binary[5] != "0",
                 "code":         binary,
             }
-            result = template.render(context)
-            Path(f"src/processed/{binary}/src/").mkdir(parents=True, exist_ok=True)
-            with open(f"src/processed/{binary}/src/lib.rs", "w") as f:
-                f.writelines(result)
-            Path(f"src/processed/{binary}/Cargo.toml").write_text(SOURCE_CARGO.read_text())
+            source_result = source_template.render(context)
+            Path(f"processed/{binary}/src/").mkdir(parents=True, exist_ok=True)
+            with open(f"processed/{binary}/src/lib.rs", "w") as f:
+                f.writelines(source_result)
+            tests_result = tests_template.render(context)
+            Path(f"processed/{binary}/tests/").mkdir(parents=True, exist_ok=True)
+            with open(f"processed/{binary}/tests/tests.rs", "w") as f:
+                f.writelines(tests_result)
+            Path(f"processed/{binary}/Cargo.toml").write_text(SOURCE_CARGO.read_text())
             bar.next()
     with ShadyBar("2 | Compiling Sources\t\t", max=64) as bar:
         loop = asyncio.get_event_loop()
         loop.run_until_complete(build_sources(bar))
-    with ShadyBar("3 | Deploying Modules\t\t", max=64) as bar:
-        loop = asyncio.get_event_loop()
-        loop.run_until_complete(deploy_contracts(bar))
+    # with ShadyBar("3 | Deploying Modules\t\t", max=64) as bar:
+    #     loop = asyncio.get_event_loop()
+    #     loop.run_until_complete(deploy_contracts(bar))
 
 
 if __name__ == "__main__":

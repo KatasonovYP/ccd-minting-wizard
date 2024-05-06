@@ -9,9 +9,9 @@
 0 bit - Mintable
 1 bit - Burnable
 2 bit - Pausable
-3 bit - Sponsored
-4 bit - Roles
-5 bit - Updates
+3 bit - Roles
+4 bit - Updates
+5 bit - Sponsored
 ```
 So, for example smart contract with only burnable, roles and updates features will have the code: `010011`
 
