@@ -4,22 +4,34 @@ use concordium_std::{collections::BTreeMap, EntrypointName, *};
 
 const SUPPORTS_STANDARDS: [StandardIdentifier<'static>; 2] =
     [CIS0_STANDARD_IDENTIFIER, CIS2_STANDARD_IDENTIFIER];
-const TRANSFER_ENTRYPOINT: EntrypointName<'_> = EntrypointName::new_unchecked("transfer"); //added back
-const UPDATE_OPERATOR_ENTRYPOINT: EntrypointName<'_> =      //added back
-    EntrypointName::new_unchecked("updateOperator");        //added back
 
-#[derive(Debug, Serial, Deserial, PartialEq, Eq)]   //added back section minus blacklist
+
+
+/// Event tags.
+
+
+
+
+
+#[derive(Debug, Serial, Deserial, PartialEq, Eq)]
 #[concordium(repr(u8))]
 pub enum Event {
+    
+    
     /// Cis2 token events.
     #[concordium(forward = cis2_events)]
     Cis2Event(Cis2Event<ContractTokenId, ContractTokenAmount>),
 }
 
+
+
+
+
 impl schema::SchemaType for Event {
     fn get_type() -> schema::Type {
         let mut event_map = BTreeMap::new();
-
+        
+        
         event_map.insert(
             TRANSFER_EVENT_TAG,
             (
@@ -43,7 +55,7 @@ impl schema::SchemaType for Event {
                 ]),
             ),
         );
-
+        
         event_map.insert(
             UPDATE_OPERATOR_EVENT_TAG,
             (
@@ -77,8 +89,8 @@ pub type ContractTokenAmount = TokenAmountU64;
 
 #[derive(Serial, Deserial, SchemaType)]
 pub struct TokenParams {
-    amount: TokenAmountU64,
-    max_supply: ContractTokenAmount,
+    pub amount: TokenAmountU64,
+    pub max_supply: ContractTokenAmount,
 }
 
 #[derive(Serialize, SchemaType)]
@@ -135,6 +147,9 @@ struct State<S = StateApi> {
     /// A map with contract addresses providing implementations of additional
     /// standards.
     implementors:       StateMap<StandardIdentifierOwned, Vec<ContractAddress>, S>,
+    
+    
+    
 }
 
 /// The different errors the contract can produce.
@@ -153,9 +168,13 @@ pub enum CustomContractError {
     ContractOnly, // -5
     /// Failed to invoke a contract.
     InvokeContractError, // -6
+    
+    
+    
+    
     /// Max supply reached
     MaxSupplyReached, // -22
-
+    
 }
 
 pub type ContractError = Cis2Error<CustomContractError>;
@@ -191,6 +210,9 @@ impl State {
             max_supply: state_builder.new_map(),
             token_balance: state_builder.new_map(),
             implementors: state_builder.new_map(),
+            
+            
+            
         }
     }
 
@@ -212,12 +234,12 @@ impl State {
             .or_insert_with(|| AddressState::empty(state_builder));
         let mut owner_balance = owner_state.balances.entry(*token_id).or_insert(0.into());
         *owner_balance += amount;
-
+    
         let mut circulating_supply = self.token_balance.entry(*token_id).or_insert(0.into());
         *circulating_supply += amount;
     }
 
-
+    
 
     /// Check that the token ID currently exists in this contract.
     #[inline(always)]
@@ -242,25 +264,7 @@ impl State {
         let _ = self.max_supply.insert(*token_id, max_supply);
     }
 
-    #[inline(always)]
-    fn get_token_supply(&self, token_id: &ContractTokenId) -> ContractResult<ContractTokenAmount> {
-        ensure!(
-            self.contains_token(&token_id),
-            ContractError::InvalidTokenId
-        );
-        let supply = self.max_supply.get(token_id).map_or(0.into(), |x| *x);
-        Ok(supply)
-    }
-
-    #[inline(always)]
-    fn get_circulating_supply(
-        &self,
-        token_id: &ContractTokenId,
-    ) -> ContractResult<ContractTokenAmount> {
-        ensure!(self.contains_token(token_id), ContractError::InvalidTokenId);
-        let circulating_supply = self.token_balance.get(token_id).map_or(0.into(), |x| *x);
-        Ok(circulating_supply)
-    }
+    
 
     /// Check if an address is an operator of a given owner address.
     fn is_operator(&self, address: &Address, owner: &Address) -> bool {
@@ -336,12 +340,14 @@ impl State {
     ) {
         let _ = self.implementors.insert(std_id, implementors);
     }
+
+    
 }
 
 // Contract functions
 
 #[init(
-    contract = "mint_wizard_000000",
+    contract = "mint_wizard_000000_V3",
     parameter = "InitParams",
     event = "Cis2Event<ContractTokenId, ContractTokenAmount>",
     enable_logger
@@ -357,7 +363,7 @@ fn contract_init(
 
     let invoker = Address::Account(ctx.init_origin());
 
-
+    
 
     // Preminting of tokens
     for (token_id, token_info) in params.premint_tokens {
@@ -398,12 +404,15 @@ pub struct ViewAddressState {
 pub struct ViewState {
     pub state:           Vec<(Address, ViewAddressState)>,
     pub tokens:          Vec<ContractTokenId>,
+    
+    
+    
     pub implementors:    Vec<(StandardIdentifierOwned, Vec<ContractAddress>)>,
 }
 
 /// View function for testing. This reports on the entire state of the contract
 /// for testing purposes.
-#[receive(contract = "mint_wizard_000000", name = "view", return_value = "ViewState")]
+#[receive(contract = "mint_wizard_000000_V3", name = "view", return_value = "ViewState")]
 fn contract_view(_ctx: &ReceiveContext, host: &Host<State>) -> ReceiveResult<ViewState> {
     let state = host.state();
 
@@ -427,6 +436,8 @@ fn contract_view(_ctx: &ReceiveContext, host: &Host<State>) -> ReceiveResult<Vie
         .collect();
 
     let tokens = state.tokens.iter().map(|a| *a.0).collect();
+    
+    
 
     let implementors: Vec<(StandardIdentifierOwned, Vec<ContractAddress>)> = state
         .implementors
@@ -444,9 +455,16 @@ fn contract_view(_ctx: &ReceiveContext, host: &Host<State>) -> ReceiveResult<Vie
     Ok(ViewState {
         state: contract_state,
         tokens,
+        
+        
         implementors,
+        
     })
 }
+
+
+
+
 
 type TransferParameter = TransferParams<ContractTokenId, ContractTokenAmount>;
 
@@ -456,6 +474,9 @@ fn transfer(
     logger: &mut impl HasLogger,
 ) -> ContractResult<()> {
     let to_address = transfer.to.address();
+
+    
+
     let (state, builder) = host.state_and_builder();
 
     state.transfer(&transfer.token_id, transfer.amount, &transfer.from, &to_address, builder)?;
@@ -481,7 +502,7 @@ fn transfer(
 }
 
 #[receive(
-    contract = "mint_wizard_000000",
+    contract = "mint_wizard_000000_V3",
     name = "transfer",
     parameter = "TransferParameter",
     error = "ContractError",
@@ -518,7 +539,7 @@ fn update_operator(
     builder: &mut StateBuilder,
     logger: &mut impl HasLogger,
 ) -> ContractResult<()> {
-
+    
 
     match update {
         OperatorUpdate::Add => state.add_operator(&sender, &operator, builder),
@@ -532,12 +553,12 @@ fn update_operator(
             update,
         },
     ))?;
-
+    
     Ok(())
 }
 
 #[receive(
-    contract = "mint_wizard_000000",
+    contract = "mint_wizard_000000_V3",
     name = "updateOperator",
     parameter = "UpdateOperatorParams",
     error = "ContractError",
@@ -563,7 +584,7 @@ pub type ContractBalanceOfQueryParams = BalanceOfQueryParams<ContractTokenId>;
 pub type ContractBalanceOfQueryResponse = BalanceOfQueryResponse<ContractTokenAmount>;
 
 #[receive(
-    contract = "mint_wizard_000000",
+    contract = "mint_wizard_000000_V3",
     name = "balanceOf",
     parameter = "ContractBalanceOfQueryParams",
     return_value = "ContractBalanceOfQueryResponse",
@@ -584,7 +605,7 @@ fn contract_balance_of(
 }
 
 #[receive(
-    contract = "mint_wizard_000000",
+    contract = "mint_wizard_000000_V3",
     name = "operatorOf",
     parameter = "OperatorOfQueryParams",
     return_value = "OperatorOfQueryResponse",
@@ -604,10 +625,10 @@ fn contract_operator_of(
     Ok(result)
 }
 
-type ContractTokenMetadataQueryParams = TokenMetadataQueryParams<ContractTokenId>;  //added back
+type ContractTokenMetadataQueryParams = TokenMetadataQueryParams<ContractTokenId>;
 
 #[receive(
-    contract = "mint_wizard_000000",
+    contract = "mint_wizard_000000_V3",
     name = "tokenMetadata",
     parameter = "ContractTokenMetadataQueryParams",
     return_value = "TokenMetadataQueryResponse",
@@ -631,7 +652,7 @@ fn contract_token_metadata(
 }
 
 #[receive(
-    contract = "mint_wizard_000000",
+    contract = "mint_wizard_000000_V3",
     name = "supports",
     parameter = "SupportsQueryParams",
     return_value = "SupportsQueryResponse",
@@ -660,7 +681,7 @@ fn contract_supports(
 /// Set the addresses for an implementation given a standard identifier and a
 /// list of contract addresses.
 #[receive(
-    contract = "mint_wizard_000000",
+    contract = "mint_wizard_000000_V3",
     name = "setImplementors",
     parameter = "SetImplementorsParams",
     error = "ContractError",
@@ -672,3 +693,8 @@ fn contract_set_implementor(ctx: &ReceiveContext, host: &mut Host<State>) -> Con
     host.state_mut().set_implementors(params.id, params.implementors);
     Ok(())
 }
+
+
+
+
+

@@ -25,7 +25,7 @@ export default defineConfig({
         svgr({
             svgrOptions: {},
         }),
-        plainText(['**/*.text', '**/*.rs']),
+        plainText(['**/*.schema', '**/*.module', '**/*.rs']),
         dynamicImport(),
     ],
     define: {
