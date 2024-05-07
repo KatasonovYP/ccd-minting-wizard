@@ -11,15 +11,18 @@ const SUPPORTS_PERMIT_ENTRYPOINTS: [EntrypointName; 2] =
 
 
 /// Event tags.
-pub const GRANT_ROLE_EVENT_TAG: u8 = 1;
-pub const REVOKE_ROLE_EVENT_TAG: u8 = 2;
+
+
 pub const NONCE_EVENT_TAG: u8 = 250;
+
+
 
 const TRANSFER_ENTRYPOINT: EntrypointName<'_> = EntrypointName::new_unchecked("transfer");
 const UPDATE_OPERATOR_ENTRYPOINT: EntrypointName<'_> =
     EntrypointName::new_unchecked("updateOperator");
 
 const MINT_ENTRYPOINT: EntrypointName<'_> = EntrypointName::new_unchecked("mint");
+
 
 
 
