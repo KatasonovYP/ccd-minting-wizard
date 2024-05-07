@@ -2,7 +2,7 @@ use mint_wizard::{ContractBalanceOfQueryParams, ContractBalanceOfQueryResponse, 
 use concordium_cis2::*;
 use concordium_smart_contract_testing::*;
 use concordium_std::{
-    collections::BTreeMap, AccountPublicKeys, AccountSignatures, CredentialSignatures, HashSha2256,
+    collections::BTreeMap, AccountSignatures, CredentialSignatures, HashSha2256,
     SignatureEd25519, Timestamp,
 };
 use concordium_std_derive::*;
@@ -12,8 +12,6 @@ const ALICE: AccountAddress =
     account_address!("2wkBET2rRgE8pahuaczxKbmv7ciehqsne57F9gtzf1PVdr2VP3");
 const ALICE_ADDR: Address = Address::Account(ALICE);
 const BOB: AccountAddress = account_address!("2xBpaHottqhwFZURMZW4uZduQvpxNDSy46iXMYs9kceNGaPpZX");
-const BOB_CANONICAL: AccountAddress = BOB.get_alias_unchecked(0);
-const BOB_CANONICAL_ADDR: Address = Address::Account(BOB_CANONICAL);
 const BOB_ADDR: Address = Address::Account(BOB);
 const UPGRADER: AccountAddress =
     account_address!("2xdTv8awN1BjgYEw8W1BVXVtiEwG2b29U8KoZQqJrDuEqddseE");
@@ -21,14 +19,13 @@ const UPGRADER_ADDR: Address = Address::Account(UPGRADER);
 const PAUSER: AccountAddress =
     account_address!("2yWkbp92JL9LYVmxgP1QfTDsJs9sMLAWJBYMy8md3SQz5ErzEd");
 const PAUSER_ADDR: Address = Address::Account(PAUSER);
-const NON_EXISTING_ACCOUNT: AccountAddress =
-    account_address!("3hWv6hv4nrgPTUgjHehCHx6ifXUoCfWZepKuPykXEBmsgjzni4");
 
 /// Token IDs.
 const TOKEN_0: ContractTokenId = TokenIdU8(2);
 const TOKEN_1: ContractTokenId = TokenIdU8(42);
 
-const TOKEN_0_METADATA: MetadataUrl = MetadataUrl::from("https://moccasin-lovely-unicorn-304.mypinata.cloud/ipfs/QmNdx4Hb7S61R5ZhUwr95zcSMvDHFVcn9fM4y2D1ENgpim");
+const TOKEN_0_METADATA: &str = "https://some.example/token/2A";
+const TOKEN_1_METADATA: &str = "https://some.example/token/3F";
 
 /// Initial balance of the accounts.
 const ACC_INITIAL_BALANCE: Amount = Amount::from_ccd(10000);
@@ -39,12 +36,40 @@ const SIGNER: Signer = Signer::with_one_key();
 /// Dummy signature used as placeholder.
 const DUMMY_SIGNATURE: SignatureEd25519 = signature_ed25519!("00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000");
 
-/// Test preminting succeeds and the tokens are owned by the given address and
+/// Test minting succeeds and the tokens are owned by the given address and
 /// the appropriate events are logged.
 #[test]
-fn test_preminting() {
-    let (chain, _keypairs, contract_address, update, _module_reference) =
-        initialize_contract_with_alice_tokens();
+fn test_minting() {
+    let (mut chain, _keypairs, contract_address, _module_reference) =
+        initialize_chain_and_contract();
+
+    let token_params = TokenParams {
+        amount: TokenAmountU64(100),
+        max_supply: TokenAmountU64(1000),
+    };
+
+    let mut mint_tokens = BTreeMap::new();
+    mint_tokens.insert(TOKEN_1, (
+        MetadataUrl {
+            url:  TOKEN_1_METADATA.to_string(),
+            hash: None,
+        }, token_params
+    ));
+
+    let mint_params = MintParams {
+        owner:      ALICE_ADDR,
+        tokens:     mint_tokens,
+    };
+
+    // Mint TOKEN_1 to Alice as the owner.
+    let update = chain
+        .contract_update(SIGNER, ALICE, ALICE_ADDR, Energy::from(10000), UpdateContractPayload {
+            amount:       Amount::zero(),
+            receive_name: OwnedReceiveName::new_unchecked("mint_wizard_100101.mint".to_string()),
+            address:      contract_address,
+            message:      OwnedParameter::from_serial(&mint_params).expect("Mint params"),
+        })
+        .expect("Mint tokens");
 
     // Invoke the view entrypoint and check that the tokens are owned by Alice.
     let invoke = chain
@@ -72,14 +97,14 @@ fn test_preminting() {
 
     assert_eq!(events, [
         Cis2Event::Mint(MintEvent {
-            token_id: TokenIdU8(42),
+            token_id: TOKEN_1,
             amount:   TokenAmountU64(100),
             owner:    ALICE_ADDR,
         }),
         Cis2Event::TokenMetadata(TokenMetadataEvent {
-            token_id:     TokenIdU8(42),
+            token_id:     TOKEN_1,
             metadata_url: MetadataUrl {
-                url:  "https://some.example/token/2A".to_string(),
+                url:  "https://some.example/token/3F".to_string(),
                 hash: None,
             },
         }),
@@ -89,8 +114,36 @@ fn test_preminting() {
 /// Test regular transfer where sender is the owner.
 #[test]
 fn test_account_transfer() {
-    let (mut chain, _keypairs, contract_address, _update, _module_reference) =
-        initialize_contract_with_alice_tokens();
+    let (mut chain, _keypairs, contract_address, _module_reference) =
+        initialize_chain_and_contract();
+
+    let token_params = TokenParams {
+        amount: TokenAmountU64(100),
+        max_supply: TokenAmountU64(1000),
+    };
+
+    let mut mint_tokens = BTreeMap::new();
+    mint_tokens.insert(TOKEN_1, (
+        MetadataUrl {
+            url:  TOKEN_1_METADATA.to_string(),
+            hash: None,
+        }, token_params
+    ));
+
+    let mint_params = MintParams {
+        owner:      ALICE_ADDR,
+        tokens:     mint_tokens,
+    };
+
+    // Mint TOKEN_1 to Alice as the owner.
+    let _update = chain
+        .contract_update(SIGNER, ALICE, ALICE_ADDR, Energy::from(10000), UpdateContractPayload {
+            amount:       Amount::zero(),
+            receive_name: OwnedReceiveName::new_unchecked("mint_wizard_100101.mint".to_string()),
+            address:      contract_address,
+            message:      OwnedParameter::from_serial(&mint_params).expect("Mint params"),
+        })
+        .expect("Mint tokens");
 
     // Transfer one token from Alice to Bob.
     let transfer_params = TransferParams::from(vec![concordium_cis2::Transfer {
@@ -151,8 +204,8 @@ fn test_account_transfer() {
 /// Then add Bob as an operator for Alice.
 #[test]
 fn test_add_operator() {
-    let (mut chain, _keypairs, contract_address, _update, _module_reference) =
-        initialize_contract_with_alice_tokens();
+    let (mut chain, _keypairs, contract_address, _module_reference) =
+        initialize_chain_and_contract();
 
     // Add Bob as an operator for Alice.
     let params = UpdateOperatorParams(vec![UpdateOperator {
@@ -208,8 +261,8 @@ fn test_add_operator() {
 /// himself.
 #[test]
 fn test_unauthorized_sender() {
-    let (mut chain, _keypairs, contract_address, _update, _module_reference) =
-        initialize_contract_with_alice_tokens();
+    let (mut chain, _keypairs, contract_address, _module_reference) =
+        initialize_chain_and_contract();
 
     // Construct a transfer of `TOKEN_0` from Alice to Bob, which will be submitted
     // by Bob.
@@ -239,8 +292,36 @@ fn test_unauthorized_sender() {
 /// Test that an operator can make a transfer.
 #[test]
 fn test_operator_can_transfer() {
-    let (mut chain, _keypairs, contract_address, _update, _module_reference) =
-        initialize_contract_with_alice_tokens();
+    let (mut chain, _keypairs, contract_address, _module_reference) =
+        initialize_chain_and_contract();
+
+    let token_params = TokenParams {
+        amount: TokenAmountU64(100),
+        max_supply: TokenAmountU64(1000),
+    };
+
+    let mut mint_tokens = BTreeMap::new();
+    mint_tokens.insert(TOKEN_1, (
+        MetadataUrl {
+            url:  TOKEN_1_METADATA.to_string(),
+            hash: None,
+        }, token_params
+    ));
+
+    let mint_params = MintParams {
+        owner:      ALICE_ADDR,
+        tokens:     mint_tokens,
+    };
+
+    // Mint TOKEN_1 to Alice as the owner.
+    let _update = chain
+        .contract_update(SIGNER, ALICE, ALICE_ADDR, Energy::from(10000), UpdateContractPayload {
+            amount:       Amount::zero(),
+            receive_name: OwnedReceiveName::new_unchecked("mint_wizard_100101.mint".to_string()),
+            address:      contract_address,
+            message:      OwnedParameter::from_serial(&mint_params).expect("Mint params"),
+        })
+        .expect("Mint tokens");
 
     // Add Bob as an operator for Alice.
     let params = UpdateOperatorParams(vec![UpdateOperator {
@@ -301,17 +382,58 @@ fn test_operator_can_transfer() {
 /// case. ALICE mints tokens to her account.
 #[test]
 fn test_permit_mint() {
-    let (mut chain, keypairs, contract_address, _update, _module_reference) =
-        initialize_contract_with_alice_tokens();
+    let (mut chain, keypairs, contract_address, _module_reference) =
+        initialize_chain_and_contract();
+
+    let token_params = TokenParams {
+        amount: TokenAmountU64(100),
+        max_supply: TokenAmountU64(1000),
+    };
+
+    let mut mint_tokens = BTreeMap::new();
+    mint_tokens.insert(TOKEN_1, (
+        MetadataUrl {
+            url:  TOKEN_1_METADATA.to_string(),
+            hash: None,
+        }, token_params
+    ));
+
+    let mint_params = MintParams {
+        owner:      ALICE_ADDR,
+        tokens:     mint_tokens,
+    };
+
+    // Mint TOKEN_1 to Alice as the owner.
+    let _update = chain
+        .contract_update(SIGNER, ALICE, ALICE_ADDR, Energy::from(10000), UpdateContractPayload {
+            amount:       Amount::zero(),
+            receive_name: OwnedReceiveName::new_unchecked("mint_wizard_100101.mint".to_string()),
+            address:      contract_address,
+            message:      OwnedParameter::from_serial(&mint_params).expect("Mint params"),
+        })
+        .expect("Mint tokens");
 
     // Check balances in state.
     let balance_of_alice_and_bob = get_balances(&chain, contract_address);
 
     assert_eq!(balance_of_alice_and_bob.0, [TokenAmountU64(100), TokenAmountU64(0)]);
 
+    let token_params = TokenParams {
+        amount: TokenAmountU64(100),
+        max_supply: TokenAmountU64(1000),
+    };
+
+    let mut mint_tokens = BTreeMap::new();
+    mint_tokens.insert(TOKEN_1, (
+        MetadataUrl {
+            url:  TOKEN_1_METADATA.to_string(),
+            hash: None,
+        }, token_params
+    ));
+
     // Create input parameters for the `mint` function.
     let payload = MintParams {
-        owner:      Receiver::from_account(ALICE),
+        owner:      ALICE_ADDR,
         tokens:     mint_tokens,
     };
 
@@ -333,7 +455,7 @@ fn test_permit_mint() {
         Event::Cis2Event(Cis2Event::TokenMetadata(TokenMetadataEvent {
             token_id:     TOKEN_1,
             metadata_url: MetadataUrl {
-                url:  "https://some.example/token/2A".to_string(),
+                url:  "https://some.example/token/3F".to_string(),
                 hash: None,
             },
         })),
@@ -353,8 +475,36 @@ fn test_permit_mint() {
 /// case. ALICE burns tokens from her account.
 #[test]
 fn test_permit_burn() {
-    let (mut chain, keypairs, contract_address, _update, _module_reference) =
-        initialize_contract_with_alice_tokens();
+    let (mut chain, keypairs, contract_address, _module_reference) =
+        initialize_chain_and_contract();
+
+    let token_params = TokenParams {
+        amount: TokenAmountU64(100),
+        max_supply: TokenAmountU64(1000),
+    };
+
+    let mut mint_tokens = BTreeMap::new();
+    mint_tokens.insert(TOKEN_1, (
+        MetadataUrl {
+            url:  TOKEN_1_METADATA.to_string(),
+            hash: None,
+        }, token_params
+    ));
+
+    let mint_params = MintParams {
+        owner:      ALICE_ADDR,
+        tokens:     mint_tokens,
+    };
+
+    // Mint TOKEN_1 to Alice as the owner.
+    let _update = chain
+        .contract_update(SIGNER, ALICE, ALICE_ADDR, Energy::from(10000), UpdateContractPayload {
+            amount:       Amount::zero(),
+            receive_name: OwnedReceiveName::new_unchecked("mint_wizard_100101.mint".to_string()),
+            address:      contract_address,
+            message:      OwnedParameter::from_serial(&mint_params).expect("Mint params"),
+        })
+        .expect("Mint tokens");
 
     // Check balances in state.
     let balance_of_alice_and_bob = get_balances(&chain, contract_address);
@@ -399,8 +549,8 @@ fn test_permit_burn() {
 /// case. ALICE adds BOB as an operator.
 #[test]
 fn test_permit_update_operator() {
-    let (mut chain, keypairs, contract_address, _update, _module_reference) =
-        initialize_contract_with_alice_tokens();
+    let (mut chain, keypairs, contract_address, _module_reference) =
+        initialize_chain_and_contract();
 
     // Check operator in state
     let bob_is_operator_of_alice = operator_of(&chain, contract_address);
@@ -450,8 +600,36 @@ fn test_permit_update_operator() {
 /// TOKEN_1 is transferred from Alice to Bob.
 #[test]
 fn test_permit_transfer() {
-    let (mut chain, keypairs, contract_address, _update, _module_reference) =
-        initialize_contract_with_alice_tokens();
+    let (mut chain, keypairs, contract_address, _module_reference) =
+        initialize_chain_and_contract();
+
+    let token_params = TokenParams {
+        amount: TokenAmountU64(100),
+        max_supply: TokenAmountU64(1000),
+    };
+
+    let mut mint_tokens = BTreeMap::new();
+    mint_tokens.insert(TOKEN_1, (
+        MetadataUrl {
+            url:  TOKEN_1_METADATA.to_string(),
+            hash: None,
+        }, token_params
+    ));
+
+    let mint_params = MintParams {
+        owner:      ALICE_ADDR,
+        tokens:     mint_tokens,
+    };
+
+    // Mint TOKEN_1 to Alice as the owner.
+    let _update = chain
+        .contract_update(SIGNER, ALICE, ALICE_ADDR, Energy::from(10000), UpdateContractPayload {
+            amount:       Amount::zero(),
+            receive_name: OwnedReceiveName::new_unchecked("mint_wizard_100101.mint".to_string()),
+            address:      contract_address,
+            message:      OwnedParameter::from_serial(&mint_params).expect("Mint params"),
+        })
+        .expect("Mint tokens");
 
     // Check balances in state.
     let balance_of_alice_and_bob = get_balances(&chain, contract_address);
@@ -499,8 +677,36 @@ fn test_permit_transfer() {
 /// Test burning tokens.
 #[test]
 fn test_burning_tokens() {
-    let (mut chain, _keypairs, contract_address, _update, _module_reference) =
-        initialize_contract_with_alice_tokens();
+    let (mut chain, _keypairs, contract_address, _module_reference) =
+        initialize_chain_and_contract();
+
+    let token_params = TokenParams {
+        amount: TokenAmountU64(100),
+        max_supply: TokenAmountU64(1000),
+    };
+
+    let mut mint_tokens = BTreeMap::new();
+    mint_tokens.insert(TOKEN_1, (
+        MetadataUrl {
+            url:  TOKEN_1_METADATA.to_string(),
+            hash: None,
+        }, token_params
+    ));
+
+    let mint_params = MintParams {
+        owner:      ALICE_ADDR,
+        tokens:     mint_tokens,
+    };
+
+    // Mint TOKEN_1 to Alice as the owner.
+    let _update = chain
+        .contract_update(SIGNER, ALICE, ALICE_ADDR, Energy::from(10000), UpdateContractPayload {
+            amount:       Amount::zero(),
+            receive_name: OwnedReceiveName::new_unchecked("mint_wizard_100101.mint".to_string()),
+            address:      contract_address,
+            message:      OwnedParameter::from_serial(&mint_params).expect("Mint params"),
+        })
+        .expect("Mint tokens");
 
     // Create input parameters to burn one of Alice's tokens.
     let burn_params = BurnParams {
@@ -547,8 +753,36 @@ fn test_burning_tokens() {
 /// Upgrade the contract to itself without invoking a migration function.
 #[test]
 fn test_upgrade_without_migration_function() {
-    let (mut chain, _keypairs, contract_address, _update, module_reference) =
-        initialize_contract_with_alice_tokens();
+    let (mut chain, _keypairs, contract_address, module_reference) =
+        initialize_chain_and_contract();
+
+    let token_params = TokenParams {
+        amount: TokenAmountU64(100),
+        max_supply: TokenAmountU64(1000),
+    };
+
+    let mut mint_tokens = BTreeMap::new();
+    mint_tokens.insert(TOKEN_1, (
+        MetadataUrl {
+            url:  TOKEN_1_METADATA.to_string(),
+            hash: None,
+        }, token_params
+    ));
+
+    let mint_params = MintParams {
+        owner:      ALICE_ADDR,
+        tokens:     mint_tokens,
+    };
+
+    // Mint TOKEN_1 to Alice as the owner.
+    let _update = chain
+        .contract_update(SIGNER, ALICE, ALICE_ADDR, Energy::from(10000), UpdateContractPayload {
+            amount:       Amount::zero(),
+            receive_name: OwnedReceiveName::new_unchecked("mint_wizard_100101.mint".to_string()),
+            address:      contract_address,
+            message:      OwnedParameter::from_serial(&mint_params).expect("Mint params"),
+        })
+        .expect("Mint tokens");
 
     let input_parameter = UpgradeParams {
         module:  module_reference,
@@ -600,8 +834,8 @@ fn test_upgrade_without_migration_function() {
 /// the state.
 #[test]
 fn test_pause_functionality() {
-    let (mut chain, _keypairs, contract_address, _update, _module_reference) =
-        initialize_contract_with_alice_tokens();
+    let (mut chain, _keypairs, contract_address, _module_reference) =
+        initialize_chain_and_contract();
 
     // Pause the contract.
     chain
@@ -632,8 +866,8 @@ fn test_pause_functionality() {
 /// Test that only the PAUSER can pause/unpause the contract.
 #[test]
 fn test_pause_unpause_unauthorized() {
-    let (mut chain, _keypairs, contract_address, _update, _module_reference) =
-        initialize_contract_with_alice_tokens();
+    let (mut chain, _keypairs, contract_address, _module_reference) =
+        initialize_chain_and_contract();
 
     // Pause the contract as Bob, who is not the PAUSER.
     let update = chain
@@ -654,8 +888,8 @@ fn test_pause_unpause_unauthorized() {
 /// mint, transfer, updateOperator) when the contract is paused.
 #[test]
 fn test_no_execution_of_state_mutative_functions_when_paused() {
-    let (mut chain, _keypairs, contract_address, _update, _module_reference) =
-        initialize_contract_with_alice_tokens();
+    let (mut chain, _keypairs, contract_address, _module_reference) =
+        initialize_chain_and_contract();
 
     // Pause the contract.
     chain
@@ -700,9 +934,22 @@ fn test_no_execution_of_state_mutative_functions_when_paused() {
         .expect_err("Update operator");
     assert_contract_paused_error(&update_operator);
 
+    let token_params = TokenParams {
+        amount: TokenAmountU64(10),
+        max_supply: TokenAmountU64(1000),
+    };
+
+    let mut mint_tokens = BTreeMap::new();
+    mint_tokens.insert(TOKEN_0, (
+        MetadataUrl {
+            url:  TOKEN_0_METADATA.to_string(),
+            hash: None,
+        }, token_params
+    ));
+
     // Try to mint tokens.
     let params = MintParams {
-        owner:      Receiver::from_account(ALICE),
+        owner:      ALICE_ADDR,
         tokens:     mint_tokens,
     };
 
@@ -873,55 +1120,6 @@ fn get_balances(
     rv
 }
 
-/// Helper function that sets up the contract with two types of tokens minted to
-/// Alice. She has 100 of `TOKEN_0` and 100 of `TOKEN_1`.
-/// Alice's account is created with keys.
-/// Hence, Alice's account signature can be checked in the test cases.
-fn initialize_contract_with_alice_tokens(
-) -> (Chain, AccountKeys, ContractAddress, ContractInvokeSuccess, ModuleReference) {
-    let (mut chain, keypairs, contract_address, module_reference) = initialize_chain_and_contract();
-
-    let token_params = TokenParams {
-        amount: 10,
-        max_supply: 1000,
-    };
-
-    let mint_tokens = BTreeMap::new();
-    mint_tokens.insert(TOKEN_0, (TOKEN_0_METADATA, token_params));
-
-    let mint_params = MintParams {
-        owner:      Receiver::from_account(ALICE),
-        tokens:     mint_tokens,
-    };
-
-    // Mint/airdrop TOKEN_0 to Alice as the owner.
-    let _update = chain
-        .contract_update(SIGNER, ALICE, ALICE_ADDR, Energy::from(10000), UpdateContractPayload {
-            amount:       Amount::zero(),
-            receive_name: OwnedReceiveName::new_unchecked("mint_wizard_100101.mint".to_string()),
-            address:      contract_address,
-            message:      OwnedParameter::from_serial(&mint_params).expect("Mint params"),
-        })
-        .expect("Mint tokens");
-
-    let mint_params = MintParams {
-        owner:      Receiver::from_account(ALICE),
-        tokens:     mint_tokens,
-    };
-
-    // Mint/airdrop TOKEN_1 to Alice as the owner.
-    let update = chain
-        .contract_update(SIGNER, ALICE, ALICE_ADDR, Energy::from(10000), UpdateContractPayload {
-            amount:       Amount::zero(),
-            receive_name: OwnedReceiveName::new_unchecked("mint_wizard_100101.mint".to_string()),
-            address:      contract_address,
-            message:      OwnedParameter::from_serial(&mint_params).expect("Mint params"),
-        })
-        .expect("Mint tokens");
-
-    (chain, keypairs, contract_address, update, module_reference)
-}
-
 /// Setup chain and contract.
 /// The function creates the five accounts: ALICE, BOB, UPGRADER, PAUSER.
 /// The function grants ALICE the ADMIN role, the UPGRADER the
@@ -950,8 +1148,18 @@ fn initialize_chain_and_contract() -> (Chain, AccountKeys, ContractAddress, Modu
     let deployment = chain.module_deploy_v1(SIGNER, ALICE, module).expect("Deploy valid module");
 
     // Init the contract
-    let premint_tokens = BTreeMap::new();
-    premint_tokens.insert(TOKEN_0, (TOKEN_0_METADATA, token_params));
+    let token_params = TokenParams {
+        amount: TokenAmountU64(100),
+        max_supply: TokenAmountU64(1000),
+    };
+
+    let mut premint_tokens = BTreeMap::new();
+    premint_tokens.insert(TOKEN_0, (
+        MetadataUrl {
+            url:  TOKEN_0_METADATA.to_string(),
+            hash: None,
+        }, token_params
+    ));
 
     let init_params = InitParams {
         premint_tokens: premint_tokens,

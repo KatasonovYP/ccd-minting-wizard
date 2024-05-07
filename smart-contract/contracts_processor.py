@@ -19,7 +19,7 @@ lock = asyncio.Lock()
 
 
 async def source_build(binary, bar):
-    command = f'cargo concordium build -v V{VERSION} -b "dist/schemab64.txt" --out dist/module.wasm.v1'
+    command = f'cargo concordium build -v V{VERSION} -b "dist/schemab64.schema" --out dist/module.wasm.v1'
     process = await asyncio.create_subprocess_shell(
         command,
         cwd=Path(f"processed/{binary}/"),
@@ -76,7 +76,7 @@ async def contract_deploy(binary, bar):
                     for char in ["'", "."]:
                         module_reference = module_reference.replace(char, "")
                     module_reference.strip()
-                    with open(f"processed/{binary}/reference.txt", "w") as f:
+                    with open(f"processed/{binary}/reference.module", "w") as f:
                         f.write(module_reference)
 
         await asyncio.gather(
@@ -126,9 +126,9 @@ def main():
                 f.writelines(tests_result)
             Path(f"processed/{binary}/Cargo.toml").write_text(SOURCE_CARGO.read_text())
             bar.next()
-    with ShadyBar("2 | Compiling Sources\t\t", max=64) as bar:
-        loop = asyncio.get_event_loop()
-        loop.run_until_complete(build_sources(bar))
+    # with ShadyBar("2 | Compiling Sources\t\t", max=64) as bar:
+    #     loop = asyncio.get_event_loop()
+    #     loop.run_until_complete(build_sources(bar))
     # with ShadyBar("3 | Deploying Modules\t\t", max=64) as bar:
     #     loop = asyncio.get_event_loop()
     #     loop.run_until_complete(deploy_contracts(bar))
