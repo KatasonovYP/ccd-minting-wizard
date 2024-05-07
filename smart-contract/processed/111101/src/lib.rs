@@ -519,6 +519,7 @@ impl State {
         let _ = self.max_supply.insert(*token_id, max_supply);
     }
 
+    
     #[inline(always)]
     fn get_token_supply(&self, token_id: &ContractTokenId) -> ContractResult<ContractTokenAmount> {
         ensure!(
@@ -538,6 +539,7 @@ impl State {
         let circulating_supply = self.token_balance.get(token_id).map_or(0.into(), |x| *x);
         Ok(circulating_supply)
     }
+    
 
     /// Check if an address is an operator of a given owner address.
     fn is_operator(&self, address: &Address, owner: &Address) -> bool {
