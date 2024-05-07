@@ -58,12 +58,12 @@ async def test_run(binary, bar):
         stderr=asyncio.subprocess.PIPE,
     )
 
-    _, stderr = await process.communicate()
+    stdout, stderr = await process.communicate()
 
     if process.returncode != 0:
         logging.error(f"Error while testing {binary} contract:\n{stderr.decode()}")
     else:
-        logging.info(f"{binary} passed all tests!")
+        logging.info(f"{binary}:\n{stdout.decode()}")
     bar.next()
     return process.returncode
 
