@@ -39,9 +39,9 @@ const names: Array<keyof ContractFeatures> = [
     'mintable',
     'burnable',
     'pausable',
-    'sponsored',
     'roles',
     'upgradable',
+    'sponsored',
 ];
 
 export function FormFunctionalitySettings(
@@ -70,11 +70,15 @@ export function FormFunctionalitySettings(
             {names.map((name) => (
                 <div className={'flex justify-between'}>
                     <CheckboxControlled
-                        key={name}
+                        key={`checkbox-${name}`}
                         control={control}
                         name={name}
                     />
-                    <TooltipProvider delayDuration={0} skipDelayDuration={0}>
+                    <TooltipProvider
+                        key={`tooltip-${name}`}
+                        delayDuration={0}
+                        skipDelayDuration={0}
+                    >
                         <Tooltip>
                             <TooltipTrigger>
                                 <CircleHelp size={16} />
