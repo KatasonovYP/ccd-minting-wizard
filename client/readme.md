@@ -1,4 +1,4 @@
-# TotalnyFrontend
+# Concordium Minting Wizard
 
 node: v21.2.0
 
