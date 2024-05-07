@@ -13,17 +13,17 @@ export function useCode() {
             .then((lib) => setCode(lib.plainText.trim()))
             .catch(console.error);
 
-        import(`./processed/${contractFeaturesCode}/reference.text`)
+        import(`./processed/${contractFeaturesCode}/reference.module`)
             .then((lib) => setReference(lib.plainText.trim()))
             .catch(console.error);
 
-        import(`./processed/${contractFeaturesCode}/dist/schemab64.text`)
+        import(`./processed/${contractFeaturesCode}/dist/schemab64.schema`)
             .then((lib) => setSchema(lib.plainText.trim()))
             .catch(console.error);
     }, [contractFeaturesCode]);
 
     return {
-        name: `mint_wizard_${contractFeaturesCode}`,
+        name: `mint_wizard_${contractFeaturesCode}_V3`,
         code,
         reference,
         schema,
