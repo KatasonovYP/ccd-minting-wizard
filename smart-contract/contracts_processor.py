@@ -156,14 +156,14 @@ def main():
             Path(f"processed/{binary}/tests/").mkdir(parents=True, exist_ok=True)
             with open(f"processed/{binary}/tests/tests.rs", "w") as f:
                 f.writelines(tests_result)
-            # Path(f"processed/{binary}/Cargo.toml").write_text(SOURCE_CARGO.read_text())
+            Path(f"processed/{binary}/Cargo.toml").write_text(SOURCE_CARGO.read_text())
             bar.next()
     with ShadyBar("2 | Building Sources\t\t", max=64) as bar:
         loop = asyncio.get_event_loop()
         loop.run_until_complete(build_sources(bar))
-    # with ShadyBar("3 | Running Tests\t\t", max=64) as bar:
-    #     loop = asyncio.get_event_loop()
-    #     loop.run_until_complete(run_tests(bar))
+    with ShadyBar("3 | Running Tests\t\t", max=64) as bar:
+        loop = asyncio.get_event_loop()
+        loop.run_until_complete(run_tests(bar))
     with ShadyBar("4 | Deploying Modules\t\t", max=64) as bar:
         loop = asyncio.get_event_loop()
         loop.run_until_complete(deploy_contracts(bar))
