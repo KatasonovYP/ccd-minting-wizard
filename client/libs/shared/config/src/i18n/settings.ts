@@ -1,4 +1,4 @@
-const defaultLocale = 'ru';
+const defaultLocale = 'en';
 const defaultNamespace = 'translation';
 const namespaces = [defaultNamespace];
 
