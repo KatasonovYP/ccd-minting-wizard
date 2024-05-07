@@ -373,7 +373,7 @@ impl State {
 // Contract functions
 
 #[init(
-    contract = "mint_wizard_100000",
+    contract = "mint_wizard_100000_V3",
     parameter = "InitParams",
     event = "Cis2Event<ContractTokenId, ContractTokenAmount>",
     enable_logger
@@ -438,7 +438,7 @@ pub struct ViewState {
 
 /// View function for testing. This reports on the entire state of the contract
 /// for testing purposes.
-#[receive(contract = "mint_wizard_100000", name = "view", return_value = "ViewState")]
+#[receive(contract = "mint_wizard_100000_V3", name = "view", return_value = "ViewState")]
 fn contract_view(_ctx: &ReceiveContext, host: &Host<State>) -> ReceiveResult<ViewState> {
     let state = host.state();
 
@@ -542,7 +542,7 @@ fn mint(
 }
 
 #[receive(
-    contract = "mint_wizard_100000",
+    contract = "mint_wizard_100000_V3",
     name = "mint",
     parameter = "MintParams",
     error = "ContractError",
@@ -607,7 +607,7 @@ fn transfer(
 }
 
 #[receive(
-    contract = "mint_wizard_100000",
+    contract = "mint_wizard_100000_V3",
     name = "transfer",
     parameter = "TransferParameter",
     error = "ContractError",
@@ -663,7 +663,7 @@ fn update_operator(
 }
 
 #[receive(
-    contract = "mint_wizard_100000",
+    contract = "mint_wizard_100000_V3",
     name = "updateOperator",
     parameter = "UpdateOperatorParams",
     error = "ContractError",
@@ -689,7 +689,7 @@ pub type ContractBalanceOfQueryParams = BalanceOfQueryParams<ContractTokenId>;
 pub type ContractBalanceOfQueryResponse = BalanceOfQueryResponse<ContractTokenAmount>;
 
 #[receive(
-    contract = "mint_wizard_100000",
+    contract = "mint_wizard_100000_V3",
     name = "balanceOf",
     parameter = "ContractBalanceOfQueryParams",
     return_value = "ContractBalanceOfQueryResponse",
@@ -710,7 +710,7 @@ fn contract_balance_of(
 }
 
 #[receive(
-    contract = "mint_wizard_100000",
+    contract = "mint_wizard_100000_V3",
     name = "operatorOf",
     parameter = "OperatorOfQueryParams",
     return_value = "OperatorOfQueryResponse",
@@ -733,7 +733,7 @@ fn contract_operator_of(
 type ContractTokenMetadataQueryParams = TokenMetadataQueryParams<ContractTokenId>;
 
 #[receive(
-    contract = "mint_wizard_100000",
+    contract = "mint_wizard_100000_V3",
     name = "tokenMetadata",
     parameter = "ContractTokenMetadataQueryParams",
     return_value = "TokenMetadataQueryResponse",
@@ -757,7 +757,7 @@ fn contract_token_metadata(
 }
 
 #[receive(
-    contract = "mint_wizard_100000",
+    contract = "mint_wizard_100000_V3",
     name = "supports",
     parameter = "SupportsQueryParams",
     return_value = "SupportsQueryResponse",
@@ -786,7 +786,7 @@ fn contract_supports(
 /// Set the addresses for an implementation given a standard identifier and a
 /// list of contract addresses.
 #[receive(
-    contract = "mint_wizard_100000",
+    contract = "mint_wizard_100000_V3",
     name = "setImplementors",
     parameter = "SetImplementorsParams",
     error = "ContractError",

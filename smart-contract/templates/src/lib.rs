@@ -35,9 +35,9 @@ const BURN_ENTRYPOINT: EntrypointName<'_> = EntrypointName::new_unchecked("burn"
 #[concordium(repr(u8))]
 pub enum Event {
     {% if roles %}
-    #[concordium(tag = 1)]
+    #[concordium(tag = 0)]
     GrantRole(GrantRoleEvent),
-    #[concordium(tag = 2)]
+    #[concordium(tag = 1)]
     RevokeRole(RevokeRoleEvent),
     {% endif %}
     {% if sponsored %}
@@ -679,7 +679,7 @@ impl State {
 // Contract functions
 
 #[init(
-    contract = "mint_wizard_{{ code }}",
+    contract = "mint_wizard_{{ code }}_V{{ version }}",
     parameter = "InitParams",
     event = "Cis2Event<ContractTokenId, ContractTokenAmount>",
     enable_logger
@@ -756,7 +756,7 @@ pub struct ViewState {
 
 /// View function for testing. This reports on the entire state of the contract
 /// for testing purposes.
-#[receive(contract = "mint_wizard_{{ code }}", name = "view", return_value = "ViewState")]
+#[receive(contract = "mint_wizard_{{ code }}_V{{ version }}", name = "view", return_value = "ViewState")]
 fn contract_view(_ctx: &ReceiveContext, host: &Host<State>) -> ReceiveResult<ViewState> {
     let state = host.state();
 
@@ -882,7 +882,7 @@ fn mint(
 }
 
 #[receive(
-    contract = "mint_wizard_{{ code }}",
+    contract = "mint_wizard_{{ code }}_V{{ version }}",
     name = "mint",
     parameter = "MintParams",
     error = "ContractError",
@@ -947,7 +947,7 @@ fn burn(
 }
 
 #[receive(
-    contract = "mint_wizard_{{ code }}",
+    contract = "mint_wizard_{{ code }}_V{{ version }}",
     name = "burn",
     parameter = "BurnParams",
     error = "ContractError",
@@ -1010,7 +1010,7 @@ fn transfer(
 }
 
 #[receive(
-    contract = "mint_wizard_{{ code }}",
+    contract = "mint_wizard_{{ code }}_V{{ version }}",
     name = "transfer",
     parameter = "TransferParameter",
     error = "ContractError",
@@ -1040,13 +1040,13 @@ fn contract_transfer(
 {% if sponsored %}
 /// Helper function that can be invoked at the front-end to serialize the
 /// `PermitMessage` before signing it in the wallet.
-#[receive(contract = "mint_wizard_{{ code }}", name = "serializationHelper", parameter = "PermitMessage")]
+#[receive(contract = "mint_wizard_{{ code }}_V{{ version }}", name = "serializationHelper", parameter = "PermitMessage")]
 fn contract_serialization_helper(_ctx: &ReceiveContext, _host: &Host<State>) -> ContractResult<()> {
     Ok(())
 }
 
 #[receive(
-    contract = "mint_wizard_{{ code }}",
+    contract = "mint_wizard_{{ code }}_V{{ version }}",
     name = "viewMessageHash",
     parameter = "PermitParam",
     return_value = "[u8;32]",
@@ -1087,7 +1087,7 @@ fn contract_view_message_hash(
 }
 
 #[receive(
-    contract = "mint_wizard_{{ code }}",
+    contract = "mint_wizard_{{ code }}_V{{ version }}",
     name = "permit",
     parameter = "PermitParam",
     error = "ContractError",
@@ -1229,7 +1229,7 @@ fn update_operator(
 }
 
 #[receive(
-    contract = "mint_wizard_{{ code }}",
+    contract = "mint_wizard_{{ code }}_V{{ version }}",
     name = "updateOperator",
     parameter = "UpdateOperatorParams",
     error = "ContractError",
@@ -1255,7 +1255,7 @@ pub type ContractBalanceOfQueryParams = BalanceOfQueryParams<ContractTokenId>;
 pub type ContractBalanceOfQueryResponse = BalanceOfQueryResponse<ContractTokenAmount>;
 
 #[receive(
-    contract = "mint_wizard_{{ code }}",
+    contract = "mint_wizard_{{ code }}_V{{ version }}",
     name = "balanceOf",
     parameter = "ContractBalanceOfQueryParams",
     return_value = "ContractBalanceOfQueryResponse",
@@ -1276,7 +1276,7 @@ fn contract_balance_of(
 }
 
 #[receive(
-    contract = "mint_wizard_{{ code }}",
+    contract = "mint_wizard_{{ code }}_V{{ version }}",
     name = "operatorOf",
     parameter = "OperatorOfQueryParams",
     return_value = "OperatorOfQueryResponse",
@@ -1299,7 +1299,7 @@ fn contract_operator_of(
 type ContractTokenMetadataQueryParams = TokenMetadataQueryParams<ContractTokenId>;
 
 #[receive(
-    contract = "mint_wizard_{{ code }}",
+    contract = "mint_wizard_{{ code }}_V{{ version }}",
     name = "tokenMetadata",
     parameter = "ContractTokenMetadataQueryParams",
     return_value = "TokenMetadataQueryResponse",
@@ -1323,7 +1323,7 @@ fn contract_token_metadata(
 }
 
 #[receive(
-    contract = "mint_wizard_{{ code }}",
+    contract = "mint_wizard_{{ code }}_V{{ version }}",
     name = "supports",
     parameter = "SupportsQueryParams",
     return_value = "SupportsQueryResponse",
@@ -1349,7 +1349,7 @@ fn contract_supports(
 
 {% if sponsored %}
 #[receive(
-    contract = "mint_wizard_{{ code }}",
+    contract = "mint_wizard_{{ code }}_V{{ version }}",
     name = "supportsPermit",
     parameter = "SupportsPermitQueryParams",
     return_value = "SupportsQueryResponse",
@@ -1377,7 +1377,7 @@ fn contract_supports_permit(
 /// Set the addresses for an implementation given a standard identifier and a
 /// list of contract addresses.
 #[receive(
-    contract = "mint_wizard_{{ code }}",
+    contract = "mint_wizard_{{ code }}_V{{ version }}",
     name = "setImplementors",
     parameter = "SetImplementorsParams",
     error = "ContractError",
@@ -1392,7 +1392,7 @@ fn contract_set_implementor(ctx: &ReceiveContext, host: &mut Host<State>) -> Con
 
 {% if updates %}
 #[receive(
-    contract = "mint_wizard_{{ code }}",
+    contract = "mint_wizard_{{ code }}_V{{ version }}",
     name = "upgrade",
     parameter = "UpgradeParams",
     error = "CustomContractError",
@@ -1425,7 +1425,7 @@ fn contract_upgrade(ctx: &ReceiveContext, host: &mut LowLevelHost) -> ContractRe
 
 {% if pausable %}
 #[receive(
-    contract = "mint_wizard_{{ code }}",
+    contract = "mint_wizard_{{ code }}_V{{ version }}",
     name = "setPaused",
     parameter = "SetPausedParams",
     error = "CustomContractError",
@@ -1450,7 +1450,7 @@ fn contract_set_paused(ctx: &ReceiveContext, host: &mut Host<State>) -> Contract
 
 {% if roles %}
 #[receive(
-    contract = "mint_wizard_{{ code }}",
+    contract = "mint_wizard_{{ code }}_V{{ version }}",
     name = "grantRole",
     parameter = "GrantRoleParams",
     enable_logger,
@@ -1482,7 +1482,7 @@ fn contract_grant_role(
 }
 
 #[receive(
-    contract = "mint_wizard_{{ code }}",
+    contract = "mint_wizard_{{ code }}_V{{ version }}",
     name = "revokeRole",
     parameter = "RevokeRoleParams",
     enable_logger,

@@ -63,7 +63,7 @@ fn test_minting() {
     let update = chain
         .contract_update(SIGNER, ALICE, ALICE_ADDR, Energy::from(10000), UpdateContractPayload {
             amount:       Amount::zero(),
-            receive_name: OwnedReceiveName::new_unchecked("mint_wizard_111001.mint".to_string()),
+            receive_name: OwnedReceiveName::new_unchecked("mint_wizard_111001_V3.mint".to_string()),
             address:      contract_address,
             message:      OwnedParameter::from_serial(&mint_params).expect("Mint params"),
         })
@@ -73,7 +73,7 @@ fn test_minting() {
     let invoke = chain
         .contract_invoke(ALICE, ALICE_ADDR, Energy::from(10000), UpdateContractPayload {
             amount:       Amount::zero(),
-            receive_name: OwnedReceiveName::new_unchecked("mint_wizard_111001.view".to_string()),
+            receive_name: OwnedReceiveName::new_unchecked("mint_wizard_111001_V3.view".to_string()),
             address:      contract_address,
             message:      OwnedParameter::empty(),
         })
@@ -128,7 +128,7 @@ fn test_account_transfer() {
     let update = chain
         .contract_update(SIGNER, ALICE, ALICE_ADDR, Energy::from(10000), UpdateContractPayload {
             amount:       Amount::zero(),
-            receive_name: OwnedReceiveName::new_unchecked("mint_wizard_111001.transfer".to_string()),
+            receive_name: OwnedReceiveName::new_unchecked("mint_wizard_111001_V3.transfer".to_string()),
             address:      contract_address,
             message:      OwnedParameter::from_serial(&transfer_params).expect("Transfer params"),
         })
@@ -139,7 +139,7 @@ fn test_account_transfer() {
     let invoke = chain
         .contract_invoke(ALICE, ALICE_ADDR, Energy::from(10000), UpdateContractPayload {
             amount:       Amount::zero(),
-            receive_name: OwnedReceiveName::new_unchecked("mint_wizard_111001.view".to_string()),
+            receive_name: OwnedReceiveName::new_unchecked("mint_wizard_111001_V3.view".to_string()),
             address:      contract_address,
             message:      OwnedParameter::empty(),
         })
@@ -187,7 +187,7 @@ fn test_add_operator() {
     let update = chain
         .contract_update(SIGNER, ALICE, ALICE_ADDR, Energy::from(10000), UpdateContractPayload {
             amount:       Amount::zero(),
-            receive_name: OwnedReceiveName::new_unchecked("mint_wizard_111001.updateOperator".to_string()),
+            receive_name: OwnedReceiveName::new_unchecked("mint_wizard_111001_V3.updateOperator".to_string()),
             address:      contract_address,
             message:      OwnedParameter::from_serial(&params).expect("UpdateOperator params"),
         })
@@ -217,7 +217,7 @@ fn test_add_operator() {
     let invoke = chain
         .contract_invoke(ALICE, ALICE_ADDR, Energy::from(10000), UpdateContractPayload {
             amount:       Amount::zero(),
-            receive_name: OwnedReceiveName::new_unchecked("mint_wizard_111001.operatorOf".to_string()),
+            receive_name: OwnedReceiveName::new_unchecked("mint_wizard_111001_V3.operatorOf".to_string()),
             address:      contract_address,
             message:      OwnedParameter::from_serial(&query_params).expect("OperatorOf params"),
         })
@@ -249,7 +249,7 @@ fn test_unauthorized_sender() {
     let update = chain
         .contract_update(SIGNER, BOB, BOB_ADDR, Energy::from(10000), UpdateContractPayload {
             amount:       Amount::zero(),
-            receive_name: OwnedReceiveName::new_unchecked("mint_wizard_111001.transfer".to_string()),
+            receive_name: OwnedReceiveName::new_unchecked("mint_wizard_111001_V3.transfer".to_string()),
             address:      contract_address,
             message:      OwnedParameter::from_serial(&transfer_params).expect("Transfer params"),
         })
@@ -274,7 +274,7 @@ fn test_operator_can_transfer() {
     chain
         .contract_update(SIGNER, ALICE, ALICE_ADDR, Energy::from(10000), UpdateContractPayload {
             amount:       Amount::zero(),
-            receive_name: OwnedReceiveName::new_unchecked("mint_wizard_111001.updateOperator".to_string()),
+            receive_name: OwnedReceiveName::new_unchecked("mint_wizard_111001_V3.updateOperator".to_string()),
             address:      contract_address,
             message:      OwnedParameter::from_serial(&params).expect("UpdateOperator params"),
         })
@@ -292,7 +292,7 @@ fn test_operator_can_transfer() {
     chain
         .contract_update(SIGNER, BOB, BOB_ADDR, Energy::from(10000), UpdateContractPayload {
             amount:       Amount::zero(),
-            receive_name: OwnedReceiveName::new_unchecked("mint_wizard_111001.transfer".to_string()),
+            receive_name: OwnedReceiveName::new_unchecked("mint_wizard_111001_V3.transfer".to_string()),
             address:      contract_address,
             message:      OwnedParameter::from_serial(&transfer_params).expect("Transfer params"),
         })
@@ -303,7 +303,7 @@ fn test_operator_can_transfer() {
     let invoke = chain
         .contract_invoke(ALICE, ALICE_ADDR, Energy::from(10000), UpdateContractPayload {
             amount:       Amount::zero(),
-            receive_name: OwnedReceiveName::new_unchecked("mint_wizard_111001.view".to_string()),
+            receive_name: OwnedReceiveName::new_unchecked("mint_wizard_111001_V3.view".to_string()),
             address:      contract_address,
             message:      OwnedParameter::empty(),
         })
@@ -320,6 +320,7 @@ fn test_operator_can_transfer() {
         }),
     ]);
 }
+
 
 
 /// Test permit mint function. The signature is generated in the test
@@ -387,6 +388,8 @@ fn test_permit_mint() {
     assert_eq!(balance_of_alice_and_bob.0, [TokenAmountU64(200), TokenAmountU64(0)]);
 }
 
+
+
 /// Test permit burn function. The signature is generated in the test
 /// case. ALICE burns tokens from her account.
 #[test]
@@ -432,6 +435,7 @@ fn test_permit_burn() {
 
     assert_eq!(balance_of_alice_and_bob.0, [TokenAmountU64(99), TokenAmountU64(0)]);
 }
+
 
 /// Test permit update operator function. The signature is generated in the test
 /// case. ALICE adds BOB as an operator.
@@ -559,7 +563,7 @@ fn test_burning_tokens() {
             UpdateContractPayload {
                 amount:       Amount::zero(),
                 address:      contract_address,
-                receive_name: OwnedReceiveName::new_unchecked("mint_wizard_111001.burn".to_string()),
+                receive_name: OwnedReceiveName::new_unchecked("mint_wizard_111001_V3.burn".to_string()),
                 message:      OwnedParameter::from_serial(&burn_params)
                     .expect("Should be a valid inut parameter"),
             },
@@ -606,7 +610,7 @@ fn test_pause_functionality() {
             Energy::from(10000),
             UpdateContractPayload {
             amount:       Amount::zero(),
-            receive_name: OwnedReceiveName::new_unchecked("mint_wizard_111001.setPaused".to_string()),
+            receive_name: OwnedReceiveName::new_unchecked("mint_wizard_111001_V3.setPaused".to_string()),
             address:      contract_address,
             message:      OwnedParameter::from_serial(&true).expect("Pause params"),
         })
@@ -626,7 +630,7 @@ fn test_pause_functionality() {
             Energy::from(10000),
             UpdateContractPayload {
             amount:       Amount::zero(),
-            receive_name: OwnedReceiveName::new_unchecked("mint_wizard_111001.setPaused".to_string()),
+            receive_name: OwnedReceiveName::new_unchecked("mint_wizard_111001_V3.setPaused".to_string()),
             address:      contract_address,
             message:      OwnedParameter::from_serial(&false).expect("Unpause params"),
         })
@@ -645,7 +649,7 @@ fn test_pause_unpause_unauthorized() {
     let update = chain
         .contract_update(SIGNER, BOB, BOB_ADDR, Energy::from(10000), UpdateContractPayload {
             amount:       Amount::zero(),
-            receive_name: OwnedReceiveName::new_unchecked("mint_wizard_111001.setPaused".to_string()),
+            receive_name: OwnedReceiveName::new_unchecked("mint_wizard_111001_V3.setPaused".to_string()),
             address:      contract_address,
             message:      OwnedParameter::from_serial(&true).expect("Pause params"),
         })
@@ -674,7 +678,7 @@ fn test_no_execution_of_state_mutative_functions_when_paused() {
             Energy::from(10000),
             UpdateContractPayload {
             amount:       Amount::zero(),
-            receive_name: OwnedReceiveName::new_unchecked("mint_wizard_111001.setPaused".to_string()),
+            receive_name: OwnedReceiveName::new_unchecked("mint_wizard_111001_V3.setPaused".to_string()),
             address:      contract_address,
             message:      OwnedParameter::from_serial(&true).expect("Pause params"),
         })
@@ -691,7 +695,7 @@ fn test_no_execution_of_state_mutative_functions_when_paused() {
     let update_transfer = chain
         .contract_update(SIGNER, ALICE, ALICE_ADDR, Energy::from(10000), UpdateContractPayload {
             amount:       Amount::zero(),
-            receive_name: OwnedReceiveName::new_unchecked("mint_wizard_111001.transfer".to_string()),
+            receive_name: OwnedReceiveName::new_unchecked("mint_wizard_111001_V3.transfer".to_string()),
             address:      contract_address,
             message:      OwnedParameter::from_serial(&transfer_params).expect("Transfer params"),
         })
@@ -706,13 +710,15 @@ fn test_no_execution_of_state_mutative_functions_when_paused() {
     let update_operator = chain
         .contract_update(SIGNER, ALICE, ALICE_ADDR, Energy::from(10000), UpdateContractPayload {
             amount:       Amount::zero(),
-            receive_name: OwnedReceiveName::new_unchecked("mint_wizard_111001.updateOperator".to_string()),
+            receive_name: OwnedReceiveName::new_unchecked("mint_wizard_111001_V3.updateOperator".to_string()),
             address:      contract_address,
             message:      OwnedParameter::from_serial(&params).expect("UpdateOperator params"),
         })
         .expect_err("Update operator");
     assert_contract_paused_error(&update_operator);
 
+    
+    // Try to mint tokens.
     let token_params = TokenParams {
         amount: TokenAmountU64(10),
         max_supply: TokenAmountU64(1000),
@@ -726,7 +732,6 @@ fn test_no_execution_of_state_mutative_functions_when_paused() {
         }, token_params
     ));
 
-    // Try to mint tokens.
     let params = MintParams {
         owner:      ALICE_ADDR,
         tokens:     mint_tokens,
@@ -735,13 +740,15 @@ fn test_no_execution_of_state_mutative_functions_when_paused() {
     let update_operator = chain
         .contract_update(SIGNER, ALICE, ALICE_ADDR, Energy::from(10000), UpdateContractPayload {
             amount:       Amount::zero(),
-            receive_name: OwnedReceiveName::new_unchecked("mint_wizard_111001.mint".to_string()),
+            receive_name: OwnedReceiveName::new_unchecked("mint_wizard_111001_V3.mint".to_string()),
             address:      contract_address,
             message:      OwnedParameter::from_serial(&params).expect("Mint params"),
         })
         .expect_err("Update operator");
     assert_contract_paused_error(&update_operator);
+    
 
+    
     // Try to burn tokens.
     let params = BurnParams {
         owner:    ALICE_ADDR,
@@ -752,12 +759,13 @@ fn test_no_execution_of_state_mutative_functions_when_paused() {
     let update_operator = chain
         .contract_update(SIGNER, ALICE, ALICE_ADDR, Energy::from(10000), UpdateContractPayload {
             amount:       Amount::zero(),
-            receive_name: OwnedReceiveName::new_unchecked("mint_wizard_111001.burn".to_string()),
+            receive_name: OwnedReceiveName::new_unchecked("mint_wizard_111001_V3.burn".to_string()),
             address:      contract_address,
             message:      OwnedParameter::from_serial(&params).expect("Burn params"),
         })
         .expect_err("Update operator");
     assert_contract_paused_error(&update_operator);
+    
 }
 
 /// Check that the returned error is `ContractPaused`.
@@ -766,13 +774,12 @@ fn assert_contract_paused_error(update: &ContractInvokeError) {
     assert_eq!(rv, ContractError::Custom(CustomContractError::Paused));
 }
 
-
 /// Get the result of the view entrypoint.
 fn invoke_view(chain: &mut Chain, contract_address: ContractAddress) -> ViewState {
     let invoke = chain
         .contract_invoke(ALICE, ALICE_ADDR, Energy::from(10000), UpdateContractPayload {
             amount:       Amount::zero(),
-            receive_name: OwnedReceiveName::new_unchecked("mint_wizard_111001.view".to_string()),
+            receive_name: OwnedReceiveName::new_unchecked("mint_wizard_111001_V3.view".to_string()),
             address:      contract_address,
             message:      OwnedParameter::empty(),
         })
@@ -818,7 +825,7 @@ fn permit(
         .contract_invoke(BOB, BOB_ADDR, Energy::from(10000), UpdateContractPayload {
             amount:       Amount::zero(),
             address:      contract_address,
-            receive_name: OwnedReceiveName::new_unchecked("mint_wizard_111001.viewMessageHash".to_string()),
+            receive_name: OwnedReceiveName::new_unchecked("mint_wizard_111001_V3.viewMessageHash".to_string()),
             message:      OwnedParameter::from_serial(&param)
                 .expect("Should be a valid inut parameter"),
         })
@@ -839,7 +846,7 @@ fn permit(
             UpdateContractPayload {
                 amount:       Amount::zero(),
                 address:      contract_address,
-                receive_name: OwnedReceiveName::new_unchecked("mint_wizard_111001.permit".to_string()),
+                receive_name: OwnedReceiveName::new_unchecked("mint_wizard_111001_V3.permit".to_string()),
                 message:      OwnedParameter::from_serial(&param)
                     .expect("Should be a valid inut parameter"),
             },
@@ -860,7 +867,7 @@ fn operator_of(chain: &Chain, contract_address: ContractAddress) -> OperatorOfQu
     let invoke = chain
         .contract_invoke(ALICE, ALICE_ADDR, Energy::from(10000), UpdateContractPayload {
             amount:       Amount::zero(),
-            receive_name: OwnedReceiveName::new_unchecked("mint_wizard_111001.operatorOf".to_string()),
+            receive_name: OwnedReceiveName::new_unchecked("mint_wizard_111001_V3.operatorOf".to_string()),
             address:      contract_address,
             message:      OwnedParameter::from_serial(&operator_of_params)
                 .expect("OperatorOf params"),
@@ -893,7 +900,7 @@ fn get_balances(
     let invoke = chain
         .contract_invoke(ALICE, ALICE_ADDR, Energy::from(10000), UpdateContractPayload {
             amount:       Amount::zero(),
-            receive_name: OwnedReceiveName::new_unchecked("mint_wizard_111001.balanceOf".to_string()),
+            receive_name: OwnedReceiveName::new_unchecked("mint_wizard_111001_V3.balanceOf".to_string()),
             address:      contract_address,
             message:      OwnedParameter::from_serial(&balance_of_params)
                 .expect("BalanceOf params"),
@@ -906,9 +913,6 @@ fn get_balances(
 
 
 /// Setup chain and contract.
-/// The function creates the five accounts: ALICE, BOB, UPGRADER, PAUSER.
-/// The function grants ALICE the ADMIN role, the UPGRADER the
-/// UPGRADE role.
 fn initialize_chain_and_contract() -> (Chain, AccountKeys, ContractAddress, ModuleReference) {
     let mut chain = Chain::new();
 
@@ -965,7 +969,7 @@ fn initialize_chain_and_contract() -> (Chain, AccountKeys, ContractAddress, Modu
         .contract_init(SIGNER, ALICE, Energy::from(10000), InitContractPayload {
             amount:    Amount::zero(),
             mod_ref:   deployment.module_reference,
-            init_name: OwnedContractName::new_unchecked("init_mint_wizard_111001".to_string()),
+            init_name: OwnedContractName::new_unchecked("init_mint_wizard_111001_V3".to_string()),
             param:     OwnedParameter::from_serial(&init_params).expect("Init params"),
         })
         .expect("Initialize contract");

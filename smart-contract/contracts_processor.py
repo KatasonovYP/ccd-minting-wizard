@@ -9,7 +9,7 @@ from jinja2 import Environment, FileSystemLoader, select_autoescape
 from progress.bar import ShadyBar
 from pathlib import Path
 
-VERSION = 1
+VERSION = 3
 SOURCE_CARGO = Path("templates/Cargo.toml")
 
 os.makedirs("logs", exist_ok=True)
@@ -19,7 +19,7 @@ lock = asyncio.Lock()
 
 
 async def source_build(binary, bar):
-    command = f'cargo concordium build -v V{VERSION} -b "dist/schemab64.schema" --out dist/module.wasm.v1'
+    command = f'cargo concordium build -v V1 -b "dist/schemab64.schema" --out dist/module.wasm.v1'
     process = await asyncio.create_subprocess_shell(
         command,
         cwd=Path(f"processed/{binary}/"),
@@ -37,13 +37,46 @@ async def source_build(binary, bar):
 
 async def build_sources(bar):
     tasks = []
-    semaphore = asyncio.Semaphore(2)
+    semaphore = asyncio.Semaphore(4)
     for i in range(0, 64):
         binary = f"{i:06b}"
 
-        async def task():
-            async with semaphore:  # Используем семафор здесь
+        async def task(binary=binary):
+            async with semaphore:
                 await source_build(binary, bar)
+
+        tasks.append(asyncio.create_task(task()))
+    await asyncio.gather(*tasks)
+
+
+async def test_run(binary, bar):
+    command = f"cargo test --test tests"
+    process = await asyncio.create_subprocess_shell(
+        command,
+        cwd=Path(f"processed/{binary}/"),
+        stdout=asyncio.subprocess.PIPE,
+        stderr=asyncio.subprocess.PIPE,
+    )
+
+    _, stderr = await process.communicate()
+
+    if process.returncode != 0:
+        logging.error(f"Error while testing {binary} contract:\n{stderr.decode()}")
+    else:
+        logging.info(f"{binary} passed all tests!")
+    bar.next()
+    return process.returncode
+
+
+async def run_tests(bar):
+    tasks = []
+    semaphore = asyncio.Semaphore(8)
+    for i in range(0, 64):
+        binary = f"{i:06b}"
+
+        async def task(binary=binary):
+            async with semaphore:
+                await test_run(binary, bar)
 
         tasks.append(asyncio.create_task(task()))
     await asyncio.gather(*tasks)
@@ -51,7 +84,7 @@ async def build_sources(bar):
 
 async def contract_deploy(binary, bar):
     async with lock:
-        command = f"concordium-client module deploy dist/module.wasm.v1 --sender {local_secrets.SENDER_ADDRESS} --name mint_wizard_{binary} --no-confirm --grpc-port 20000 --grpc-ip node.testnet.concordium.com"
+        command = f"concordium-client module deploy dist/module.wasm.v1 --sender {local_secrets.SENDER_ADDRESS} --name mint_wizard_{binary}_V{VERSION} --no-confirm --grpc-port 20000 --grpc-ip node.testnet.concordium.com"
         process = await asyncio.create_subprocess_shell(
             command,
             cwd=Path(f"processed/{binary}/"),
@@ -73,7 +106,7 @@ async def contract_deploy(binary, bar):
                     await handle_input()
                 elif "Module successfully deployed with reference:" in stream_str:
                     module_reference = stream_str.split(":")[-1]
-                    for char in ["'", "."]:
+                    for char in ["'", ".", " "]:
                         module_reference = module_reference.replace(char, "")
                     module_reference.strip()
                     with open(f"processed/{binary}/reference.module", "w") as f:
@@ -93,9 +126,7 @@ async def deploy_contracts(bar):
     for i in range(0, 64):
         binary = f"{i:06b}"
         tasks.append(asyncio.ensure_future(contract_deploy(binary, bar)))
-    semaphore = asyncio.Semaphore(16)
-    async with semaphore:
-        await asyncio.gather(*tasks)
+    await asyncio.gather(*tasks)
 
 
 def main():
@@ -108,13 +139,14 @@ def main():
         for i in range(0, 64):
             binary = f"{i:06b}"
             context = {
-                "mintable": binary[0] != "0",
-                "burnable": binary[1] != "0",
-                "pausable": binary[2] != "0",
-                "roles": binary[3] != "0",
-                "updates": binary[4] != "0",
-                "sponsored": binary[5] != "0",
-                "code": binary,
+                "mintable":     binary[0] != "0",
+                "burnable":     binary[1] != "0",
+                "pausable":     binary[2] != "0",
+                "roles":        binary[3] != "0",
+                "updates":      binary[4] != "0",
+                "sponsored":    binary[5] != "0",
+                "code":         binary,
+                "version":      VERSION,
             }
             source_result = source_template.render(context)
             Path(f"processed/{binary}/src/").mkdir(parents=True, exist_ok=True)
@@ -124,14 +156,17 @@ def main():
             Path(f"processed/{binary}/tests/").mkdir(parents=True, exist_ok=True)
             with open(f"processed/{binary}/tests/tests.rs", "w") as f:
                 f.writelines(tests_result)
-            Path(f"processed/{binary}/Cargo.toml").write_text(SOURCE_CARGO.read_text())
+            # Path(f"processed/{binary}/Cargo.toml").write_text(SOURCE_CARGO.read_text())
             bar.next()
-    # with ShadyBar("2 | Compiling Sources\t\t", max=64) as bar:
+    with ShadyBar("2 | Building Sources\t\t", max=64) as bar:
+        loop = asyncio.get_event_loop()
+        loop.run_until_complete(build_sources(bar))
+    # with ShadyBar("3 | Running Tests\t\t", max=64) as bar:
     #     loop = asyncio.get_event_loop()
-    #     loop.run_until_complete(build_sources(bar))
-    # with ShadyBar("3 | Deploying Modules\t\t", max=64) as bar:
-    #     loop = asyncio.get_event_loop()
-    #     loop.run_until_complete(deploy_contracts(bar))
+    #     loop.run_until_complete(run_tests(bar))
+    with ShadyBar("4 | Deploying Modules\t\t", max=64) as bar:
+        loop = asyncio.get_event_loop()
+        loop.run_until_complete(deploy_contracts(bar))
 
 
 if __name__ == "__main__":

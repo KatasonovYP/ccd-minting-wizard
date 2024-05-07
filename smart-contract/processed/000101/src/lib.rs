@@ -31,9 +31,9 @@ const UPDATE_OPERATOR_ENTRYPOINT: EntrypointName<'_> =
 #[concordium(repr(u8))]
 pub enum Event {
     
-    #[concordium(tag = 1)]
+    #[concordium(tag = 0)]
     GrantRole(GrantRoleEvent),
-    #[concordium(tag = 2)]
+    #[concordium(tag = 1)]
     RevokeRole(RevokeRoleEvent),
     
     
@@ -554,7 +554,7 @@ impl State {
 // Contract functions
 
 #[init(
-    contract = "mint_wizard_000101",
+    contract = "mint_wizard_000101_V3",
     parameter = "InitParams",
     event = "Cis2Event<ContractTokenId, ContractTokenAmount>",
     enable_logger
@@ -629,7 +629,7 @@ pub struct ViewState {
 
 /// View function for testing. This reports on the entire state of the contract
 /// for testing purposes.
-#[receive(contract = "mint_wizard_000101", name = "view", return_value = "ViewState")]
+#[receive(contract = "mint_wizard_000101_V3", name = "view", return_value = "ViewState")]
 fn contract_view(_ctx: &ReceiveContext, host: &Host<State>) -> ReceiveResult<ViewState> {
     let state = host.state();
 
@@ -737,7 +737,7 @@ fn transfer(
 }
 
 #[receive(
-    contract = "mint_wizard_000101",
+    contract = "mint_wizard_000101_V3",
     name = "transfer",
     parameter = "TransferParameter",
     error = "ContractError",
@@ -767,13 +767,13 @@ fn contract_transfer(
 
 /// Helper function that can be invoked at the front-end to serialize the
 /// `PermitMessage` before signing it in the wallet.
-#[receive(contract = "mint_wizard_000101", name = "serializationHelper", parameter = "PermitMessage")]
+#[receive(contract = "mint_wizard_000101_V3", name = "serializationHelper", parameter = "PermitMessage")]
 fn contract_serialization_helper(_ctx: &ReceiveContext, _host: &Host<State>) -> ContractResult<()> {
     Ok(())
 }
 
 #[receive(
-    contract = "mint_wizard_000101",
+    contract = "mint_wizard_000101_V3",
     name = "viewMessageHash",
     parameter = "PermitParam",
     return_value = "[u8;32]",
@@ -814,7 +814,7 @@ fn contract_view_message_hash(
 }
 
 #[receive(
-    contract = "mint_wizard_000101",
+    contract = "mint_wizard_000101_V3",
     name = "permit",
     parameter = "PermitParam",
     error = "ContractError",
@@ -929,7 +929,7 @@ fn update_operator(
 }
 
 #[receive(
-    contract = "mint_wizard_000101",
+    contract = "mint_wizard_000101_V3",
     name = "updateOperator",
     parameter = "UpdateOperatorParams",
     error = "ContractError",
@@ -955,7 +955,7 @@ pub type ContractBalanceOfQueryParams = BalanceOfQueryParams<ContractTokenId>;
 pub type ContractBalanceOfQueryResponse = BalanceOfQueryResponse<ContractTokenAmount>;
 
 #[receive(
-    contract = "mint_wizard_000101",
+    contract = "mint_wizard_000101_V3",
     name = "balanceOf",
     parameter = "ContractBalanceOfQueryParams",
     return_value = "ContractBalanceOfQueryResponse",
@@ -976,7 +976,7 @@ fn contract_balance_of(
 }
 
 #[receive(
-    contract = "mint_wizard_000101",
+    contract = "mint_wizard_000101_V3",
     name = "operatorOf",
     parameter = "OperatorOfQueryParams",
     return_value = "OperatorOfQueryResponse",
@@ -999,7 +999,7 @@ fn contract_operator_of(
 type ContractTokenMetadataQueryParams = TokenMetadataQueryParams<ContractTokenId>;
 
 #[receive(
-    contract = "mint_wizard_000101",
+    contract = "mint_wizard_000101_V3",
     name = "tokenMetadata",
     parameter = "ContractTokenMetadataQueryParams",
     return_value = "TokenMetadataQueryResponse",
@@ -1023,7 +1023,7 @@ fn contract_token_metadata(
 }
 
 #[receive(
-    contract = "mint_wizard_000101",
+    contract = "mint_wizard_000101_V3",
     name = "supports",
     parameter = "SupportsQueryParams",
     return_value = "SupportsQueryResponse",
@@ -1049,7 +1049,7 @@ fn contract_supports(
 
 
 #[receive(
-    contract = "mint_wizard_000101",
+    contract = "mint_wizard_000101_V3",
     name = "supportsPermit",
     parameter = "SupportsPermitQueryParams",
     return_value = "SupportsQueryResponse",
@@ -1077,7 +1077,7 @@ fn contract_supports_permit(
 /// Set the addresses for an implementation given a standard identifier and a
 /// list of contract addresses.
 #[receive(
-    contract = "mint_wizard_000101",
+    contract = "mint_wizard_000101_V3",
     name = "setImplementors",
     parameter = "SetImplementorsParams",
     error = "ContractError",
@@ -1096,7 +1096,7 @@ fn contract_set_implementor(ctx: &ReceiveContext, host: &mut Host<State>) -> Con
 
 
 #[receive(
-    contract = "mint_wizard_000101",
+    contract = "mint_wizard_000101_V3",
     name = "grantRole",
     parameter = "GrantRoleParams",
     enable_logger,
@@ -1128,7 +1128,7 @@ fn contract_grant_role(
 }
 
 #[receive(
-    contract = "mint_wizard_000101",
+    contract = "mint_wizard_000101_V3",
     name = "revokeRole",
     parameter = "RevokeRoleParams",
     enable_logger,
