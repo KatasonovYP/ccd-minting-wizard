@@ -3,9 +3,7 @@ import { useForm } from 'react-hook-form';
 import z from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import cls from './form-metadata-optional.module.css';
-import { InputCis2Url } from './ui/input-cis2-url';
 import { formMetadataOptionalAdapter } from './utils/form-metadata-optional-adapter';
-import type { Cis2Optional, Cis2Url } from '@/shared/store/mint-store';
 import type { FormMetadataOptionalValues } from './model/form-metadata-optional-values';
 import { useMintStore } from '@/shared/store/mint-store';
 import { CheckboxControlled } from '@/shared/ui/checkbox';
@@ -40,6 +38,7 @@ export function FormMetadataOptional(props: FormMetadataOptionalProps) {
 
     const optionalFields = useMintStore((state) => state.optionalFields);
     const setOptionalFields = useMintStore((state) => state.setOptionalFields);
+    const isFileLoaded = useMintStore((state) => state.isFileLoaded);
 
     const { control, handleSubmit } = useForm<FormMetadataOptionalValues>({
         values: formMetadataOptionalAdapter.toForm(optionalFields),
@@ -59,14 +58,17 @@ export function FormMetadataOptional(props: FormMetadataOptionalProps) {
             <InputControlled
                 control={control}
                 name={'symbol'}
+                disabled={isFileLoaded}
             />
             <InputControlled
                 control={control}
                 name={'decimals'}
+                disabled={isFileLoaded}
             />
             <CheckboxControlled
                 control={control}
                 name={'unique'}
+                disabled={isFileLoaded}
             />
         </form>
     );

@@ -15,7 +15,9 @@ export interface MintStoreState {
     display: { display?: Cis2Url };
     thumbnail: { thumbnail?: Cis2Url };
     artifact: { artifact?: Cis2Url };
+    metadataFile?: FileList;
     isTestNet: boolean;
+    isFileLoaded: boolean;
 }
 
 export type MintStoreActions = Setters<MintStoreState>;
@@ -61,6 +63,8 @@ export const useMintStore = create<Store>(
             assets: [],
         },
         isTestNet: false,
+        isFileLoaded: false,
+        metadataFile: undefined,
 
         setIdentity: (identity) => set({ identity }),
         setMintingSettings: (mintingSettings) => set({ mintingSettings }),
@@ -72,5 +76,7 @@ export const useMintStore = create<Store>(
         setThumbnail: (thumbnail) => set({ thumbnail }),
         setArtifact: (artifact) => set({ artifact }),
         setIsTestNet: (isTestNet) => set({ isTestNet }),
+        setIsFileLoaded: (isFileLoaded) => set({ isFileLoaded }),
+        setMetadataFile: (metadataFile) => set({ metadataFile }),
     }),
 );

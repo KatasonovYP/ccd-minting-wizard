@@ -1,9 +1,9 @@
 import { render } from '@testing-library/react';
-import { ResultContent } from './result-content';
+import { Hint } from './hint';
 
-describe('result-content', () => {
+describe('hint', () => {
     it('should render successfully', () => {
-        const { baseElement } = render(<ResultContent />);
+        const { baseElement } = render(<Hint />);
         expect(baseElement).toBeTruthy();
     });
 });

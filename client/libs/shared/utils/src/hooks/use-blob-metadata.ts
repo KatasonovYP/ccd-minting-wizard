@@ -22,7 +22,7 @@ export function useBlobMetadata() {
             ...thumbnail,
             ...display,
         };
-        metadata.attributes = attributes.attributes.length
+        metadata.attributes = attributes.attributes?.length
             ? attributes.attributes
             : undefined;
         setFile(new Blob([JSON.stringify(metadata)], options));

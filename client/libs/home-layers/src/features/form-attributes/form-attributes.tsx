@@ -5,6 +5,7 @@ import { FormAttributesInput } from './ui/form-attributes-input';
 import type { FormAttributesValues } from './model/form-attributes-values';
 import { Button } from '@/shared/ui/button';
 import { useMintStore } from '@/shared/store/mint-store';
+import { Hint } from '@/shared/ui/hint';
 
 interface FormAttributesProps {
     className?: string;
@@ -15,6 +16,7 @@ export function FormAttributes(props: FormAttributesProps) {
 
     const attributes = useMintStore((state) => state.attributes);
     const setAttributes = useMintStore((state) => state.setAttributes);
+    const isFileLoaded = useMintStore((state) => state.isFileLoaded);
 
     const { control, handleSubmit } = useForm<FormAttributesValues>({
         values: attributes,
@@ -47,15 +49,19 @@ export function FormAttributes(props: FormAttributesProps) {
                     field={field}
                 />
             ))}
-            <Button
-                type='button'
-                onClick={() => {
-                    append({ type: 'string', name: '', value: '' });
-                    handleSubmit(onAction)();
-                }}
-            >
-                Add Attribute
-            </Button>
+            <div className={'flex items-center justify-between'}>
+                <Button
+                    type='button'
+                    disabled={isFileLoaded}
+                    onClick={() => {
+                        append({ type: 'string', name: '', value: '' });
+                        handleSubmit(onAction)();
+                    }}
+                >
+                    Add Attribute
+                </Button>
+                <Hint name={'attributes'} />
+            </div>
         </form>
     );
 }

@@ -1,9 +1,9 @@
 import { Trash } from 'lucide-react';
 import { Controller } from 'react-hook-form';
 import type { InputControlledProps } from '@/shared/ui/input';
-import { InputControlled } from '@/shared/ui/input';
 import type { Cis2Attribute } from '@/shared/store/mint-store';
 import type { FormAttributesValues } from '../model/form-attributes-values';
+import { InputControlled } from '@/shared/ui/input';
 import { Text } from '@/shared/ui/text';
 import { Button } from '@/shared/ui/button';
 import {
@@ -59,7 +59,6 @@ export function FormAttributesInput(props: FormAttributesInputProps) {
                                 <SelectItem value='string'>String</SelectItem>
                                 <SelectItem value='date'>Date</SelectItem>
                                 <SelectItem value='number'>Number</SelectItem>
-                                {/*<SelectItem value='boolean'>Boolean</SelectItem>*/}
                             </SelectContent>
                         </Select>
                     )}

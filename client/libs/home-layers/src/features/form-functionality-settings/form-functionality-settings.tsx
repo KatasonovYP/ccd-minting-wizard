@@ -4,33 +4,9 @@ import cls from './form-functionality-settings.module.css';
 import type { ContractFeatures } from '@/shared/store/mint-store';
 import { useMintStore } from '@/shared/store/mint-store';
 import { CheckboxControlled } from '@/shared/ui/checkbox';
-import { CircleHelp } from 'lucide-react';
-import {
-    Tooltip,
-    TooltipContent,
-    TooltipProvider,
-    TooltipTrigger,
-} from '@/shared/ui/tooltip';
 
 interface FormFunctionalitySettingsProps {
     className?: string;
-}
-
-export function getHelpText(name: string) {
-    switch (name) {
-        case 'mintable':
-            return 'mintable help text';
-        case 'burnable':
-            return 'burnable help text';
-        case 'pausable':
-            return 'pausable help text';
-        case 'sponsored':
-            return 'sponsored help text';
-        case 'roles':
-            return 'roles help text';
-        case 'upgradable':
-            return 'upgradable help text';
-    }
 }
 
 type FormFunctionalitySettingsValues = ContractFeatures;
@@ -68,25 +44,11 @@ export function FormFunctionalitySettings(
             className={cn(className, cls.formFunctionalitySettings)}
         >
             {names.map((name) => (
-                <div className={'flex justify-between'}>
-                    <CheckboxControlled
-                        key={`checkbox-${name}`}
-                        control={control}
-                        name={name}
-                    />
-                    <TooltipProvider
-                        key={`tooltip-${name}`}
-                        delayDuration={0}
-                        skipDelayDuration={0}
-                    >
-                        <Tooltip>
-                            <TooltipTrigger>
-                                <CircleHelp size={16} />
-                            </TooltipTrigger>
-                            <TooltipContent>{getHelpText(name)}</TooltipContent>
-                        </Tooltip>
-                    </TooltipProvider>
-                </div>
+                <CheckboxControlled
+                    key={`checkbox-${name}`}
+                    control={control}
+                    name={name}
+                />
             ))}
         </form>
     );

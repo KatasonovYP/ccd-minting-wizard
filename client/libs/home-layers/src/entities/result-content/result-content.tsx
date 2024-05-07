@@ -1,11 +1,11 @@
 import cn from 'classnames';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { ConcordiumGRPCWebClient, TransactionHash } from '@concordium/web-sdk';
 import cls from './result-content.module.css';
 import { Link } from '@/shared/ui/link';
 import { Button } from '@/shared/ui/button';
 import { staticRoutes } from '@/shared/config/const';
-import { useNavigate, useSearchParams } from 'react-router-dom';
-import { useEffect, useState } from 'react';
-import { ConcordiumGRPCWebClient, TransactionHash } from '@concordium/web-sdk';
 import { Spinner } from '@/shared/ui/spinner';
 
 const explorerBaseUrl =
@@ -48,7 +48,6 @@ export function ResultContent(props: ResultContentProps) {
     return (
         <div className={cn(className, cls.resultContent)}>
             <h1>Your contract index is: {`<${address}, 0>`}</h1>
-            {/*<p>See the transaction details in concordium explorer:</p>*/}
             <Link
                 className={cls.link}
                 href={explorerBaseUrl + hash}

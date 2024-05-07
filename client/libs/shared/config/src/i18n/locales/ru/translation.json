@@ -1,3 +1,17 @@
 {
-    "title": "Hello!"
+    "hint": {
+        "metadata": "metadata help text",
+        "attributes": "attributes help text",
+        "premint": "Premint help text",
+        "maximum tokens": "Maximum Tokens help text",
+        "symbol": "symbol help text",
+        "decimals": "decimals help text",
+        "unique": "unique help text",
+        "mintable": "mintable help text",
+        "burnable": "burnable help text",
+        "pausable": "pausable help text",
+        "roles": "roles help text",
+        "upgradable": "upgradable help text",
+        "sponsored": "sponsored help text"
+    }
 }

@@ -25,6 +25,7 @@ export function FormIdentity(props: FormIdentityProps) {
 
     const setIdentity = useMintStore((state) => state.setIdentity);
     const identity = useMintStore((state) => state.identity);
+    const isFileLoaded = useMintStore((state) => state.isFileLoaded);
 
     const { handleSubmit, control } = useForm<FormIdentityValues>({
         values: identity,
@@ -44,10 +45,12 @@ export function FormIdentity(props: FormIdentityProps) {
                 control={control}
                 name={'name'}
                 required
+                disabled={isFileLoaded}
             />
             <InputControlled
                 control={control}
                 name={'description'}
+                disabled={isFileLoaded}
             />
         </form>
     );

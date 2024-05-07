@@ -1,4 +1,4 @@
-import { Input } from './input';
+import { Input } from './ui/input.shadcn';
 import type { Meta, StoryObj } from '@storybook/react';
 
 const meta: Meta<typeof Input> = {
