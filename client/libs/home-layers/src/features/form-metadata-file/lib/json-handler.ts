@@ -23,7 +23,7 @@ export function jsonHandler(
         const parsed = JSON.parse(buffer);
 
         if (cis2Validator(parsed)) {
-            setters.map((set) => set(parsed));
+            setters.map((set) => set!(parsed));
         } else {
             setError('metadata', errors.cis2);
         }
