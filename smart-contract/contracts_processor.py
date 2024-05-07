@@ -130,43 +130,43 @@ async def deploy_contracts(bar):
 
 
 def main():
-    # env = Environment(
-    #     loader=FileSystemLoader("templates"), autoescape=select_autoescape()
-    # )
-    # source_template = env.get_template("src/lib.rs")
-    # tests_template = env.get_template("tests/tests.rs")
-    # with ShadyBar("1 | Processing Variations\t", max=64) as bar:
-    #     for i in range(0, 64):
-    #         binary = f"{i:06b}"
-    #         context = {
-    #             "mintable":     binary[0] != "0",
-    #             "burnable":     binary[1] != "0",
-    #             "pausable":     binary[2] != "0",
-    #             "roles":        binary[3] != "0",
-    #             "updates":      binary[4] != "0",
-    #             "sponsored":    binary[5] != "0",
-    #             "code":         binary,
-    #             "version":      VERSION,
-    #         }
-    #         source_result = source_template.render(context)
-    #         Path(f"processed/{binary}/src/").mkdir(parents=True, exist_ok=True)
-    #         with open(f"processed/{binary}/src/lib.rs", "w") as f:
-    #             f.writelines(source_result)
-    #         tests_result = tests_template.render(context)
-    #         Path(f"processed/{binary}/tests/").mkdir(parents=True, exist_ok=True)
-    #         with open(f"processed/{binary}/tests/tests.rs", "w") as f:
-    #             f.writelines(tests_result)
-    #         Path(f"processed/{binary}/Cargo.toml").write_text(SOURCE_CARGO.read_text())
-    #         bar.next()
-    # with ShadyBar("2 | Building Sources\t\t", max=64) as bar:
-    #     loop = asyncio.get_event_loop()
-    #     loop.run_until_complete(build_sources(bar))
+    env = Environment(
+        loader=FileSystemLoader("templates"), autoescape=select_autoescape()
+    )
+    source_template = env.get_template("src/lib.rs")
+    tests_template = env.get_template("tests/tests.rs")
+    with ShadyBar("1 | Processing Variations\t", max=64) as bar:
+        for i in range(0, 64):
+            binary = f"{i:06b}"
+            context = {
+                "mintable":     binary[0] != "0",
+                "burnable":     binary[1] != "0",
+                "pausable":     binary[2] != "0",
+                "roles":        binary[3] != "0",
+                "updates":      binary[4] != "0",
+                "sponsored":    binary[5] != "0",
+                "code":         binary,
+                "version":      VERSION,
+            }
+            source_result = source_template.render(context)
+            Path(f"processed/{binary}/src/").mkdir(parents=True, exist_ok=True)
+            with open(f"processed/{binary}/src/lib.rs", "w") as f:
+                f.writelines(source_result)
+            tests_result = tests_template.render(context)
+            Path(f"processed/{binary}/tests/").mkdir(parents=True, exist_ok=True)
+            with open(f"processed/{binary}/tests/tests.rs", "w") as f:
+                f.writelines(tests_result)
+            Path(f"processed/{binary}/Cargo.toml").write_text(SOURCE_CARGO.read_text())
+            bar.next()
+    with ShadyBar("2 | Building Sources\t\t", max=64) as bar:
+        loop = asyncio.get_event_loop()
+        loop.run_until_complete(build_sources(bar))
     with ShadyBar("3 | Running Tests\t\t", max=64) as bar:
         loop = asyncio.get_event_loop()
         loop.run_until_complete(run_tests(bar))
-    # with ShadyBar("4 | Deploying Modules\t\t", max=64) as bar:
-    #     loop = asyncio.get_event_loop()
-    #     loop.run_until_complete(deploy_contracts(bar))
+    with ShadyBar("4 | Deploying Modules\t\t", max=64) as bar:
+        loop = asyncio.get_event_loop()
+        loop.run_until_complete(deploy_contracts(bar))
 
 
 if __name__ == "__main__":
