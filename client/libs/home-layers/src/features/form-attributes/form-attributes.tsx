@@ -54,6 +54,7 @@ export function FormAttributes(props: FormAttributesProps) {
                 <Button
                     type='button'
                     disabled={isFileLoaded}
+                    variant={'outline'}
                     onClick={() => {
                         append({ type: 'string', name: '', value: '' });
                         handleSubmit(onAction)();

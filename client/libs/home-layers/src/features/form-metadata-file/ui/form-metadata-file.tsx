@@ -1,7 +1,7 @@
 import type { SubmitHandler } from 'react-hook-form';
 import { useForm } from 'react-hook-form';
 import cn from 'classnames';
-import { Trash2 } from 'lucide-react';
+import { Check, Trash2, Upload } from 'lucide-react';
 import { readFileJson } from '../lib/read-file-json';
 import type { FormMetadataFileValues } from '../model/form-metadata-file-values';
 import { Input } from '@/shared/ui/input';
@@ -70,7 +70,7 @@ export function FormMetadataFile(props: FormMetadataProps) {
             onChange={handleSubmit(onAction)}
             className={cn(className, 'mb-4 flex flex-col gap-1')}
         >
-            <div className='flex items-center justify-between gap-6'>
+            <div className='flex items-center justify-between gap-12'>
                 <Label
                     className={
                         'flex cursor-pointer items-center justify-between capitalize'
@@ -79,14 +79,33 @@ export function FormMetadataFile(props: FormMetadataProps) {
                 >
                     {name}
                 </Label>
-                <Input
-                    type='file'
-                    id={name}
-                    className={cn(className, 'w-full')}
-                    accept='.json'
-                    disabled={isFileLoaded}
-                    {...register('metadata')}
-                />
+                <div>
+                    <label
+                        htmlFor={name}
+                        className={cn(
+                            'text-secondary-foreground flex h-10 cursor-pointer rounded-md border bg-white px-3 py-2 text-sm',
+                            'hover:bg-slate-100',
+                            'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2',
+                            isFileLoaded && 'cursor-not-allowed opacity-50 hover:bg-white',
+                            'flex gap-2 items-center'
+                        )}
+                    >
+                        Upload a File
+                        {isFileLoaded ? (
+                            <Check size={16} />
+                        ) : (
+                            <Upload size={16} />
+                        )}
+                    </label>
+                    <Input
+                        type='file'
+                        id={name}
+                        className={cn(className, 'hidden w-full')}
+                        accept='.json'
+                        disabled={isFileLoaded}
+                        {...register('metadata')}
+                    />
+                </div>
                 <Button
                     variant={'ghost'}
                     size={'icon'}
