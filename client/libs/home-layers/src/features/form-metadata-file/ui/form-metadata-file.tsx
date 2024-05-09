@@ -68,17 +68,17 @@ export function FormMetadataFile(props: FormMetadataProps) {
     return (
         <form
             onChange={handleSubmit(onAction)}
-            className={cn(className, 'flex items-center justify-between gap-6 mb-4')}
+            className={cn(className, 'mb-4 flex flex-col gap-1')}
         >
-            <Label
-                className={
-                    'flex cursor-pointer items-center justify-between capitalize'
-                }
-                htmlFor={name}
-            >
-                {name}
-            </Label>
-            <div className='flex flex-col gap-1'>
+            <div className='flex items-center justify-between gap-6'>
+                <Label
+                    className={
+                        'flex cursor-pointer items-center justify-between capitalize'
+                    }
+                    htmlFor={name}
+                >
+                    {name}
+                </Label>
                 <Input
                     type='file'
                     id={name}
@@ -87,23 +87,25 @@ export function FormMetadataFile(props: FormMetadataProps) {
                     disabled={isFileLoaded}
                     {...register('metadata')}
                 />
-                {errors.metadata && <ErrorMessage message={errors.metadata?.message} />}
+                <Button
+                    variant={'ghost'}
+                    size={'icon'}
+                    onClick={(event) => {
+                        event.preventDefault();
+                        resetField('metadata');
+                        reset();
+                        setIsFileLoaded(false);
+                    }}
+                    className={'hover:text-red-600'}
+                    disabled={!isFileLoaded}
+                >
+                    <Trash2 size={20} />
+                </Button>
+                <Hint name={name} />
             </div>
-            <Button
-                variant={'ghost'}
-                size={'icon'}
-                onClick={(event) => {
-                    event.preventDefault();
-                    resetField('metadata');
-                    reset();
-                    setIsFileLoaded(false);
-                }}
-                className={'hover:text-red-600'}
-                disabled={!isFileLoaded}
-            >
-                <Trash2 size={20} />
-            </Button>
-            <Hint name={name} />
+            {errors.metadata && (
+                <ErrorMessage message={errors.metadata?.message} />
+            )}
         </form>
     );
 }
