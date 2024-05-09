@@ -3,14 +3,6 @@ export const defaultMetadataValues = {
         name: 'myToken',
         description: '',
     },
-    contractFeatures: {
-        mintable: false,
-        burnable: false,
-        pausable: false,
-        roles: false,
-        upgradable: false,
-        sponsored: false,
-    },
     optionalFields: {
         symbol: undefined,
         unique: undefined,
