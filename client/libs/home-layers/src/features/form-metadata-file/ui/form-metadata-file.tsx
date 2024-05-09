@@ -1,12 +1,16 @@
+import type { SubmitHandler } from 'react-hook-form';
 import { useForm } from 'react-hook-form';
 import cn from 'classnames';
 import { Trash2 } from 'lucide-react';
 import { readFileJson } from '../lib/read-file-json';
-import type { SubmitHandler } from 'react-hook-form';
 import type { FormMetadataFileValues } from '../model/form-metadata-file-values';
-import { InputFile } from '@/shared/ui/input';
+import { Input } from '@/shared/ui/input';
 import { useMintStore } from '@/shared/store/mint-store';
 import { Button } from '@/shared/ui/button';
+import { Label } from '@/shared/ui/label';
+import { Hint } from '@/shared/ui/hint';
+import { ErrorMessage } from '@/shared/ui/error-message';
+import * as React from 'react';
 
 interface FormMetadataProps {
     className?: string;
@@ -32,7 +36,7 @@ export function FormMetadataFile(props: FormMetadataProps) {
         setError,
         resetField,
     } = useForm<FormMetadataFileValues>({
-        values: {  },
+        values: {},
     });
 
     const onAction: SubmitHandler<FormMetadataFileValues> = async (
@@ -59,18 +63,32 @@ export function FormMetadataFile(props: FormMetadataProps) {
         }
     };
 
+    const name = 'metadata';
+
     return (
         <form
             onChange={handleSubmit(onAction)}
-            className={cn(className, 'flex items-center justify-between')}
+            className={cn(className, 'flex items-center justify-between gap-6 mb-4')}
         >
-            <InputFile
-                className={'w-full'}
-                accept='.json'
-                error={errors.metadata}
-                formReg={register('metadata')}
-                disabled={isFileLoaded}
-            />
+            <Label
+                className={
+                    'flex cursor-pointer items-center justify-between capitalize'
+                }
+                htmlFor={name}
+            >
+                {name}
+            </Label>
+            <div className='flex flex-col gap-1'>
+                <Input
+                    type='file'
+                    id={name}
+                    className={cn(className, 'w-full')}
+                    accept='.json'
+                    disabled={isFileLoaded}
+                    {...register('metadata')}
+                />
+                {errors.metadata && <ErrorMessage message={errors.metadata?.message} />}
+            </div>
             <Button
                 variant={'ghost'}
                 size={'icon'}
@@ -85,6 +103,7 @@ export function FormMetadataFile(props: FormMetadataProps) {
             >
                 <Trash2 size={20} />
             </Button>
+            <Hint name={name} />
         </form>
     );
 }

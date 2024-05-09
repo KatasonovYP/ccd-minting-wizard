@@ -14,7 +14,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
                     type === 'file' &&
                         'bg-primary text-primary-foreground hover:bg-primary/90 disabled:hover:bg-primary cursor-pointer',
                     type !== 'file' &&
-                        'border-input bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring w-full ',
+                        'border-input bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring w-full',
                     className,
                     cls.input,
                 )}
