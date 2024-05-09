@@ -33,7 +33,6 @@ export function InputFile(props: InputFileProps) {
                 {...otherProps}
                 {...formReg}
                 className={cn(className)}
-                hidden
             />
             <ErrorMessage message={error?.message} />
         </div>

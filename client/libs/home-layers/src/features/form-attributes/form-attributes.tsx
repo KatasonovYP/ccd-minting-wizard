@@ -42,6 +42,7 @@ export function FormAttributes(props: FormAttributesProps) {
                         remove(index);
                         handleSubmit(onAction)();
                     }}
+                    disabled={isFileLoaded}
                     key={index}
                     control={control}
                     index={index}

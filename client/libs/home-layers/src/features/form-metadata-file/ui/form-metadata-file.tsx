@@ -23,7 +23,7 @@ export function FormMetadataFile(props: FormMetadataProps) {
     const setIsFileLoaded = useMintStore((store) => store.setIsFileLoaded);
     const isFileLoaded = useMintStore((store) => store.isFileLoaded);
     const setMetadataFile = useMintStore((store) => store.setMetadataFile)!;
-    const metadataFile = useMintStore((store) => store.metadataFile);
+    const reset = useMintStore((store) => store.reset);
 
     const {
         register,
@@ -32,7 +32,7 @@ export function FormMetadataFile(props: FormMetadataProps) {
         setError,
         resetField,
     } = useForm<FormMetadataFileValues>({
-        values: { metadata: metadataFile },
+        values: {  },
     });
 
     const onAction: SubmitHandler<FormMetadataFileValues> = async (
@@ -65,10 +65,11 @@ export function FormMetadataFile(props: FormMetadataProps) {
             className={cn(className, 'flex items-center justify-between')}
         >
             <InputFile
-                className={'max-w-[180px]'}
+                className={'w-full'}
                 accept='.json'
                 error={errors.metadata}
                 formReg={register('metadata')}
+                disabled={isFileLoaded}
             />
             <Button
                 variant={'ghost'}
@@ -76,11 +77,13 @@ export function FormMetadataFile(props: FormMetadataProps) {
                 onClick={(event) => {
                     event.preventDefault();
                     resetField('metadata');
+                    reset();
                     setIsFileLoaded(false);
                 }}
                 className={'hover:text-red-600'}
+                disabled={!isFileLoaded}
             >
-                {isFileLoaded && <Trash2 size={20} />}
+                <Trash2 size={20} />
             </Button>
         </form>
     );
