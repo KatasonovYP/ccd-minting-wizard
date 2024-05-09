@@ -70,16 +70,15 @@ export function FormMetadataFile(props: FormMetadataProps) {
             onChange={handleSubmit(onAction)}
             className={cn(className, 'mb-4 flex flex-col gap-1')}
         >
-            <div className='flex items-center justify-between gap-12'>
+            <div className='flex items-center justify-end gap-4'>
                 <Label
-                    className={
-                        'flex cursor-pointer items-center justify-between capitalize'
-                    }
+                    className='flex cursor-pointer items-center justify-between capitalize mr-auto'
+
                     htmlFor={name}
                 >
                     {name}
                 </Label>
-                <div>
+                <div className={''}>
                     <label
                         htmlFor={name}
                         className={cn(
@@ -115,7 +114,7 @@ export function FormMetadataFile(props: FormMetadataProps) {
                         reset();
                         setIsFileLoaded(false);
                     }}
-                    className={'hover:text-red-600'}
+                    className='hover:text-red-600'
                     disabled={!isFileLoaded}
                 >
                     <Trash2 size={20} />

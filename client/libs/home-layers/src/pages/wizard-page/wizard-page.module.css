@@ -21,7 +21,7 @@
     justify-content: space-between;
     gap: 32px;
     overflow-y: clip;
-    max-height: calc(100vh - 128px);
+    max-height: calc(100vh - 128px - 20px);
 
     @media screen and (max-width: 800px) {
         flex-direction: column;
