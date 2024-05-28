@@ -13,6 +13,7 @@ export function useCode() {
     const [schema, setSchema] = useState<string>();
 
     useEffect(() => {
+        console.log(`texts changed to ${net}`);
         import(`./${net}/${contractFeaturesCode}/src/lib.rs`)
             .then((lib) => setCode(lib.plainText.trim()))
             .catch(console.error);
@@ -24,7 +25,7 @@ export function useCode() {
         import(`./${net}/${contractFeaturesCode}/dist/schemab64.schema`)
             .then((lib) => setSchema(lib.plainText.trim()))
             .catch(console.error);
-    }, [contractFeaturesCode]);
+    }, [contractFeaturesCode, isTestNet]);
 
     return {
         name: `mint_wizard_${contractFeaturesCode}_${version}`,

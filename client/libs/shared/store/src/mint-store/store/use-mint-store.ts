@@ -42,7 +42,7 @@ export const useMintStore = create<Store>(
             upgradable: false,
             sponsored: false,
         },
-        isTestNet: false,
+        isTestNet: true,
         isFileLoaded: false,
         metadataFile: undefined,
 
