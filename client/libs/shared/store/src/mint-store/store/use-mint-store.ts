@@ -36,9 +36,9 @@ export const useMintStore = create<Store>(
             mintable: false,
             burnable: false,
             pausable: false,
-            sponsored: false,
             roles: false,
             upgradable: false,
+            sponsored: false,
         },
         optionalFields: {
             symbol: undefined,
