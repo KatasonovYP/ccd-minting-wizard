@@ -9,7 +9,7 @@ from jinja2 import Environment, FileSystemLoader, select_autoescape
 from progress.bar import ShadyBar
 from pathlib import Path
 
-VERSION = 1
+VERSION = 3
 SOURCE_CARGO = Path("templates/Cargo.toml")
 
 os.makedirs("logs", exist_ok=True)
