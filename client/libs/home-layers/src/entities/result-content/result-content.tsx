@@ -1,11 +1,8 @@
 import cn from 'classnames';
-import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { ConcordiumGRPCWebClient, TransactionHash } from '@concordium/web-sdk';
 import cls from './result-content.module.css';
 import { Link } from '@/shared/ui/link';
-import { Button } from '@/shared/ui/button';
-import { staticRoutes } from '@/shared/config/const';
 import { Spinner } from '@/shared/ui/spinner';
 
 const explorerBaseUrl =
