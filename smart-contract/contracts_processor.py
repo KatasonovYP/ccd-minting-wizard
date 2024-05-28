@@ -9,7 +9,7 @@ from jinja2 import Environment, FileSystemLoader, select_autoescape
 from progress.bar import ShadyBar
 from pathlib import Path
 
-VERSION = 3
+VERSION = 1
 SOURCE_CARGO = Path("templates/Cargo.toml")
 
 os.makedirs("logs", exist_ok=True)
@@ -19,7 +19,7 @@ lock = asyncio.Lock()
 
 
 async def source_build(binary, bar):
-    command = f'cargo concordium build -v V1 -b "dist/schemab64.schema" --out dist/module.wasm.v1'
+    command = f'cargo concordium build -e -v V1 -b "dist/schemab64.schema" --out dist/module.wasm.v1'
     process = await asyncio.create_subprocess_shell(
         command,
         cwd=Path(f"processed/{binary}/"),
@@ -58,12 +58,12 @@ async def test_run(binary, bar):
         stderr=asyncio.subprocess.PIPE,
     )
 
-    _, stderr = await process.communicate()
+    stdout, stderr = await process.communicate()
 
     if process.returncode != 0:
         logging.error(f"Error while testing {binary} contract:\n{stderr.decode()}")
     else:
-        logging.info(f"{binary} passed all tests!")
+        logging.info(f"{binary}:\n{stdout.decode()}")
     bar.next()
     return process.returncode
 
@@ -84,7 +84,7 @@ async def run_tests(bar):
 
 async def contract_deploy(binary, bar):
     async with lock:
-        command = f"concordium-client module deploy dist/module.wasm.v1 --sender {local_secrets.SENDER_ADDRESS} --name mint_wizard_{binary}_V{VERSION} --no-confirm --grpc-port 20000 --grpc-ip node.testnet.concordium.com"
+        command = f"concordium-client module deploy dist/module.wasm.v1 --sender main --name mint_wizard_{binary}_V{VERSION} --no-confirm --grpc-port 20000 --grpc-ip grpc.mainnet.concordium.software --secure"
         process = await asyncio.create_subprocess_shell(
             command,
             cwd=Path(f"processed/{binary}/"),
