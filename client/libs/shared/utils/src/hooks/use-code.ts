@@ -6,6 +6,7 @@ export function useCode() {
     const contractFeaturesCode = useContractFeaturesCode();
     const isTestNet = useMintStore((state) => state.isTestNet);
     const net = isTestNet ? 'testnet' : 'mainnet';
+    const version = isTestNet ? 'V3' : 'V1';
 
     const [code, setCode] = useState<string>();
     const [reference, setReference] = useState<string>();
@@ -26,7 +27,7 @@ export function useCode() {
     }, [contractFeaturesCode]);
 
     return {
-        name: `mint_wizard_${contractFeaturesCode}_V3`,
+        name: `mint_wizard_${contractFeaturesCode}_${version}`,
         code,
         reference,
         schema,
