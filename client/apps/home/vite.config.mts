@@ -43,7 +43,6 @@ export default defineConfig({
             allow: [
                 '../../libs/shared/assets',
                 '../../libs/shared/hooks',
-                '../../../smart-contract/src/processed/',
             ],
         },
     },
