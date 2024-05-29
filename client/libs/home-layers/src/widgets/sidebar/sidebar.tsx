@@ -50,14 +50,15 @@ export function Sidebar(props: SidebarProps) {
                     value='advanced'
                     className='p-2'
                 >
-                    <h2 className='mb-4 text-xl'>Metadata settings</h2>
+                    <h2 className='mb-4 text-xl'>Metadata Upload (optional)</h2>
+                    <FormMetadataFile />
+                    <h2 className='mb-4 text-xl'>Metadata Settings</h2>
                     <FormIdentity />
                     <FormImages className={'mb-4'} />
                     <FormMetadataOptional />
                     <FormAttributes className='mb-4' />
-                    {/*<FormMetadataFile />*/}
                     <div className='my-4 h-[1px] w-full bg-neutral-300' />
-                    <h2 className='mb-4 text-xl'>Contract settings</h2>
+                    <h2 className='mb-4 text-xl'>Contract Settings</h2>
                     <FormMintingSettings />
                     <FormFunctionalitySettings />
                 </TabsContent>

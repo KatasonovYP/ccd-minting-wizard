@@ -51,20 +51,20 @@ export function FormImages(props: FormImagesProps) {
     );
     const [isDisplayLoading, setIsDisplayLoading] = useState(false);
     const [isThumbnailLoading, setIsThumbnailLoading] = useState(false);
+    const isFileLoaded = useMintStore((state) => state.isFileLoaded);
 
-    const { register, control, handleSubmit, watch, getValues } =
-        useForm<FormImagesValues>({
-            values: {
-                'url usage display': display.display?.url ? true : isUrlDisplay,
-                'url usage thumbnail': thumbnail.thumbnail?.url
-                    ? true
-                    : isUrlThumbnail,
-                'file display': undefined,
-                'url display': display.display?.url || '',
-                'file thumbnail': undefined,
-                'url thumbnail': thumbnail.thumbnail?.url || '',
-            },
-        });
+    const { register, control, handleSubmit } = useForm<FormImagesValues>({
+        values: {
+            'url usage display': display.display?.url ? true : isUrlDisplay,
+            'url usage thumbnail': thumbnail.thumbnail?.url
+                ? true
+                : isUrlThumbnail,
+            'file display': undefined,
+            'url display': display.display?.url || '',
+            'file thumbnail': undefined,
+            'url thumbnail': thumbnail.thumbnail?.url || '',
+        },
+    });
 
     function readFileImage(blob: Blob, set: (buffer: string) => void) {
         const onLoadEnd = (event: ProgressEvent<FileReader>) => {
@@ -122,7 +122,7 @@ export function FormImages(props: FormImagesProps) {
                     <Button
                         className={'flex gap-2'}
                         variant={'outline'}
-                        disabled={isDisplayLoading}
+                        disabled={isDisplayLoading || isFileLoaded}
                     >
                         Add Display{' '}
                         {isDisplayLoading ? (
@@ -176,6 +176,7 @@ export function FormImages(props: FormImagesProps) {
                                 />
                             ) : (
                                 <InputFile
+                                    className={'max-w-[180px]'}
                                     accept='.png,.jpg,.jpeg,.ico'
                                     formReg={register('file display')}
                                 />
@@ -204,7 +205,7 @@ export function FormImages(props: FormImagesProps) {
                     <Button
                         className='flex gap-2'
                         variant={'outline'}
-                        disabled={isThumbnailLoading}
+                        disabled={isThumbnailLoading || isFileLoaded}
                     >
                         Add Thumbnail{' '}
                         {isThumbnailLoading ? (
@@ -260,6 +261,7 @@ export function FormImages(props: FormImagesProps) {
                                 <InputFile
                                     accept='.png,.jpg,.jpeg,.ico'
                                     formReg={register('file thumbnail')}
+                                    className={'max-w-[180px]'}
                                 />
                             )}
                         </div>

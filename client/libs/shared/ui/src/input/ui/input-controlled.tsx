@@ -1,8 +1,9 @@
 import { Controller } from 'react-hook-form';
 import * as React from 'react';
-import { Text } from '../../text';
+import cn from 'classnames';
 import { ErrorMessage } from '../../error-message';
 import { Label } from '../../label';
+import { Hint } from '../../hint';
 import { Input } from './input.shadcn';
 import type { Control, FieldValues, Path } from 'react-hook-form';
 
@@ -35,13 +36,16 @@ export function InputControlled<T extends FieldValues>(
             name={name}
             rules={rules}
             render={({ field, fieldState: { error } }) => (
-                <div className={className}>
+                <div className={cn(className, 'flex flex-col gap-1')}>
                     {labeled && (
                         <Label
-                            className={'capitalize placeholder:capitalize'}
+                            className={
+                                'flex items-center justify-between capitalize placeholder:capitalize'
+                            }
                             htmlFor={name}
                         >
-                            {label}
+                            <p>{label}</p>
+                            <Hint name={name} />
                         </Label>
                     )}
                     <Input

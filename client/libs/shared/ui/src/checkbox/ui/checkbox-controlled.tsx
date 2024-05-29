@@ -2,6 +2,7 @@ import { Controller } from 'react-hook-form';
 import * as React from 'react';
 import cn from 'classnames';
 import { Label } from '../../label';
+import { Hint } from '../../hint';
 import { Checkbox } from './checkbox.shadcn';
 import type { Control, FieldValues, Path } from 'react-hook-form';
 
@@ -23,7 +24,9 @@ export function CheckboxControlled<T extends FieldValues>(
             name={name}
             rules={rules}
             render={({ field }) => (
-                <div className={cn(className, 'flex items-center gap-2')}>
+                <div
+                    className={cn(className, 'flex w-full items-center gap-2')}
+                >
                     <Checkbox
                         {...field}
                         {...otherProps}
@@ -32,10 +35,11 @@ export function CheckboxControlled<T extends FieldValues>(
                         onCheckedChange={field.onChange}
                     />
                     <Label
-                        className='cursor-pointer capitalize'
+                        className='flex w-full cursor-pointer items-center justify-between capitalize'
                         htmlFor={`checkbox-${name}`}
                     >
-                        {name}
+                        <p>{name}</p>
+                        <Hint name={name} />
                     </Label>
                 </div>
             )}

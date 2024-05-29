@@ -4,6 +4,7 @@ import type { Cis2Optional, Identity } from '../model/identity';
 import type { MintingSettings } from '../model/minting-settings';
 import type { ContractFeatures } from '../model/contract-features';
 import type { Setters } from '@/shared/types/utils';
+import { defaultMetadataValues } from '../model/default-metadata-values';
 
 export interface MintStoreState {
     identity: Identity;
@@ -15,19 +16,20 @@ export interface MintStoreState {
     display: { display?: Cis2Url };
     thumbnail: { thumbnail?: Cis2Url };
     artifact: { artifact?: Cis2Url };
+    metadataFile?: FileList;
     isTestNet: boolean;
+    isFileLoaded: boolean;
 }
 
-export type MintStoreActions = Setters<MintStoreState>;
+export interface MintStoreActions extends Setters<MintStoreState> {
+    reset: () => void;
+}
 
 type Store = MintStoreState & MintStoreActions;
 
 export const useMintStore = create<Store>(
     (set): Store => ({
-        identity: {
-            name: 'myToken',
-            description: '',
-        },
+        ...defaultMetadataValues,
         mintingSettings: {
             premint: undefined,
             'maximum tokens': undefined,
@@ -40,27 +42,9 @@ export const useMintStore = create<Store>(
             upgradable: false,
             sponsored: false,
         },
-        optionalFields: {
-            symbol: undefined,
-            unique: undefined,
-            decimals: undefined,
-        },
-        display: {
-            display: undefined,
-        },
-        thumbnail: {
-            thumbnail: undefined,
-        },
-        artifact: {
-            artifact: undefined,
-        },
-        attributes: {
-            attributes: [],
-        },
-        assets: {
-            assets: [],
-        },
-        isTestNet: false,
+        isTestNet: true,
+        isFileLoaded: false,
+        metadataFile: undefined,
 
         setIdentity: (identity) => set({ identity }),
         setMintingSettings: (mintingSettings) => set({ mintingSettings }),
@@ -72,5 +56,8 @@ export const useMintStore = create<Store>(
         setThumbnail: (thumbnail) => set({ thumbnail }),
         setArtifact: (artifact) => set({ artifact }),
         setIsTestNet: (isTestNet) => set({ isTestNet }),
+        setIsFileLoaded: (isFileLoaded) => set({ isFileLoaded }),
+        setMetadataFile: (metadataFile) => set({ metadataFile }),
+        reset: () => set({ ...defaultMetadataValues }),
     }),
 );

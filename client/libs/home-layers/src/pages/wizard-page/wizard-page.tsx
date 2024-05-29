@@ -13,7 +13,6 @@ import { ConcordiumLogoIcon } from '@/shared/assets/icons';
 import {
     DropdownMenu,
     DropdownMenuContent,
-    DropdownMenuItem,
     DropdownMenuTrigger,
 } from '@/shared/ui/dropdown-menu';
 import { Button } from '@/shared/ui/button';
@@ -54,6 +53,19 @@ export function WizardPage(props: WizardPageProps) {
                 <Sidebar />
                 <ShowCode className={'shadow-md'} />
             </div>
+
+            <p className={cn('mt-4 text-xs')}>
+                This tool is fully open sourced and community driven, source
+                code can be found in{' '}
+                <a
+                    className='link'
+                    target={'_blank'}
+                    href={'https://github.com/KatasonovYP/ccd-minting-wizard'}
+                >
+                    here
+                </a>{' '}
+                to contribution.
+            </p>
         </div>
     );
 }

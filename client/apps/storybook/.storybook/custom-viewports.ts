@@ -21,25 +21,4 @@ export const customViewports = {
         },
         type: 'mobile',
     },
-    // desktopLarge: {
-    //     name: 'desktop lg',
-    //     styles: {
-    //         width: '1920px',
-    //         height: '1080px',
-    //     },
-    // },
-    // desktopMedium: {
-    //     name: 'desktop md',
-    //     styles: {
-    //         width: '1536px',
-    //         height: '864px',
-    //     },
-    // },
-    // desktopSmall: {
-    //     name: 'desktop sm',
-    //     styles: {
-    //         width: '1280px',
-    //         height: '720px',
-    //     },
-    // },
 };

@@ -8,6 +8,7 @@
     width: 100%;
     max-width: 950px;
     font-size: 12px;
+    border-radius: var(--border-radius-md);
 
     *:focus,
     *:focus-within,

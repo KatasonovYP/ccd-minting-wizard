@@ -44,3 +44,12 @@ body::-webkit-scrollbar-thumb {
 button {
     text-transform: capitalize;
 }
+
+.link {
+    text-decoration: underline;
+    color: theme('colors.blue.500');
+
+    &:hover {
+        color: theme('colors.blue.600');
+    }
+}

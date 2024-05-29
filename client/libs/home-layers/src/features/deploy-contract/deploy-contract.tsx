@@ -1,6 +1,7 @@
 import cn from 'classnames';
 import { useState } from 'react';
 import { postIpfs } from '../form-metadata-file/lib/post-ipfs';
+import { ResultContent } from '../../entities/result-content/result-content';
 import cls from './deploy-contract.module.css';
 import { Button } from '@/shared/ui/button';
 import { useAuth, useCode } from '@/shared/utils/hooks';
@@ -8,7 +9,6 @@ import { contractMint } from '@/shared/utils/smart-contract';
 import { useBlobMetadata } from '@/shared/utils/hooks/use-blob-metadata';
 import { useMintStore } from '@/shared/store/mint-store';
 import { Popover, PopoverContent, PopoverTrigger } from '@/shared/ui/popover';
-import { ResultContent } from '@/home/entities/result-content';
 
 interface DeployContractProps {
     className?: string;

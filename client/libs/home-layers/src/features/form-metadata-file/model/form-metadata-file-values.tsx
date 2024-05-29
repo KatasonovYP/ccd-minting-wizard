@@ -1,3 +1,3 @@
 export interface FormMetadataFileValues {
-    metadata: FileList;
+    metadata?: FileList;
 }

@@ -1,7 +1,9 @@
 import * as React from 'react';
+import cn from 'classnames';
 import { Input } from '../../input';
 import { ErrorMessage } from '../../error-message';
 import { Label } from '../../label';
+import { Hint } from '../../hint';
 import type { InputHTMLAttributes } from 'react';
 import type { FieldError } from 'react-hook-form';
 
@@ -15,20 +17,22 @@ export function InputFile(props: InputFileProps) {
     const { className, formReg, error, ...otherProps } = props;
 
     return (
-        <div>
+        <div className='flex flex-col gap-1'>
             <Label
-                className={'cursor-pointer capitalize'}
+                className={
+                    'flex cursor-pointer items-center justify-between capitalize'
+                }
                 htmlFor={otherProps.name}
             >
                 {formReg.name}
+                <Hint name={formReg.name} />
             </Label>
             <Input
                 type='file'
                 id={otherProps.name}
                 {...otherProps}
                 {...formReg}
-                className='cursor-pointer border-dashed transition-colors file:border-0 file:bg-transparent file:bg-none file:font-medium file:text-transparent hover:border-gray-500'
-                hidden
+                className={cn(className)}
             />
             <ErrorMessage message={error?.message} />
         </div>

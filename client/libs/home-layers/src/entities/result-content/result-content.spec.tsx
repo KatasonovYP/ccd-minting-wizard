@@ -1,5 +1,4 @@
 import { render } from '@testing-library/react';
-
 import { ResultContent } from './result-content';
 
 describe('result-content', () => {

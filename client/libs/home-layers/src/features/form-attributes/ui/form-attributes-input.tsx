@@ -1,9 +1,9 @@
 import { Trash } from 'lucide-react';
 import { Controller } from 'react-hook-form';
 import type { InputControlledProps } from '@/shared/ui/input';
-import { InputControlled } from '@/shared/ui/input';
 import type { Cis2Attribute } from '@/shared/store/mint-store';
 import type { FormAttributesValues } from '../model/form-attributes-values';
+import { InputControlled } from '@/shared/ui/input';
 import { Text } from '@/shared/ui/text';
 import { Button } from '@/shared/ui/button';
 import {
@@ -22,7 +22,7 @@ interface FormAttributesInputProps
 }
 
 export function FormAttributesInput(props: FormAttributesInputProps) {
-    const { control, name, index, field, remove, ...otherProps } = props;
+    const { control, name, index, field, disabled, remove, ...otherProps } = props;
     return (
         <div>
             <div className='mb-2 flex items-center justify-between'>
@@ -37,6 +37,7 @@ export function FormAttributesInput(props: FormAttributesInputProps) {
                     variant='link'
                     onClick={remove}
                     className='hover:text-red-500'
+                    disabled={disabled}
                 >
                     <Trash className='h-4 w-4' />
                 </Button>
@@ -45,6 +46,7 @@ export function FormAttributesInput(props: FormAttributesInputProps) {
                 <Controller
                     name={`${name}.${index}.type` as 'attributes.0.type'}
                     control={control}
+                    disabled={disabled}
                     render={({ field }) => (
                         <Select
                             {...field}
@@ -59,7 +61,6 @@ export function FormAttributesInput(props: FormAttributesInputProps) {
                                 <SelectItem value='string'>String</SelectItem>
                                 <SelectItem value='date'>Date</SelectItem>
                                 <SelectItem value='number'>Number</SelectItem>
-                                {/*<SelectItem value='boolean'>Boolean</SelectItem>*/}
                             </SelectContent>
                         </Select>
                     )}
@@ -69,6 +70,7 @@ export function FormAttributesInput(props: FormAttributesInputProps) {
                     name={`${name}.${index}.name` as 'attributes.0.name'}
                     labeled={false}
                     label={'name'}
+                    disabled={disabled}
                     {...otherProps}
                 />
                 <InputControlled
@@ -77,6 +79,7 @@ export function FormAttributesInput(props: FormAttributesInputProps) {
                     labeled={false}
                     label={'value'}
                     type={field.type}
+                    disabled={disabled}
                     {...otherProps}
                 />
             </div>

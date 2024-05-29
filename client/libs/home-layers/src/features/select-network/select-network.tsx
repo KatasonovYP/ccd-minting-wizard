@@ -16,11 +16,12 @@ interface SelectNetworkProps {
 export function SelectNetwork(props: SelectNetworkProps) {
     const { className } = props;
     const setIsTestNet = useMintStore((state) => state.setIsTestNet);
+    const isTestNet = useMintStore((state) => state.isTestNet);
 
     return (
         <div className={cn(className, cls.selectNetwork)}>
             <Select
-                defaultValue={'testnet'}
+                value={isTestNet ? 'testnet' : 'mainnet'}
                 onValueChange={(value) => {
                     setIsTestNet(value === 'testnet');
                 }}

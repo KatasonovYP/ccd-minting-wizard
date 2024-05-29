@@ -1,6 +1,5 @@
-import type { Meta, StoryObj } from '@storybook/react';
-
 import { ResultContent } from './result-content';
+import type { Meta, StoryObj } from '@storybook/react';
 
 const meta: Meta<typeof ResultContent> = {
     title: 'unknown/result-content',
