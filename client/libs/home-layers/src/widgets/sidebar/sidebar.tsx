@@ -41,7 +41,7 @@ export function Sidebar(props: SidebarProps) {
                     <h2 className='mb-4 text-xl'>Metadata settings</h2>
                     <FormIdentity />
                     <FormImages className={'mb-4'} />
-                    <FormMetadataOptional />
+                    <FormMetadataOptional isBasic />
                     <div className='my-4 h-[1px] w-full bg-neutral-300' />
                     <h2 className='mb-4 text-xl'>Contract settings</h2>
                     <FormMintingSettings />

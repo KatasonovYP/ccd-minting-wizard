@@ -11,6 +11,7 @@ import { InputControlled } from '@/shared/ui/input';
 
 interface FormMetadataOptionalProps {
     className?: string;
+    isBasic?: boolean;
 }
 
 const zodUrl = z
@@ -34,7 +35,7 @@ const schema = z.object({
 } satisfies Record<keyof FormMetadataOptionalValues, unknown>);
 
 export function FormMetadataOptional(props: FormMetadataOptionalProps) {
-    const { className } = props;
+    const { className, isBasic = false } = props;
 
     const optionalFields = useMintStore((state) => state.optionalFields);
     const setOptionalFields = useMintStore((state) => state.setOptionalFields);
@@ -60,11 +61,11 @@ export function FormMetadataOptional(props: FormMetadataOptionalProps) {
                 name={'symbol'}
                 disabled={isFileLoaded}
             />
-            <InputControlled
+            {isBasic && <InputControlled
                 control={control}
                 name={'decimals'}
                 disabled={isFileLoaded}
-            />
+            />}
             <CheckboxControlled
                 control={control}
                 name={'unique'}
