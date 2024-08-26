@@ -61,7 +61,7 @@ export function FormMetadataOptional(props: FormMetadataOptionalProps) {
                 name={'symbol'}
                 disabled={isFileLoaded}
             />
-            {isBasic && <InputControlled
+            {!isBasic && <InputControlled
                 control={control}
                 name={'decimals'}
                 disabled={isFileLoaded}
