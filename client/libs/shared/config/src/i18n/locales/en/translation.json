@@ -1,17 +1,17 @@
 {
     "hint": {
-        "metadata": "metadata help text",
-        "attributes": "attributes help text",
-        "premint": "Premint help text",
-        "maximum tokens": "Maximum Tokens help text",
-        "symbol": "symbol help text",
-        "decimals": "decimals help text",
-        "unique": "unique help text",
-        "mintable": "mintable help text",
-        "burnable": "burnable help text",
-        "pausable": "pausable help text",
-        "roles": "roles help text",
-        "upgradable": "upgradable help text",
-        "sponsored": "sponsored help text"
+        "metadata": "Upload if you have a valid CIS-2 metadata file.",
+        "attributes": "Create a new attribute to attach to the metadata.",
+        "premint": "Amount of token to be minted at the initialization.",
+        "maximum tokens": "Maximum amount of tokens allowed to mint.",
+        "symbol": "Token symbol",
+        "decimals": "How many decimals will be supported.",
+        "unique": "The unique flag for collectibles.",
+        "mintable": "Enables Mintable feature that allows tokens to be minted.",
+        "burnable": "Enables Burnable feature that allows tokens to be burned.",
+        "pausable": "Enables Pausable feature that allows pausing the token state.",
+        "roles": "Enables Roles feature that allows granting or revoking roles for some actions on the smart contract.",
+        "upgradable": "Enables Upgradable feature that allows upgrading smart contract if its needed.",
+        "sponsored": "Enables Sponsored feature that allows to support sponsored transactions for the tokens created on this smart contract."
     }
 }
