@@ -6,7 +6,7 @@ export const defaultMetadataValues = {
     optionalFields: {
         symbol: undefined,
         unique: undefined,
-        decimals: 6,
+        decimals: undefined,
     },
     display: {
         display: undefined,
